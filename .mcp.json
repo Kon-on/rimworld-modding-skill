@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "rimworld-source": {
-      "transport": "http",
-      "url": "https://mcp.rimsage.com/mcp"
-    }
-  }
-}

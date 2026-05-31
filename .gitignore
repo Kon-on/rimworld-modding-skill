@@ -14,3 +14,4 @@ Thumbs.db
 # Temp
 *.tmp
 *.log
+.mcp.json
