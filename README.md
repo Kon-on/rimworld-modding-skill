@@ -1,25 +1,28 @@
-# RimWorld Modding Skill
+# RimWorld Modding Skill · 环世界Mod制作技能
 
-Claude Code agent skill for RimWorld mod development. Covers the full mod creation workflow — from environment setup to Steam Workshop publishing.
+Claude Code 环世界 Mod 制作全流程技能——从环境搭建到 Steam Workshop 发布。
+Claude Code agent skill for full-cycle RimWorld mod development.
 
-## Features
+---
 
-- **Full coverage**: XML Defs, C# modding, Harmony patching, assets, debugging, Workshop publishing
-- **Chinese-first**: Teaching content in Chinese, code/XML in English
-- **Vanilla-verified**: Every Def pattern validated against RimWorld 1.6 base game files
-- **RimSage MCP integration**: Real-time source code search for verifying Def structures
-- **Test-first pipeline**: Test version → developer verification → formalize → optional publish
-- **Templates**: Ready-to-use XML templates for weapons (melee/ranged), buildings, recipes, ThingComp, and Harmony patches
+## 功能特性
 
-## Structure
+- **全流程覆盖**: XML Def、C#、Harmony 补丁、资源制作、调试、Workshop 发布
+- **中英双语**: 教程用中文，代码/XML 用英文
+- **原版验证**: 所有 Def 模式均对照 RimWorld 1.6 原版文件验证
+- **RimSage MCP 集成**: 实时源码搜索，写 Def 前先查原版
+- **测试版先行**: 测试版 → 验证 → 正规化 → 可选发布
+- **代码模板**: 近战/远程武器、建筑、配方、ThingComp、Harmony 补丁
+
+## 目录结构
 
 ```
 rimworld-modding-skill/
-├── SKILL.md                 # Main dispatcher + intent routing
-├── references/              # Knowledge base (10 files)
-│   ├── 01-environment.md    # IDE, .NET, dnSpy, MCP setup
+├── SKILL.md                 # 总调度器 + 意图路由
+├── references/              # 知识库（10 篇）
+│   ├── 01-environment.md    # IDE、.NET、dnSpy、MCP 配置
 │   ├── 02-project-structure.md
-│   ├── 03-xml-defs.md       # Core: ThingDef, RecipeDef, etc.
+│   ├── 03-xml-defs.md       # 核心：ThingDef、RecipeDef 等
 │   ├── 04-xml-patching.md   # XPath PatchOperations
 │   ├── 05-csharp-basics.md
 │   ├── 06-harmony.md
@@ -27,40 +30,59 @@ rimworld-modding-skill/
 │   ├── 08-debugging.md
 │   ├── 09-workshop.md
 │   └── 10-api-reference.md
-├── templates/               # Code templates (6 files)
+├── templates/               # 代码模板（6 个）
 │   ├── weapon-melee.xml
 │   ├── weapon-ranged.xml
 │   ├── building.xml
 │   ├── recipe.xml
 │   ├── harmony-patch.cs
 │   └── thingcomp.cs
-├── workflows/               # Task workflows (6 files)
-│   ├── new-mod.md            # Test-first creation
-│   ├── formalize-mod.md      # Test→formal→publish
+├── workflows/               # 工作流（6 个）
+│   ├── new-mod.md            # 测试版先行创建
+│   ├── formalize-mod.md      # 测试→正规化→发布
 │   ├── add-item.md
 │   ├── add-building.md
 │   ├── patch-vanilla.md
 │   └── debug-crash.md
-└── docs/                    # Design docs
-    ├── specs/                # Specification
-    └── plans/                # Implementation plan
+└── docs/                    # 设计文档
+    ├── specs/                # 设计规格
+    └── plans/                # 实施计划
 ```
 
-## Installation
+## 安装
 
-Copy the skill directory to your Claude Code skills folder:
+复制到 Claude Code skills 目录：
 
 ```
 cp -r rimworld-modding-skill ~/.claude/skills/rimworld-modding/
 ```
 
-Or install via the skills marketplace (coming soon).
-
-## Requirements
+## 需求
 
 - RimWorld 1.6
-- [RimSage MCP](https://mcp.rimsage.com/mcp) (recommended for source code search)
-- .mcp.json configured for the `rimworld-source` MCP server
+- [RimSage MCP](https://mcp.rimsage.com/mcp)（推荐，用于源码搜索）
+- `.mcp.json` 配置 `rimworld-source` MCP 服务器
+
+## 许可证
+
+MIT
+
+---
+
+## Features (EN)
+
+- **Full coverage**: XML Defs, C# modding, Harmony patching, assets, debugging, Workshop
+- **Bilingual**: Chinese tutorials + English code/XML
+- **Vanilla-verified**: All Def patterns validated against RimWorld 1.6 base game files
+- **RimSage MCP**: Real-time source code search for verifying Def structures
+- **Test-first pipeline**: Test version → verify → formalize → optional publish
+- **Templates**: Ready-to-use XML/C# templates for weapons, buildings, recipes, ThingComp, Harmony
+
+## Installation (EN)
+
+```
+cp -r rimworld-modding-skill ~/.claude/skills/rimworld-modding/
+```
 
 ## License
 
