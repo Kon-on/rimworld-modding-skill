@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  配方模板
+  将此 RecipeDef 放在 Defs/RecipeDefs/ 下
+  需要在对应 ThingDef 的 <recipeMaker> 中引用
+-->
+<Defs>
+  <RecipeDef>
+    <defName><YourPrefix>_Recipe_<YourName></defName>
+    <label>make <your product label></label>
+    <description>Craft a <your product> at the machining table.</description>
+
+    <!-- 配方所属的工作台 -->
+    <!-- 原版工作台示例: TableMachining, TableSmithing, TableFabrication, FueledStove, ElectricStove -->
+    <recipeUsers>
+      <li>TableMachining</li>
+    </recipeUsers>
+
+    <!-- 研究前置 -->
+    <researchPrerequisite>Smithing</researchPrerequisite>
+
+    <!-- 技能要求 -->
+    <skillRequirements>
+      <Crafting>5</Crafting>
+    </skillRequirements>
+
+    <!-- 制作工作量（ticks, 1秒=60ticks） -->
+    <workAmount>6000</workAmount>
+
+    <!-- 制作速度统计 -->
+    <workSpeedStat>CraftingSpeed</workSpeedStat>
+    <efficiencyStat>CraftingEfficiency</efficiencyStat>
+
+    <!-- 所需原料 -->
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>50</count>
+      </li>
+    </ingredients>
+
+    <!-- 固定产出 -->
+    <products>
+      <li>
+        <thingDef><YourPrefix>_<YourProductDef></thingDef>
+        <count>1</count>
+      </li>
+    </products>
+
+    <!-- 允许制作的最低/最高品质（可选） -->
+    <defaultIngredientFilter>
+      <categories>
+        <li>Metallic</li>
+      </categories>
+    </defaultIngredientFilter>
+  </RecipeDef>
+</Defs>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  近战武器模板（已验证——基于原版 BaseWeapons.xml）
+  替换所有 <Your...> 占位符为你的实际值
+
+  ⚠️ 重要：生成后务必对比原版 Def 验证！
+  原版武器参考：RimWorld/Data/Core/Defs/ThingDefs_Misc/Weapons/MeleeMedieval.xml
+
+  ParentName 继承链：
+  BaseWeapon → BaseMeleeWeapon → BaseMeleeWeapon_Sharp → BaseMeleeWeapon_Sharp_Quality
+  （BaseWeapon 已内置 CompEquippable、CompForbiddable、CompStyleable——无需在 <comps> 中重复）
+-->
+<Defs>
+  <ThingDef ParentName="BaseMeleeWeapon_Sharp_Quality">
+    <defName><YourPrefix>_Weapon_<YourName></defName>
+    <label><your weapon label></label>
+    <description><your weapon description></description>
+
+    <possessionCount>1</possessionCount>
+    <techLevel>Industrial</techLevel>            <!-- Neolithic / Medieval / Industrial / Spacer / Ultratech -->
+
+    <!-- 材料成本：costStuffCount = 所需材料单位数 -->
+    <costStuffCount>50</costStuffCount>
+    <stuffCategories>                             <!-- 允许的制作材料 -->
+      <li>Metallic</li>
+      <!-- <li>Woody</li> -->                     <!-- 木质武器可加这行 -->
+      <!-- <li>Stony</li> -->                     <!-- 石质武器可加这行 -->
+    </stuffCategories>
+
+    <statBases>
+      <WorkToMake>8000</WorkToMake>              <!-- 制作工作量（tick） -->
+      <Mass>2.0</Mass>                            <!-- 重量（kg） -->
+    </statBases>
+
+    <equippedAngleOffset>-55</equippedAngleOffset> <!-- 装备角度偏移 -->
+
+    <weaponTags>
+      <li><YourPrefix>_<YourTag></li>             <!-- 武器标签，用于文化/角色偏好 -->
+    </weaponTags>
+
+    <tools>
+      <li>
+        <label>edge</label>
+        <capacities>
+          <li>Cut</li>                            <!-- 伤害类型: Cut/Blunt/Stab/Poke -->
+        </capacities>
+        <power>15</power>                         <!-- 基础伤害值 -->
+        <cooldownTime>1.6</cooldownTime>          <!-- 攻击冷却（秒） -->
+        <armorPenetration>0.15</armorPenetration> <!-- 护甲穿透（0-1） -->
+      </li>
+    </tools>
+
+    <graphicData>
+      <texPath>Things/Item/<YourPrefix>_<YourTexture></texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <shaderType>CutoutComplex</shaderType>
+    </graphicData>
+
+    <recipeMaker>
+      <researchPrerequisite>Smithing</researchPrerequisite> <!-- 研究前置 -->
+      <skillRequirements>
+        <Crafting>3</Crafting>                    <!-- 技能要求 -->
+      </skillRequirements>
+      <workAmount>8000</workAmount>               <!-- 制作所需工作量（tick） -->
+    </recipeMaker>
+  </ThingDef>
+</Defs>
