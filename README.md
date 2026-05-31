@@ -1,5 +1,7 @@
 # RimWorld Modding Skill · 环世界Mod制作技能
 
+> **GitHub:** https://github.com/Kon-on/rimworld-modding-skill
+
 Claude Code 环世界 Mod 制作全流程技能——从环境搭建到 Steam Workshop 发布。
 Claude Code agent skill for full-cycle RimWorld mod development.
 
