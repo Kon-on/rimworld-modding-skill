@@ -67,7 +67,7 @@ cp -r rimworld-modding-skill ~/.claude/skills/rimworld-modding/
 
 本项目依赖以下开源工具：
 
-- **[RimSage](https://mcp.rimsage.com/mcp)** — RimWorld 源码 AI 搜索 MCP 服务器，提供 `search_rimworld_source`、`get_def_details`、`read_rimworld_file` 工具，是本 Skill 验证 Def 结构的核心依赖
+- **[RimSage](https://mcp.rimsage.com/mcp)**（MIT 协议）—— RimWorld 源码 AI 搜索 MCP 服务器，提供 `search_rimworld_source`、`get_def_details`、`read_rimworld_file` 工具，是本 Skill 验证 Def 结构的核心依赖。本项目基于 MIT 协议使用该组件。
 
 > 感谢 RimSage 作者为 RimWorld mod 社区提供了如此强大的开发工具。
 
@@ -96,7 +96,7 @@ cp -r rimworld-modding-skill ~/.claude/skills/rimworld-modding/
 
 This project depends on:
 
-- **[RimSage](https://mcp.rimsage.com/mcp)** — AI-powered RimWorld source code search MCP server, providing `search_rimworld_source`, `get_def_details`, and `read_rimworld_file` tools. The core dependency that enables vanilla Def structure verification in this Skill.
+- **[RimSage](https://mcp.rimsage.com/mcp)** (MIT License) — AI-powered RimWorld source code search MCP server. Provides `search_rimworld_source`, `get_def_details`, and `read_rimworld_file`. Used under the MIT License.
 
 > Thanks to the RimSage author for building such a powerful tool for the RimWorld modding community.
 
