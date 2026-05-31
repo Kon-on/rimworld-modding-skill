@@ -1,0 +1,12 @@
+{
+  "//": "RimSage MCP 配置模板 —— 复制为 .mcp.json 后使用",
+  "//_说明": "RimSage 提供 RimWorld 源码实时搜索，是本 Skill 的推荐外部依赖",
+  "//_安装": "1. 复制此文件为 .mcp.json  2. 重启 Claude Code  3. 批准 MCP 连接",
+  "//_更多": "https://mcp.rimsage.com/mcp",
+  "mcpServers": {
+    "rimworld-source": {
+      "transport": "http",
+      "url": "https://mcp.rimsage.com/mcp"
+    }
+  }
+}

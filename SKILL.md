@@ -9,21 +9,55 @@ description: >
 
 # RimWorld Mod 制作指南
 
-## ⚙️ 开始前：配置 RimSage MCP（实时源码搜索）
+## ⚙️ 前置依赖：RimSage MCP
 
-RimSage 是 RimWorld 源码 AI 搜索工具——**这是避免 Def 结构错误的根本方案。**
+### 依赖声明
 
-> 如果还没有配置，创建 `.mcp.json` 或运行：
-> ```
-> claude mcp add rimworld-source --transport http https://mcp.rimsage.com/mcp
-> ```
-> 首次索引需 30-60 分钟。
+| 项目 | 值 |
+|------|-----|
+| **依赖名称** | RimSage（`rimworld-source`） |
+| **协议** | MCP over HTTP |
+| **必需工具** | `search_rimworld_source`、`get_def_details`、`read_rimworld_file` |
+| **配置方式** | `.mcp.json`（项目级）或 `claude mcp add`（全局） |
+| **首次索引** | 30-60 分钟，之后毫秒级 |
 
-**在开始任何 mod 制作工作前，请先确认：**
+> ⚠️ RimSage 是**外部运行时依赖**——本 Skill 不捆绑、不内置 MCP 服务器。
 
-- **A. 已配置 RimSage** → 我会用 MCP 工具验证所有 Def 结构
-- **B. 还没配置** → 帮你创建 `.mcp.json` 配置文件
-- **C. 不想用 MCP** → 改用本地 `grep` 搜索 `RimWorld/Data/Core/Defs/`（功能受限）
+### 初始化检测（每个会话开始时执行）
+
+在开始任何 mod 制作工作前，先检测 MCP 可用性：
+
+```
+检测流程：
+  try MCP ping
+    ├─ ✅ 可用 → 使用 MCP 工具验证所有 Def 结构
+    ├─ ❌ 不可用 → 询问用户：
+    │     A. 帮我配置  → 创建 .mcp.json（参考 .mcp.json.example）
+    │     B. 稍后再说  → 降级为本地 grep 模式（功能受限）
+    │     C. 不用 MCP  → 永久降级，只用 grep
+    └─ ⏱️ 超时 → 降级为本地 grep，提示用户检查 MCP 服务状态
+```
+
+### 优雅降级：MCP 不可用时的回退
+
+| 原本用 MCP 做的事 | 降级方案 |
+|------------------|---------|
+| `get_def_details("xxx")` | `grep -r 'defName="xxx"' <RW>/Data/Core/Defs/` + Read 对应文件 |
+| `search_rimworld_source("xxx")` | `grep -r "xxx" <RW>/Data/Core/Defs/` |
+| `read_rimworld_file("path")` | Read 工具直接读本地文件 |
+| 查继承链 | `grep -r 'ParentName="Xxx"' <RW>/Data/Core/Defs/'` 递归追溯 |
+
+> **降级模式限制**：grep 只能做字面匹配，无法像 MCP 那样理解语义。"查哪些武器用了 extraMeleeDamages" 这种查询在降级模式中需要手动遍历文件。
+
+### MCP 不可用时的错误信息
+
+当调用 MCP 工具失败时，区分原因：
+
+| 错误现象 | 可能原因 | 告诉用户 |
+|---------|---------|---------|
+| `mcp__rimworld-source` 工具不存在 | MCP 未配置或未批准 | "RimSage MCP 未连接——运行 `claude mcp add rimworld-source --transport http https://mcp.rimsage.com/mcp` 或在项目目录创建 `.mcp.json`（参考 `.mcp.json.example`）" |
+| 工具调用超时 | MCP 服务未启动或网络问题 | "RimSage 服务无响应——检查 `https://mcp.rimsage.com/mcp` 是否可达，或降级为本地 grep 模式" |
+| 工具返回空结果 | 索引未完成或查询不匹配 | "未找到匹配结果。可能原因：1) 索引还未完成（首次需 30-60 分钟）2) 查询关键词不对——试试更通用的词" |
 
 ### RimSage 三件套：何时用哪个
 
@@ -35,25 +69,10 @@ RimSage 是 RimWorld 源码 AI 搜索工具——**这是避免 Def 结构错误
 
 ### 典型查询模式
 
-**查继承链**：
-```
-get_def_details("BaseMeleeWeapon") → 看 ParentName 链 → 确认正确父类
-```
-
-**查字段用法**：
-```
-search_rimworld_source("extraMeleeDamages Burn") → 看原版哪些武器用了这个字段
-```
-
-**验证枚举值**：
-```
-search_rimworld_source("techLevel Ultra") → 确认 techLevel 的合法值是 "Ultra" 不是 "Ultratech"
-```
-
-**对比相似物品**：
-```
-get_def_details("MeleeWeapon_Gladius") → 看 Gladius 的完整结构 → 模仿写新武器
-```
+**查继承链**：`get_def_details("BaseMeleeWeapon")` → 看 ParentName 链  
+**查字段用法**：`search_rimworld_source("extraMeleeDamages Burn")`  
+**验证枚举值**：`search_rimworld_source("techLevel Ultra")` → 确认是 "Ultra" 不是 "Ultratech"  
+**对比相似物品**：`get_def_details("MeleeWeapon_Gladius")` → 模仿写新武器
 
 ---
 
