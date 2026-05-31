@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  远程武器模板（已验证——基于原版 BaseWeapons.xml）
+  替换所有 <Your...> 占位符为你的实际值
+
+  ⚠️ 重要：生成后务必对比原版 Def 验证！
+  原版武器参考：RimWorld/Data/Core/Defs/ThingDefs_Misc/Weapons/RangedIndustrial.xml
+
+  ParentName 继承链：
+  BaseWeapon → BaseGun → BaseGunWithQuality → BaseMakeableGun → BaseHumanMakeableGun
+  （BaseWeapon 已内置 CompEquippable——无需在 <comps> 中重复）
+  （BaseHumanMakeableGun 已内置 recipeMaker + weaponTags + CompBiocodable）
+-->
+<Defs>
+  <ThingDef ParentName="BaseHumanMakeableGun">
+    <defName><YourPrefix>_Gun_<YourName></defName>
+    <label><your gun label></label>
+    <description><your gun description></description>
+
+    <possessionCount>1</possessionCount>
+    <techLevel>Industrial</techLevel>            <!-- Neolithic / Medieval / Industrial / Spacer / Ultratech -->
+
+    <!-- 材料成本 -->
+    <costStuffCount>60</costStuffCount>
+    <stuffCategories>
+      <li>Metallic</li>
+    </stuffCategories>
+
+    <statBases>
+      <WorkToMake>12000</WorkToMake>             <!-- 制作工作量 -->
+      <Mass>3.0</Mass>
+      <AccuracyTouch>0.75</AccuracyTouch>
+      <AccuracyShort>0.85</AccuracyShort>
+      <AccuracyMedium>0.70</AccuracyMedium>
+      <AccuracyLong>0.50</AccuracyLong>
+    </statBases>
+
+    <weaponTags>
+      <li><YourPrefix>_<YourTag></li>
+    </weaponTags>
+
+    <!-- 远程特有属性 -->
+    <verbClass>Verb_Shoot</verbClass>
+    <rangedWeapon_Cooldown>1.2</rangedWeapon_Cooldown>     <!-- 两次射击间隔（秒） -->
+    <rangedWeapon_WarmupTime>1.0</rangedWeapon_WarmupTime> <!-- 瞄准时间（秒） -->
+    <rangedWeapon_Range>25</rangedWeapon_Range>            <!-- 射程（格） -->
+
+    <graphicData>
+      <texPath>Things/Item/<YourPrefix>_<YourTexture></texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <shaderType>CutoutComplex</shaderType>
+    </graphicData>
+
+    <recipeMaker>
+      <researchPrerequisite>Gunsmithing</researchPrerequisite>
+      <skillRequirements>
+        <Crafting>5</Crafting>
+      </skillRequirements>
+      <workAmount>15000</workAmount>
+    </recipeMaker>
+
+    <!-- 需要弹药（可选，取消注释以启用） -->
+    <!--
+    <comps>
+      <li Class="CompProperties_Reloadable">
+        <ammoDef><YourPrefix>_Bullet</ammoDef>
+        <maxCharges>6</maxCharges>
+      </li>
+    </comps>
+    -->
+  </ThingDef>
+</Defs>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  建筑模板
+  替换所有 <Your...> 占位符为你的实际值
+  前缀示例：SR → SR_Building_ArcFurnace
+-->
+<Defs>
+  <ThingDef ParentName="BuildingBase">
+    <defName><YourPrefix>_Building_<YourName></defName>
+    <label><your building label></label>
+    <description><your building description></description>
+
+    <!-- 占地大小（宽, 高） -->
+    <size>(2,2)</size>
+
+    <!-- 建筑菜单分类 -->
+    <!-- 可选: Production, Furniture, Structure, Power, Temperature, Security, Recreation, Misc -->
+    <designationCategory>Production</designationCategory>
+
+    <statBases>
+      <MaxHitPoints>300</MaxHitPoints>            <!-- 耐久度 -->
+      <WorkToBuild>5000</WorkToBuild>             <!-- 建造工作量 -->
+      <Mass>20</Mass>                             <!-- 拆毁掉落材料量 -->
+      <Flammability>0.5</Flammability>            <!-- 可燃性 -->
+      <Beauty>0</Beauty>                          <!-- 美观度 -->
+    </statBases>
+
+    <!-- 建造所需材料 -->
+    <costList>
+      <Steel>100</Steel>
+      <ComponentIndustrial>5</ComponentIndustrial>
+    </costList>
+
+    <!-- 通过性: Impassable / PassThroughOnly / Standable -->
+    <passability>Impassable</passability>
+
+    <!-- 贴图填充率 (0-1)，低于1表示建筑物不完全占满格子 -->
+    <fillPercent>0.85</fillPercent>
+
+    <!-- 地形要求: Light / Medium / Heavy -->
+    <terrainAffordanceNeeded>Medium</terrainAffordanceNeeded>
+
+    <!-- 是否可旋转 -->
+    <rotatable>true</rotatable>
+
+    <comps>
+      <!-- 电力消费者 -->
+      <li Class="CompProperties_Power">
+        <basePowerConsumption>-200</basePowerConsumption>   <!-- 负数为消耗电力 -->
+        <shortCircuitInRain>true</shortCircuitInRain>
+      </li>
+      <!-- 可摧毁（掉落材料） -->
+      <li Class="CompProperties_Breakdownable" />
+    </comps>
+
+    <graphicData>
+      <texPath>Things/Building/<YourPrefix>_<YourTexture></texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <shaderType>CutoutComplex</shaderType>
+      <drawSize>(2,2)</drawSize>                  <!-- 贴图绘制大小 -->
+    </graphicData>
+
+    <!-- 可选：添加自定义 ThingComp -->
+    <!--
+    <comps>
+      <li Class="CompProperties_CustomBattery">
+        <storedEnergy>500</storedEnergy>
+        <efficiency>0.95</efficiency>
+      </li>
+    </comps>
+    -->
+
+    <!-- 建造研究前置（可选） -->
+    <!--
+    <researchPrerequisites>
+      <li>Electricity</li>
+    </researchPrerequisites>
+    -->
+  </ThingDef>
+</Defs>
