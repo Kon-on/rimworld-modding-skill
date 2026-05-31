@@ -2,6 +2,19 @@
 
 > **适用版本**: RimWorld 1.6 | **最后更新**: 2026-05-31
 
+
+## 目录
+
+- [概述](#概述)
+- [Mod 类——入口点](#mod类入口点)
+- [Mod Settings——可配置选项](#modsettings可配置选项)
+- [ExposeData——存档兼容](#exposedata存档兼容)
+- [ThingComp——给物品添加自定义组件](#thingcomp给物品添加自定义组件)
+- [GameComponent / MapComponent / WorldComponent](#gamecomponentmapcomponentworldcomponent)
+- [DefModExtension——自定义 Def 扩展字段](#defmodextension自定义def扩展字段)
+- [编译与引用](#编译与引用)
+- [常见问题](#常见问题)
+
 ## 概述
 
 当 XML Def 无法满足需求时（如自定义行为、复杂逻辑、数据持久化），需要编写 C# 代码。

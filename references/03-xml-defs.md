@@ -2,6 +2,17 @@
 
 > **适用版本**: RimWorld 1.6 | **最后更新**: 2026-05-31
 
+
+## 目录
+
+- [什么是 Def？](#什么是def)
+- [Def 类型速查表](#def类型速查表)
+- [ThingDef 详解](#thingdef详解)
+- [ParentName 继承机制](#parentname继承机制)
+- [MayRequire / MayRequireAnyOf（条件加载）](#mayrequiremayrequireanyof条件加载)
+- [完整示例：彩虹喵喵剑](#完整示例彩虹喵喵剑)
+- [常见问题](#常见问题)
+
 ## 什么是 Def？
 
 Def（Definition）是 RimWorld 的数据定义系统。游戏中的所有内容——武器、建筑、植物、生物、派系、事件——都是通过 XML 文件中的 `Def` 定义的。

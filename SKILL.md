@@ -1,12 +1,10 @@
 ---
 name: rimworld-modding
-description: |
-  RimWorld mod 制作全流程指南——覆盖环境搭建、XML Def 系统、C# 开发、Harmony 补丁、
-  资源制作和 Steam Workshop 发布。适用于零基础到进阶的 RimWorld 1.6 mod 开发者。
-  
-  触发词：RimWorld, 环世界, rimworld, RW, mod, Mod, 模组, Def, XML, ThingDef, 
-  Harmony, Patch, 补丁, 武器, 建筑, 物品, 生物, 植物, 派系, 事件, 
-  Steam Workshop, 创意工坊, C#, DLL, 编译
+description: >
+  Comprehensive guide for RimWorld mod developers. Use when users want to create or modify
+  RimWorld mods (weapons, buildings, items, plants, factions, events), work with XML Defs
+  (ThingDef, RecipeDef), write C# mod code or Harmony patches, debug mod errors, or publish
+  to Steam Workshop. Covers environment setup through publishing. 环世界模组制作全流程指南。
 ---
 
 # RimWorld Mod 制作指南
@@ -187,14 +185,14 @@ get_def_details("MeleeWeapon_Gladius") → 看 Gladius 的完整结构 → 模�
 ### grep（第二选择——本地搜索）
 
 ```bash
-# 搜索字段的所有用法
-grep -r "extraMeleeDamages" "D:/steam/steamapps/common/RimWorld/Data/Core/Defs/" | head -10
+# 搜索字段的所有用法（<RW> 替换为你的 RimWorld 安装目录）
+grep -r "extraMeleeDamages" "<RW>/Data/Core/Defs/" | head -10
 
 # 搜索 ParentName 定义
-grep -r 'Name="BaseMeleeWeapon"' "D:/steam/steamapps/common/RimWorld/Data/Core/Defs/"
+grep -r 'Name="BaseMeleeWeapon"' "<RW>/Data/Core/Defs/"
 
 # 搜索所有 techLevel 取值
-grep -rh "techLevel" "D:/steam/steamapps/common/RimWorld/Data/Core/Defs/" | sort -u | head -20
+grep -rh "techLevel" "<RW>/Data/Core/Defs/" | sort -u | head -20
 ```
 
 ### dnSpy（第三选择——反编译 C# 源码）
