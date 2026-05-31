@@ -1,0 +1,38 @@
+{
+  "name": "rimworld-modding-skill-evals",
+  "description": "Baseline evaluation prompts for rimworld-modding skill",
+  "prompts": [
+    {
+      "id": "create-melee-weapon",
+      "prompt": "帮我创建一把近战武器——等离子匕首，伤害18，冷却1.2秒，Ultratech科技等级",
+      "expect": {
+        "contains": ["ParentName=\"BaseMeleeWeapon_Sharp_Quality\"", "costStuffCount", "stuffCategories", "Metallic", "possessionCount"],
+        "not_contains": ["costList", "CompProperties_Equippable", "Ultratech"]
+      }
+    },
+    {
+      "id": "create-ranged-weapon",
+      "prompt": "帮我创建一把远程武器——离子步枪，射程30，伤害15",
+      "expect": {
+        "contains": ["ParentName=\"BaseHumanMakeableGun\"", "verbClass=\"Verb_Shoot\"", "rangedWeapon_Range"],
+        "not_contains": ["BaseRangedWeapon", "costList"]
+      }
+    },
+    {
+      "id": "check-techlevel-enum",
+      "prompt": "RimWorld 近战武器的 techLevel 枚举值有哪些？帮我列出合法的值",
+      "expect": {
+        "contains": ["Neolithic", "Medieval", "Industrial", "Spacer", "Ultra"],
+        "not_contains": ["Ultratech", "Industry"]
+      }
+    },
+    {
+      "id": "debug-missing-def",
+      "prompt": "我的武器mod在游戏里搜索不到defName，怎么排查？",
+      "expect": {
+        "contains": ["RimSage", "grep", "Data/Core/Defs", "先查原版"],
+        "not_contains": []
+      }
+    }
+  ]
+}
