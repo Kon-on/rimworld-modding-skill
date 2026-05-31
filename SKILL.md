@@ -1,10 +1,25 @@
 ---
 name: rimworld-modding
+version: 0.721.0-alpha
 description: >
   Comprehensive guide for RimWorld mod developers. Use when users want to create or modify
   RimWorld mods (weapons, buildings, items, plants, factions, events), work with XML Defs
   (ThingDef, RecipeDef), write C# mod code or Harmony patches, debug mod errors, or publish
   to Steam Workshop. Covers environment setup through publishing. 环世界模组制作全流程指南。
+tags:
+  - rimworld
+  - modding
+  - game-development
+  - csharp
+  - harmony
+  - xml
+  - steam-workshop
+dependencies:
+  rimworld-source:
+    type: mcp
+    url: https://mcp.rimsage.com/mcp
+    required: false
+    fallback: local-grep
 ---
 
 # RimWorld Mod 制作指南
@@ -95,14 +110,14 @@ description: >
 ### 我想...
 | 需求 | 加载内容 |
 |------|---------|
-| 🆕 **新建一个 mod 项目** | `workflows/new-mod.md` + `references/02-project-structure.md` |
-| ⚔️ **添加武器/物品/建筑/服装/植物** | `references/03-xml-defs.md` + 对应 `templates/*.xml` |
+| 🆕 **新建一个 mod 项目** | `references/workflows/new-mod.md` + `references/02-project-structure.md` |
+| ⚔️ **添加武器/物品/建筑/服装/植物** | `references/03-xml-defs.md` + 对应 `assets/templates/*.xml` |
 | 🔧 **修改原版机制/打补丁** | `references/04-xml-patching.md`（XML）/ `references/06-harmony.md`（C#） |
 | 💻 **编写 C# 代码/DLL** | `references/05-csharp-basics.md` |
-| 🎵 **用 Harmony 拦截方法** | `references/06-harmony.md` + `templates/harmony-patch.cs` |
+| 🎵 **用 Harmony 拦截方法** | `references/06-harmony.md` + `assets/templates/harmony-patch.cs` |
 | 🖼️ **添加纹理/音效资源** | `references/07-assets.md` |
 | 🐛 **排查报错/崩溃/红字** | `references/08-debugging.md` |
-| ✅ **测试通过，正规化 mod** | `workflows/formalize-mod.md` |
+| ✅ **测试通过，正规化 mod** | `references/workflows/formalize-mod.md` |
 | 📦 **发布到 Steam Workshop** | `references/09-workshop.md` |
 | 📖 **查询 API/类/方法** | `references/10-api-reference.md`（建议先接入 RimSage MCP） |
 
@@ -240,18 +255,18 @@ grep -rh "techLevel" "<RW>/Data/Core/Defs/" | sort -u | head -20
 9. `references/09-workshop.md` — Steam Workshop 发布
 10. `references/10-api-reference.md` — API 速查表
 
-### 代码模板 (templates/)
-- `templates/weapon-melee.xml` — 近战武器 Def
-- `templates/weapon-ranged.xml` — 远程武器 Def
-- `templates/harmony-patch.cs` — Harmony 补丁骨架
-- `templates/building.xml` — 建筑 Def（Phase 2）
-- `templates/recipe.xml` — 配方 Def（Phase 2）
-- `templates/thingcomp.cs` — ThingComp 骨架（Phase 2）
+### 代码模板 (assets/templates/)
+- `assets/templates/weapon-melee.xml` — 近战武器 Def
+- `assets/templates/weapon-ranged.xml` — 远程武器 Def
+- `assets/templates/harmony-patch.cs` — Harmony 补丁骨架
+- `assets/templates/building.xml` — 建筑 Def
+- `assets/templates/recipe.xml` — 配方 Def
+- `assets/templates/thingcomp.cs` — ThingComp 骨架
 
-### 工作流 (workflows/)
-- `workflows/new-mod.md` — 从零创建 mod（测试版先行）
-- `workflows/formalize-mod.md` — 测试通过后正规化 + 可选发布
-- `workflows/debug-crash.md` — 崩溃排查
-- `workflows/add-item.md` — 添加物品
-- `workflows/add-building.md` — 添加建筑
-- `workflows/patch-vanilla.md` — 修改原版
+### 工作流 (references/workflows/)
+- `references/workflows/new-mod.md` — 从零创建 mod（测试版先行）
+- `references/workflows/formalize-mod.md` — 测试通过后正规化 + 可选发布
+- `references/workflows/debug-crash.md` — 崩溃排查
+- `references/workflows/add-item.md` — 添加物品
+- `references/workflows/add-building.md` — 添加建筑
+- `references/workflows/patch-vanilla.md` — 修改原版

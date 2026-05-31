@@ -18,35 +18,39 @@ Claude Code agent skill for full-cycle RimWorld mod development.
 
 ```
 rimworld-modding-skill/
-├── SKILL.md                 # 总调度器 + 意图路由
-├── references/              # 知识库（10 篇）
-│   ├── 01-environment.md    # IDE、.NET、dnSpy、MCP 配置
+├── SKILL.md                 # 核心指令文件（必需）
+├── README.md                # 项目介绍（推荐）
+├── LICENSE                  # MIT
+├── .gitignore
+├── .mcp.json.example        # MCP 配置模板
+├── references/              # 参考文档 + 工作流
+│   ├── 01-environment.md
 │   ├── 02-project-structure.md
-│   ├── 03-xml-defs.md       # 核心：ThingDef、RecipeDef 等
-│   ├── 04-xml-patching.md   # XPath PatchOperations
+│   ├── 03-xml-defs.md       # 核心：ThingDef、RecipeDef
+│   ├── 04-xml-patching.md
 │   ├── 05-csharp-basics.md
 │   ├── 06-harmony.md
 │   ├── 07-assets.md
 │   ├── 08-debugging.md
 │   ├── 09-workshop.md
-│   └── 10-api-reference.md
-├── templates/               # 代码模板（6 个）
-│   ├── weapon-melee.xml
-│   ├── weapon-ranged.xml
-│   ├── building.xml
-│   ├── recipe.xml
-│   ├── harmony-patch.cs
-│   └── thingcomp.cs
-├── workflows/               # 工作流（6 个）
-│   ├── new-mod.md            # 测试版先行创建
-│   ├── formalize-mod.md      # 测试→正规化→发布
-│   ├── add-item.md
-│   ├── add-building.md
-│   ├── patch-vanilla.md
-│   └── debug-crash.md
-└── docs/                    # 设计文档
-    ├── specs/                # 设计规格
-    └── plans/                # 实施计划
+│   ├── 10-api-reference.md
+│   └── workflows/           # 任务工作流（6 个）
+│       ├── new-mod.md
+│       ├── formalize-mod.md
+│       ├── add-item.md
+│       ├── add-building.md
+│       ├── patch-vanilla.md
+│       └── debug-crash.md
+├── assets/                  # 静态资源
+│   └── templates/           # 代码模板（6 个）
+│       ├── weapon-melee.xml
+│       ├── weapon-ranged.xml
+│       ├── building.xml
+│       ├── recipe.xml
+│       ├── harmony-patch.cs
+│       └── thingcomp.cs
+└── tests/                   # 测试用例
+    └── evals.json
 ```
 
 ## 安装
