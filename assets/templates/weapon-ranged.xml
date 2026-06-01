@@ -18,7 +18,7 @@
     <description><your gun description></description>
 
     <possessionCount>1</possessionCount>
-    <techLevel>Industrial</techLevel>            <!-- Neolithic / Medieval / Industrial / Spacer / Ultratech -->
+    <techLevel>Industrial</techLevel>            <!-- Neolithic / Medieval / Industrial / Spacer / Ultra / Archotech -->
 
     <!-- 材料成本 -->
     <costStuffCount>60</costStuffCount>
@@ -50,6 +50,7 @@
       <graphicClass>Graphic_Single</graphicClass>
       <shaderType>CutoutComplex</shaderType>
     </graphicData>
+    <uiIconScale>1.0</uiIconScale>                <!-- UI图标缩放（枪械一般1.0）-->
 
     <recipeMaker>
       <researchPrerequisite>Gunsmithing</researchPrerequisite>

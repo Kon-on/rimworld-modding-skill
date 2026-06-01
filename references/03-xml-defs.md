@@ -63,7 +63,7 @@ Def（Definition）是 RimWorld 的数据定义系统。游戏中的所有内容
   <label>plasma sword</label>                  <!-- 游戏内显示名 -->
   <description>A sword made of superheated plasma.</description>
   <possessionCount>1</possessionCount>         <!-- 可持有个数 -->
-  <techLevel>Ultratech</techLevel>             <!-- Neolithic/Medieval/Industrial/Spacer/Ultratech -->
+  <techLevel>Ultra</techLevel>                 <!-- Neolithic/Medieval/Industrial/Spacer/Ultra/Archotech -->
 ```
 
 #### 物品分类
@@ -221,7 +221,7 @@ BaseBuilding → BuildingBase → 你的建筑
     <description>A shimmering blade infused with the power of rainbow cats.</description>
 
     <possessionCount>1</possessionCount>
-    <techLevel>Ultratech</techLevel>
+    <techLevel>Ultra</techLevel>
 
     <!-- stuff 材料系统：需要 60 单位金属材料 -->
     <costStuffCount>60</costStuffCount>
