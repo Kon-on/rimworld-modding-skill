@@ -264,6 +264,7 @@ grep -rh "techLevel" "<RW>/Data/Core/Defs/" | sort -u | head -20
 - `assets/templates/recipe.xml` — 配方 Def
 - `assets/templates/thingcomp.cs` — ThingComp 骨架
 - `assets/templates/apparel.xml` — 服装/护甲 Def（含衣物、护甲、头饰注释）
+- `assets/templates/resource-stuff.xml` — 原材料/建筑材料 Def（含 stuffProps 完整注释）
 
 ### 工作流 (references/workflows/)
 - `references/workflows/new-mod.md` — 从零创建 mod（测试版先行）

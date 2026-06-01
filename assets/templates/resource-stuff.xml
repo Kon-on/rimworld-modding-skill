@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  原材料/资源模板（已验证——基于原版 Items_Resource_Stuff.xml 和 Items_Resource_Manufactured.xml）
+  替换所有 <Your...> 占位符为你的实际值
+
+  ⚠️ 重要：生成后务必对比原版 Def 验证！
+  原版材料参考：RimWorld/Data/Core/Defs/ThingDefs_Items/Items_Resource_Stuff.xml
+  原版制造品参考：RimWorld/Data/Core/Defs/ThingDefs_Items/Items_Resource_Manufactured.xml
+
+  ParentName 继承链：
+  ResourceBase（内置 CompForbiddable、stackLimit=75、category=Item）
+
+  stuffProps.categories 决定了哪些武器/服装/建筑可以用此材料：
+    Metallic  — 金属（对应 weapon/apparel 的 <stuffCategories><li>Metallic</li>）
+    Woody     — 木材
+    Stony     — 石料
+    Fabric    — 布料（裁缝台）
+    Leathery  — 皮革（裁缝台）
+-->
+
+<!-- ============================================================
+     类型 A：可用的建筑材料（Stuff）——有 stuffProps
+     ============================================================ -->
+<Defs>
+  <ThingDef ParentName="ResourceBase">
+    <defName><YourPrefix>_Material_<YourName></defName>
+    <label><your material label></label>
+    <description><your material description></description>
+
+    <!-- 价值/重量 -->
+    <statBases>
+      <MarketValue>3</MarketValue>               <!-- 单个材料的基础市场价值（银） -->
+      <Mass>0.5</Mass>                           <!-- 单个重量（kg） -->
+      <!-- 以下为 stuff 专属属性：该材料贡献的护甲/隔温值 -->
+      <StuffPower_Armor_Sharp>0.08</StuffPower_Armor_Sharp>     <!-- 每单位贡献锐器护甲 -->
+      <StuffPower_Armor_Blunt>0.03</StuffPower_Armor_Blunt>     <!-- 每单位贡献钝器护甲 -->
+      <StuffPower_Armor_Heat>0.12</StuffPower_Armor_Heat>       <!-- 每单位贡献热护甲 -->
+      <StuffPower_Insulation_Cold>0</StuffPower_Insulation_Cold> <!-- 每单位贡献冷隔绝 -->
+      <StuffPower_Insulation_Heat>0</StuffPower_Insulation_Heat> <!-- 每单位贡献热隔绝 -->
+      <!-- 材料对武器伤害的影响 -->
+      <SharpDamageMultiplier>1.0</SharpDamageMultiplier>        <!-- 锐器伤害倍率 -->
+      <BluntDamageMultiplier>1.0</BluntDamageMultiplier>        <!-- 钝器伤害倍率 -->
+    </statBases>
+
+    <thingCategories>
+      <li>ResourcesRaw</li>                      <!-- ResourcesRaw / Manufactured / Textiles -->
+    </thingCategories>
+
+    <stackLimit>75</stackLimit>
+    <smallVolume>false</smallVolume>             <!-- true=高价值小体积物品（金、银） -->
+
+    <graphicData>
+      <texPath>Things/Item/Resource/<YourPrefix>_<YourName></texPath>
+      <graphicClass>Graphic_StackCount</graphicClass>
+    </graphicData>
+
+    <techLevel>Industrial</techLevel>            <!-- Neolithic / Medieval / Industrial / Spacer / Ultra / Archotech -->
+
+    <!-- ===== Stuff 核心配置 ===== -->
+    <stuffProps>
+      <!-- 材料分类（必须与使用此材料的武器/服装/建筑的 stuffCategories 匹配） -->
+      <categories>
+        <li>Metallic</li>                        <!-- Metallic / Woody / Stony / Fabric / Leathery -->
+        <!-- <li>Woody</li> -->
+        <!-- <li>Stony</li> -->
+      </categories>
+
+      <!-- 外观类型 -->
+      <appearance>Metal</appearance>             <!-- Metal / Wood / Stone / Fabric / Leather -->
+
+      <!-- 材料颜色 RGB (0-1) -->
+      <color>(0.7, 0.5, 0.3)</color>
+
+      <!-- 商人出现频率 (0~1)，越高越常见 -->
+      <commonality>0.3</commonality>
+
+      <!-- 建造特效 -->
+      <constructEffect>ConstructMetal</constructEffect>  <!-- ConstructMetal / ConstructWood / ConstructStone -->
+
+      <!-- 材质属性 -->
+      <isAirtight>true</isAirtight>              <!-- 是否气密（金属是，木头不是） -->
+      <!-- <overpowering>true</overpowering> -->  <!-- 覆盖其他材料的颜色（金、银） -->
+
+      <!-- 作为建筑材料时的属性加成 -->
+      <statOffsets>
+        <Beauty>0</Beauty>                       <!-- 美观度偏移 -->
+      </statOffsets>
+
+      <!-- 作为建筑材料时的属性倍率 -->
+      <statFactors>
+        <MaxHitPoints>1.0</MaxHitPoints>         <!-- 耐久度倍率 -->
+        <Flammability>0.3</Flammability>         <!-- 可燃性倍率 -->
+        <Beauty>1.0</Beauty>                     <!-- 美观度倍率 -->
+        <WorkToBuild>1.0</WorkToBuild>           <!-- 建造工作量倍率 -->
+      </statFactors>
+
+      <!-- 音效 -->
+      <!--
+      <soundImpactBullet>BulletImpact_Metal</soundImpactBullet>
+      <soundMeleeHitSharp>MeleeHit_Metal_Sharp</soundMeleeHitSharp>
+      <soundMeleeHitBlunt>MeleeHit_Metal_Blunt</soundMeleeHitBlunt>
+      <soundImpactMelee>Pawn_Melee_Punch_HitBuilding_Metal</soundImpactMelee>
+      -->
+    </stuffProps>
+
+    <!-- 可熔炼（金属） -->
+    <smeltable>true</smeltable>
+    <!-- <burnableByRecipe>true</burnableByRecipe> -->   <!-- 可焚烧（木头/织物） -->
+
+    <!-- 地下矿脉（仅矿石类） -->
+    <!--
+    <deepCommonality>0.5</deepCommonality>             <!-- 深钻井出现概率 -->
+    <deepCountPerPortion>35</deepCountPerPortion>      <!-- 每次采掘量 -->
+    <deepLumpSizeRange>2~10</deepLumpSizeRange>        <!-- 矿团大小范围 -->
+    -->
+
+    <!-- 地形要求 -->
+    <terrainAffordanceNeeded>Medium</terrainAffordanceNeeded>
+  </ThingDef>
+</Defs>
