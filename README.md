@@ -96,11 +96,13 @@ cp -r rimworld-modding-skill ~/.codex/skills/rimworld-modding/
 
 ## 致谢
 
-本项目依赖以下开源工具：
+特别感谢 **[RimSage](https://mcp.rimsage.com/mcp)**（MIT 协议开源项目）。
 
-- **[RimSage](https://mcp.rimsage.com/mcp)**（MIT 协议）—— RimWorld 源码 AI 搜索 MCP 服务器，提供 `search_rimworld_source`、`get_def_details`、`read_rimworld_file` 工具，是本 Skill 验证 Def 结构的核心依赖。本项目基于 MIT 协议使用该组件。
+如果你做过 RimWorld mod，大概率经历过这种事：想给武器加个燃烧伤害，但不记得 `extraMeleeDamages` 到底要不要写 `Class` 属性——于是打开 `Data/Core/Defs/` 层层翻找，grep 半天才找到答案。
 
-> 感谢 RimSage 作者为 RimWorld mod 社区提供了如此强大的开发工具。
+RimSage 把这个变成了几秒内的事。它给 RimWorld 源码做了语义索引，你用自然语言描述想查什么——"所有带燃烧附加伤害的近战武器"——它直接返回结构和字段名。本 Skill 排查报错和创建新类型模板时全靠它快速找到原版参照，不用肉眼翻几千行 XML。
+
+感谢 RimSage 作者为 mod 社区造了这个轮子 🙏
 
 ## 许可证
 
