@@ -67,12 +67,34 @@ description: |
 
 ```
 用户要求无模板类型
-  → MCP 查原版类似 Def（get_def_details + search_rimworld_source）
-  → 写出完整可用的 Def（带中文注释）
-  → 存储为 templates/<新类型>.xml
-  → 更新此 SKILL.md 的"对照表"和"索引"
-  → 下次同类型请求直接免 MCP
+  → ① MCP 查原版类似 Def（get_def_details + search_rimworld_source）
+  → ② 写出完整可用的 Def（带中文注释，遵循下方"模板格式规范"）
+  → ③ Write 模板到文件系统（绝对路径，不能用对话中输出代替）
+  → ④ 更新 SKILL.md 两处列表（见下方"存储与更新清单"）
+  → ✅ 下次同类型请求直接免 MCP
 ```
+
+**📋 存储与更新清单（每次创建新模板后必须逐项完成）：**
+
+| # | 操作 | 工具 | 目标位置 |
+|---|------|------|---------|
+| 1 | 写入模板文件 | `Write` | `templates/<新类型>.xml`（或用 `.cs` 后缀） |
+| 2 | 添加到"模板 ↔ Def 类型对照表" | `Edit` | SKILL.md 顶部表格——新增一行，标记 `❌ 免` |
+| 3 | 添加到"子文件索引 → 代码模板" | `Edit` | SKILL.md 底部 `templates/` 列表——新增条目 |
+
+**📐 模板格式规范（Write 模板文件时必须遵守）：**
+
+1. `<?xml version="1.0" encoding="utf-8"?>` 开头（XML 模板）
+2. 注释块（`<!-- ... -->`）包含：
+   - 模板类型名称 + 验证状态
+   - 原版参考路径（哪个原版 XML 文件）
+   - ParentName 继承链（完整层级）
+   - 关键设计决策说明
+3. 所有用户自定义值使用 `<YourXxx>` 占位符（如 `<YourPrefix>_Thing_<YourName>`）
+4. 关键字段附带中文行内注释（含可选值列表/合法范围）
+5. 文件末尾保留一个空行
+
+**💡 模板示例参考**：打开任意现有模板（如 `templates/weapon-melee.xml`）查看注释头和占位符风格，新模板应与之保持一致。
 
 ---
 
@@ -194,19 +216,26 @@ description: |
 
 **MCP 不可用时**：用 grep 搜原版 Defs 目录 + dnSpy 反编译 C#。
 
-#### ③ 无模板的新类型 → MCP 查 → 写 → 存模板
+#### ③ 无模板的新类型 → MCP 查 → 写 → ⚠️ 存模板
 
-遇到模板未覆盖的 Def 类型（如植物、生物、派系等），流程如下：
+遇到模板未覆盖的 Def 类型（如植物、生物、派系等），**完整流程如下**：
 
 ```
 用户: "帮我添加一种新植物"
-→ 当前无 plants.xml 模板
-→ MCP: get_def_details("Plant_TreeOak") 看原版结构
-→ MCP: search_rimworld_source("plant def wild") 了解关键字段
-→ 写出完整 Def + 中文注释
-→ 存储为 templates/plant.xml
-→ 更新 SKILL.md 模板对照表
+→ ① 查对照表，确认当前无 plants.xml 模板
+→ ② MCP: get_def_details("Plant_TreeOak") → 了解原版 Def 结构（字段名、继承、Comps）
+→ ③ MCP: search_rimworld_source("plant def wild") → 确认关键字段的用法模式
+→ ④ 根据原版结构写出完整 Def + 中文注释（遵循模板格式规范）
+→ ⑤ ⚠️ Write 到 templates/plant.xml（skill 的 templates/ 目录下）
+        （必须用 Write 工具写入文件系统，不能在对话中输出就算完！）
+→ ⑥ Edit SKILL.md 对照表：添加 `| 植物 | templates/plant.xml | ❌ 免 |`
+→ ⑦ Edit SKILL.md 索引：添加 `- templates/plant.xml — 植物 Def`
+→ ✅ 完成——下次遇到植物请求直接免 MCP，加载模板即可
 ```
+
+> **⚠️ 关键提醒：步骤⑤（Write 文件）和⑥⑦（更新 SKILL.md）最容易遗漏！**
+> 如果只生成了 Def 但没有写入文件系统，下次同类请求时模板仍然不存在，又会重复 MCP 查询。
+> **生成新模板 = 写入文件 + 更新 SKILL.md，缺一不可。**
 
 **反面教材（RainbowCatSword 犯过的错）**：
 - ❌ `techLevel` 凭记忆写 `Ultratech` → 实际是 `Ultra`（如果先用模板就不会错）
