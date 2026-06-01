@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  服装/护甲模板（已验证——基于原版 Apparel_Various.xml）
+  替换所有 <Your...> 占位符为你的实际值
+
+  ⚠️ 重要：生成后务必对比原版 Def 验证！
+  原版服装参考：RimWorld/Data/Core/Defs/ThingDefs_Misc/Apparel_Various.xml
+  原版头饰参考：RimWorld/Data/Core/Defs/ThingDefs_Misc/Apparel_Headgear.xml
+
+  ParentName 继承链：
+  普通衣物: ApparelNoQualityBase → ApparelBase → ApparelMakeableBase (裁缝台制作)
+  锻造护甲: ApparelNoQualityBase → ApparelBase → ArmorSmithableBase   (锻造台制作)
+  机械护甲: ApparelNoQualityBase → ApparelBase → ArmorMachineableBase (机械加工台制作)
+  头饰:     HatBase → HatMakeableBase (裁缝台) / ArmorHelmetMakeableBase (机械加工台)
+
+  服装层级 (layers):
+    OnSkin   — 内衣层（衬衫、裤子）
+    Middle   — 中层（夹克）
+    Shell    — 外层（外套、防尘大衣、护甲）
+    Overhead — 头饰层（帽子、头盔）
+
+  覆盖部位 (bodyPartGroups):
+    Torso, Shoulders, Arms, Legs, Neck, UpperHead, FullHead, Hands, Feet
+-->
+
+<!-- ============================================================
+     类型 A：普通衣物（裁缝台制作）
+     ParentName="ApparelMakeableBase"
+     材质：Fabric / Leathery
+     ============================================================ -->
+<Defs>
+  <ThingDef ParentName="ApparelMakeableBase">
+    <defName><YourPrefix>_Apparel_<YourName></defName>
+    <label><your apparel label></label>
+    <description><your apparel description></description>
+
+    <possessionCount>1</possessionCount>
+    <techLevel>Industrial</techLevel>            <!-- Neolithic / Medieval / Industrial / Spacer / Ultra / Archotech -->
+
+    <!-- 材料成本 -->
+    <costStuffCount>50</costStuffCount>
+    <stuffCategories>
+      <li>Fabric</li>                            <!-- 布料 -->
+      <li>Leathery</li>                          <!-- 皮革 -->
+    </stuffCategories>
+
+    <thingCategories>
+      <li>ApparelMisc</li>                       <!-- ApparelMisc / ApparelArmor / Headgear -->
+    </thingCategories>
+
+    <statBases>
+      <MaxHitPoints>150</MaxHitPoints>
+      <WorkToMake>5000</WorkToMake>              <!-- 制作工作量（tick） -->
+      <Mass>1.0</Mass>                           <!-- 重量（kg） -->
+      <!--
+        护甲/隔热/隔寒倍率取决于材料，这些值定义"材料属性的多少比例转化为护甲/温度"
+        StuffEffectMultiplierArmor:          0.20=衬衫级 / 0.30=外套级
+        StuffEffectMultiplierInsulation_Cold: 冷隔绝倍率 (0.10~0.60)
+        StuffEffectMultiplierInsulation_Heat: 热隔绝倍率 (0.10~0.85)
+      -->
+      <StuffEffectMultiplierArmor>0.20</StuffEffectMultiplierArmor>
+      <StuffEffectMultiplierInsulation_Cold>0.22</StuffEffectMultiplierInsulation_Cold>
+      <StuffEffectMultiplierInsulation_Heat>0.10</StuffEffectMultiplierInsulation_Heat>
+      <EquipDelay>2.0</EquipDelay>               <!-- 装备耗时（秒） -->
+    </statBases>
+
+    <!-- 可选：装备时的属性加成/惩罚 -->
+    <!--
+    <equippedStatOffsets>
+      <SocialImpact>0.05</SocialImpact>
+    </equippedStatOffsets>
+    -->
+
+    <!-- ===== 服装核心配置 ===== -->
+    <apparel>
+      <!-- 覆盖的身体部位（至少选一个） -->
+      <bodyPartGroups>
+        <li>Torso</li>
+        <!-- <li>Shoulders</li> -->
+        <!-- <li>Arms</li> -->
+        <!-- <li>Legs</li> -->
+        <!-- <li>Neck</li> -->
+      </bodyPartGroups>
+
+      <!-- 穿戴贴图路径（与 graphicData/texPath 通常相同） -->
+      <wornGraphicPath>Things/Pawn/Humanlike/Apparel/<YourName>/<YourName></wornGraphicPath>
+
+      <!-- 服装层级：OnSkin（内衣）/ Middle（中层）/ Shell（外层） -->
+      <layers>
+        <li>OnSkin</li>
+      </layers>
+
+      <!-- 标签：IndustrialBasic / IndustrialAdvanced / Military -->
+      <tags>
+        <li>IndustrialBasic</li>
+      </tags>
+
+      <!-- 默认着装方案标签 -->
+      <defaultOutfitTags>
+        <li>Worker</li>
+        <li>Soldier</li>
+      </defaultOutfitTags>
+
+      <!-- 是否计入遮体（大多数衣物=true，部分头饰=false） -->
+      <countsAsClothingForNudity>true</countsAsClothingForNudity>
+
+      <!-- Biotech 儿童支持（可选，需要 Biotech DLC） -->
+      <!-- <developmentalStageFilter>Child, Adult</developmentalStageFilter> -->
+    </apparel>
+
+    <graphicData>
+      <texPath>Things/Pawn/Humanlike/Apparel/<YourName>/<YourName></texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+
+    <!-- 颜色（可选） -->
+    <!--
+    <colorGenerator Class="ColorGenerator_StandardApparel" />
+    -->
+
+    <recipeMaker>
+      <researchPrerequisite>ComplexClothing</researchPrerequisite>  <!-- Tailoring / ComplexClothing -->
+      <displayPriority>200</displayPriority>                        <!-- 配方列表排序 -->
+      <skillRequirements>
+        <Crafting>5</Crafting>
+      </skillRequirements>
+      <workAmount>5000</workAmount>
+    </recipeMaker>
+
+    <tradeTags>
+      <li>Clothing</li>
+    </tradeTags>
+  </ThingDef>
+</Defs>
