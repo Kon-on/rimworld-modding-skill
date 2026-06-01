@@ -1,79 +1,29 @@
 ---
 name: rimworld-modding
-version: 0.721.0-alpha
-description: >
-  Comprehensive guide for RimWorld mod developers. Use when users want to create or modify
-  RimWorld mods (weapons, buildings, items, plants, factions, events), work with XML Defs
-  (ThingDef, RecipeDef), write C# mod code or Harmony patches, debug mod errors, or publish
-  to Steam Workshop. Covers environment setup through publishing. 环世界模组制作全流程指南。
-tags:
-  - rimworld
-  - modding
-  - game-development
-  - csharp
-  - harmony
-  - xml
-  - steam-workshop
-  - ai-generated
-dependencies:
-  rimworld-source:
-    type: mcp
-    url: https://mcp.rimsage.com/mcp
-    required: false
-    fallback: local-grep
+description: |
+  RimWorld mod 制作全流程指南——覆盖环境搭建、XML Def 系统、C# 开发、Harmony 补丁、
+  资源制作和 Steam Workshop 发布。适用于零基础到进阶的 RimWorld 1.6 mod 开发者。
+  跨平台支持 Claude Code / Copilot CLI / Codex / Gemini CLI / Cursor 等主流 AI 编程工具。
+  
+  触发词：RimWorld, 环世界, rimworld, RW, mod, Mod, 模组, Def, XML, ThingDef, 
+  Harmony, Patch, 补丁, 武器, 建筑, 物品, 生物, 植物, 派系, 事件, 
+  Steam Workshop, 创意工坊, C#, DLL, 编译
 ---
 
 # RimWorld Mod 制作指南
 
-## ⚙️ 前置依赖：RimSage MCP
+## ⚙️ 开始前：配置 RimSage MCP（实时源码搜索）
 
-### 依赖声明
+RimSage 是 RimWorld 源码 AI 搜索工具——**这是避免 Def 结构错误的根本方案。**
 
-| 项目 | 值 |
-|------|-----|
-| **依赖名称** | RimSage（`rimworld-source`） |
-| **协议** | MCP over HTTP |
-| **必需工具** | `search_rimworld_source`、`get_def_details`、`read_rimworld_file` |
-| **配置方式** | `.mcp.json`（项目级）或 `claude mcp add`（全局） |
-| **首次索引** | 30-60 分钟，之后毫秒级 |
+> 如果还没有配置，参考 `.mcp.json.example` 创建项目级配置，或运行平台对应的 MCP 添加命令（详见 `references/11-platform-adaptation.md`）。
+> 首次索引需 30-60 分钟。
 
-> ⚠️ RimSage 是**外部运行时依赖**——本 Skill 不捆绑、不内置 MCP 服务器。
+**在开始任何 mod 制作工作前，请先确认：**
 
-### 初始化检测（每个会话开始时执行）
-
-在开始任何 mod 制作工作前，先检测 MCP 可用性：
-
-```
-检测流程：
-  try MCP ping
-    ├─ ✅ 可用 → 使用 MCP 工具验证所有 Def 结构
-    ├─ ❌ 不可用 → 询问用户：
-    │     A. 帮我配置  → 创建 .mcp.json（参考 .mcp.json.example）
-    │     B. 稍后再说  → 降级为本地 grep 模式（功能受限）
-    │     C. 不用 MCP  → 永久降级，只用 grep
-    └─ ⏱️ 超时 → 降级为本地 grep，提示用户检查 MCP 服务状态
-```
-
-### 优雅降级：MCP 不可用时的回退
-
-| 原本用 MCP 做的事 | 降级方案 |
-|------------------|---------|
-| `get_def_details("xxx")` | `grep -r 'defName="xxx"' <RW>/Data/Core/Defs/` + Read 对应文件 |
-| `search_rimworld_source("xxx")` | `grep -r "xxx" <RW>/Data/Core/Defs/` |
-| `read_rimworld_file("path")` | Read 工具直接读本地文件 |
-| 查继承链 | `grep -r 'ParentName="Xxx"' <RW>/Data/Core/Defs/'` 递归追溯 |
-
-> **降级模式限制**：grep 只能做字面匹配，无法像 MCP 那样理解语义。"查哪些武器用了 extraMeleeDamages" 这种查询在降级模式中需要手动遍历文件。
-
-### MCP 不可用时的错误信息
-
-当调用 MCP 工具失败时，区分原因：
-
-| 错误现象 | 可能原因 | 告诉用户 |
-|---------|---------|---------|
-| `mcp__rimworld-source` 工具不存在 | MCP 未配置或未批准 | "RimSage MCP 未连接——运行 `claude mcp add rimworld-source --transport http https://mcp.rimsage.com/mcp` 或在项目目录创建 `.mcp.json`（参考 `.mcp.json.example`）" |
-| 工具调用超时 | MCP 服务未启动或网络问题 | "RimSage 服务无响应——检查 `https://mcp.rimsage.com/mcp` 是否可达，或降级为本地 grep 模式" |
-| 工具返回空结果 | 索引未完成或查询不匹配 | "未找到匹配结果。可能原因：1) 索引还未完成（首次需 30-60 分钟）2) 查询关键词不对——试试更通用的词" |
+- **A. 已配置 RimSage** → 我会用 MCP 工具验证所有 Def 结构
+- **B. 还没配置** → 帮你创建 `.mcp.json` 配置文件
+- **C. 不想用 MCP** → 改用本地 `grep` 搜索 `RimWorld/Data/Core/Defs/`（功能受限）
 
 ### RimSage 三件套：何时用哪个
 
@@ -85,10 +35,25 @@ dependencies:
 
 ### 典型查询模式
 
-**查继承链**：`get_def_details("BaseMeleeWeapon")` → 看 ParentName 链  
-**查字段用法**：`search_rimworld_source("extraMeleeDamages Burn")`  
-**验证枚举值**：`search_rimworld_source("techLevel Ultra")` → 确认是 "Ultra" 不是 "Ultratech"  
-**对比相似物品**：`get_def_details("MeleeWeapon_Gladius")` → 模仿写新武器
+**查继承链**：
+```
+get_def_details("BaseMeleeWeapon") → 看 ParentName 链 → 确认正确父类
+```
+
+**查字段用法**：
+```
+search_rimworld_source("extraMeleeDamages Burn") → 看原版哪些武器用了这个字段
+```
+
+**验证枚举值**：
+```
+search_rimworld_source("techLevel Ultra") → 确认 techLevel 的合法值是 "Ultra" 不是 "Ultratech"
+```
+
+**对比相似物品**：
+```
+get_def_details("MeleeWeapon_Gladius") → 看 Gladius 的完整结构 → 模仿写新武器
+```
 
 ---
 
@@ -111,16 +76,17 @@ dependencies:
 ### 我想...
 | 需求 | 加载内容 |
 |------|---------|
-| 🆕 **新建一个 mod 项目** | `references/workflows/new-mod.md` + `references/02-project-structure.md` |
-| ⚔️ **添加武器/物品/建筑/服装/植物** | `references/03-xml-defs.md` + 对应 `assets/templates/*.xml` |
+| 🆕 **新建一个 mod 项目** | `workflows/new-mod.md` + `references/02-project-structure.md` |
+| ⚔️ **添加武器/物品/建筑/服装/植物** | `references/03-xml-defs.md` + 对应 `templates/*.xml` |
 | 🔧 **修改原版机制/打补丁** | `references/04-xml-patching.md`（XML）/ `references/06-harmony.md`（C#） |
 | 💻 **编写 C# 代码/DLL** | `references/05-csharp-basics.md` |
-| 🎵 **用 Harmony 拦截方法** | `references/06-harmony.md` + `assets/templates/harmony-patch.cs` |
+| 🎵 **用 Harmony 拦截方法** | `references/06-harmony.md` + `templates/harmony-patch.cs` |
 | 🖼️ **添加纹理/音效资源** | `references/07-assets.md` |
 | 🐛 **排查报错/崩溃/红字** | `references/08-debugging.md` |
-| ✅ **测试通过，正规化 mod** | `references/workflows/formalize-mod.md` |
+| ✅ **测试通过，正规化 mod** | `workflows/formalize-mod.md` |
 | 📦 **发布到 Steam Workshop** | `references/09-workshop.md` |
 | 📖 **查询 API/类/方法** | `references/10-api-reference.md`（建议先接入 RimSage MCP） |
+| 🔄 **适配其他 AI 平台** | `references/11-platform-adaptation.md`（Copilot/Codex/Gemini 等工具映射） |
 
 ## 核心原则
 
@@ -220,14 +186,14 @@ dependencies:
 ### grep（第二选择——本地搜索）
 
 ```bash
-# 搜索字段的所有用法（<RW> 替换为你的 RimWorld 安装目录）
-grep -r "extraMeleeDamages" "<RW>/Data/Core/Defs/" | head -10
+# 搜索字段的所有用法
+grep -r "extraMeleeDamages" "D:/steam/steamapps/common/RimWorld/Data/Core/Defs/" | head -10
 
 # 搜索 ParentName 定义
-grep -r 'Name="BaseMeleeWeapon"' "<RW>/Data/Core/Defs/"
+grep -r 'Name="BaseMeleeWeapon"' "D:/steam/steamapps/common/RimWorld/Data/Core/Defs/"
 
 # 搜索所有 techLevel 取值
-grep -rh "techLevel" "<RW>/Data/Core/Defs/" | sort -u | head -20
+grep -rh "techLevel" "D:/steam/steamapps/common/RimWorld/Data/Core/Defs/" | sort -u | head -20
 ```
 
 ### dnSpy（第三选择——反编译 C# 源码）
@@ -255,21 +221,22 @@ grep -rh "techLevel" "<RW>/Data/Core/Defs/" | sort -u | head -20
 8. `references/08-debugging.md` — 调试与排错
 9. `references/09-workshop.md` — Steam Workshop 发布
 10. `references/10-api-reference.md` — API 速查表
+11. `references/11-platform-adaptation.md` — 跨平台适配（Copilot/Codex/Gemini 工具映射）
 
-### 代码模板 (assets/templates/)
-- `assets/templates/weapon-melee.xml` — 近战武器 Def
-- `assets/templates/weapon-ranged.xml` — 远程武器 Def
-- `assets/templates/harmony-patch.cs` — Harmony 补丁骨架
-- `assets/templates/building.xml` — 建筑 Def
-- `assets/templates/recipe.xml` — 配方 Def
-- `assets/templates/thingcomp.cs` — ThingComp 骨架
-- `assets/templates/apparel.xml` — 服装/护甲 Def（含衣物、护甲、头饰注释）
-- `assets/templates/resource-stuff.xml` — 原材料/建筑材料 Def（含 stuffProps 完整注释）
+### 代码模板 (templates/)
+- `templates/weapon-melee.xml` — 近战武器 Def
+- `templates/weapon-ranged.xml` — 远程武器 Def
+- `templates/harmony-patch.cs` — Harmony 补丁骨架
+- `templates/building.xml` — 建筑 Def（Phase 2）
+- `templates/recipe.xml` — 配方 Def（Phase 2）
+- `templates/thingcomp.cs` — ThingComp 骨架
+- `templates/apparel.xml` — 服装/护甲 Def（含衣物、护甲、头饰注释）
+- `templates/resource-stuff.xml` — 原材料/建筑材料 Def（含 stuffProps 完整注释）
 
-### 工作流 (references/workflows/)
-- `references/workflows/new-mod.md` — 从零创建 mod（测试版先行）
-- `references/workflows/formalize-mod.md` — 测试通过后正规化 + 可选发布
-- `references/workflows/debug-crash.md` — 崩溃排查
-- `references/workflows/add-item.md` — 添加物品
-- `references/workflows/add-building.md` — 添加建筑
-- `references/workflows/patch-vanilla.md` — 修改原版
+### 工作流 (workflows/)
+- `workflows/new-mod.md` — 从零创建 mod（测试版先行）
+- `workflows/formalize-mod.md` — 测试通过后正规化 + 可选发布
+- `workflows/debug-crash.md` — 崩溃排查
+- `workflows/add-item.md` — 添加物品
+- `workflows/add-building.md` — 添加建筑
+- `workflows/patch-vanilla.md` — 修改原版

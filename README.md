@@ -41,6 +41,7 @@ rimworld-modding-skill/
 │   ├── 08-debugging.md
 │   ├── 09-workshop.md
 │   ├── 10-api-reference.md
+│   ├── 11-platform-adaptation.md  # 跨平台适配
 │   └── workflows/           # 任务工作流（6 个）
 │       ├── new-mod.md
 │       ├── formalize-mod.md
@@ -62,19 +63,36 @@ rimworld-modding-skill/
     └── evals.json
 ```
 
+## 🖥️ 平台支持
+
+| 平台 | 状态 | 安装方式 |
+|------|:--:|------|
+| **Claude Code** | ✅ 原生 | `~/.claude/skills/rimworld-modding/` |
+| **GitHub Copilot CLI** | ✅ 适配 | `~/.copilot/skills/rimworld-modding/` |
+| **OpenAI Codex** | ✅ 适配 | `~/.codex/skills/rimworld-modding/` |
+| **Gemini CLI** | ✅ 适配 | `~/.gemini/skills/rimworld-modding/` |
+| **Cursor / Windsurf** | ⚠️ 降级 | 手动引用 `references/` + `templates/`（无 MCP） |
+
+> 各平台工具映射详见 `references/11-platform-adaptation.md`
+
 ## 安装
 
-复制到 Claude Code skills 目录：
-
-```
+```bash
+# Claude Code（原生）
 cp -r rimworld-modding-skill ~/.claude/skills/rimworld-modding/
+
+# Copilot CLI
+cp -r rimworld-modding-skill ~/.copilot/skills/rimworld-modding/
+
+# Codex / Gemini CLI
+cp -r rimworld-modding-skill ~/.codex/skills/rimworld-modding/
 ```
 
 ## 需求
 
 - RimWorld 1.6
 - [RimSage MCP](https://mcp.rimsage.com/mcp)（推荐，用于源码搜索）
-- `.mcp.json` 配置 `rimworld-source` MCP 服务器
+- `.mcp.json` 配置 `rimworld-source` MCP 服务器（所有平台通用）
 
 ## 致谢
 
@@ -101,8 +119,15 @@ MIT
 
 ## Installation (EN)
 
-```
+```bash
+# Claude Code (native)
 cp -r rimworld-modding-skill ~/.claude/skills/rimworld-modding/
+
+# Copilot CLI
+cp -r rimworld-modding-skill ~/.copilot/skills/rimworld-modding/
+
+# Codex / Gemini CLI
+cp -r rimworld-modding-skill ~/.codex/skills/rimworld-modding/
 ```
 
 ## Acknowledgments
