@@ -19,7 +19,7 @@ Claude Code agent skill for full-cycle RimWorld mod development.
 - **原版验证**: 所有 Def 模式均对照 RimWorld 1.6 原版文件验证
 - **RimSage MCP 集成**: 实时源码搜索，写 Def 前先查原版
 - **测试版先行**: 测试版 → 验证 → 正规化 → 可选发布
-- **代码模板**: 近战/远程武器、建筑、配方、ThingComp、Harmony 补丁
+- **代码模板**: 近战/远程武器、服装/护甲、原材料、建筑、配方、ThingComp、Harmony 补丁 (8 个)
 
 ## 目录结构
 
@@ -49,9 +49,11 @@ rimworld-modding-skill/
 │       ├── patch-vanilla.md
 │       └── debug-crash.md
 ├── assets/                  # 静态资源
-│   └── templates/           # 代码模板（6 个）
+│   └── templates/           # 代码模板（8 个）
 │       ├── weapon-melee.xml
 │       ├── weapon-ranged.xml
+│       ├── apparel.xml
+│       ├── resource-stuff.xml
 │       ├── building.xml
 │       ├── recipe.xml
 │       ├── harmony-patch.cs
@@ -95,7 +97,7 @@ MIT
 - **Vanilla-verified**: All Def patterns validated against RimWorld 1.6 base game files
 - **RimSage MCP**: Real-time source code search for verifying Def structures
 - **Test-first pipeline**: Test version → verify → formalize → optional publish
-- **Templates**: Ready-to-use XML/C# templates for weapons, buildings, recipes, ThingComp, Harmony
+- **Templates**: Ready-to-use XML/C# templates for weapons, apparel/armor, resources/stuff, buildings, recipes, ThingComp, Harmony (8 templates)
 
 ## Installation (EN)
 
