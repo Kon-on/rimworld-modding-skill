@@ -14,6 +14,7 @@ tags:
   - harmony
   - xml
   - steam-workshop
+  - ai-generated
 dependencies:
   rimworld-source:
     type: mcp
