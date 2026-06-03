@@ -71,6 +71,7 @@ rimworld-modding-skill/
 | **GitHub Copilot CLI** | ✅ 适配 | `~/.copilot/skills/rimworld-modding/` |
 | **OpenAI Codex** | ✅ 适配 | `~/.codex/skills/rimworld-modding/` |
 | **Gemini CLI** | ✅ 适配 | `~/.gemini/skills/rimworld-modding/` |
+| **TRAE** | ✅ 适配 | `~/.trae/skills/rimworld-modding/` |
 | **Cursor / Windsurf** | ⚠️ 降级 | 手动引用 `references/` + `templates/`（无 MCP） |
 
 > 各平台工具映射详见 `references/11-platform-adaptation.md`
@@ -83,6 +84,9 @@ cp -r rimworld-modding-skill ~/.claude/skills/rimworld-modding/
 
 # Copilot CLI
 cp -r rimworld-modding-skill ~/.copilot/skills/rimworld-modding/
+
+# TRAE
+cp -r rimworld-modding-skill ~/.trae/skills/rimworld-modding/
 
 # Codex / Gemini CLI
 cp -r rimworld-modding-skill ~/.codex/skills/rimworld-modding/
@@ -127,6 +131,9 @@ cp -r rimworld-modding-skill ~/.claude/skills/rimworld-modding/
 
 # Copilot CLI
 cp -r rimworld-modding-skill ~/.copilot/skills/rimworld-modding/
+
+# TRAE
+cp -r rimworld-modding-skill ~/.trae/skills/rimworld-modding/
 
 # Codex / Gemini CLI
 cp -r rimworld-modding-skill ~/.codex/skills/rimworld-modding/
