@@ -3,7 +3,7 @@ name: rimworld-modding
 description: |
   RimWorld mod 制作全流程指南——覆盖环境搭建、XML Def 系统、C# 开发、Harmony 补丁、
   资源制作和 Steam Workshop 发布。适用于零基础到进阶的 RimWorld 1.6 mod 开发者。
-  跨平台支持 Claude Code / Copilot CLI / Codex / Gemini CLI / Cursor 等主流 AI 编程工具。
+  跨平台支持 Claude Code / TRAE / Copilot CLI / Codex / Gemini CLI / Cursor 等主流 AI 编程工具。
   
   触发词：RimWorld, 环世界, rimworld, RW, mod, Mod, 模组, Def, XML, ThingDef, 
   Harmony, Patch, 补丁, 武器, 建筑, 物品, 生物, 植物, 派系, 事件, 
@@ -295,7 +295,7 @@ grep -rh "techLevel" "D:/steam/steamapps/common/RimWorld/Data/Core/Defs/" | sort
 8. `references/08-debugging.md` — 调试与排错
 9. `references/09-workshop.md` — Steam Workshop 发布
 10. `references/10-api-reference.md` — API 速查表
-11. `references/11-platform-adaptation.md` — 跨平台适配（Copilot/Codex/Gemini 工具映射）
+11. `references/11-platform-adaptation.md` — 跨平台适配（TRAE/Copilot/Codex/Gemini 工具映射）
 
 ### 代码模板 (templates/)
 - `templates/weapon-melee.xml` — 近战武器 Def

@@ -80,6 +80,43 @@ cp -r rimworld-modding-skill/* ~/.copilot/skills/rimworld-modding/
 
 ---
 
+### TRAE（字节跳动 AI IDE）
+
+**Skill 安装**：
+```
+mkdir -p ~/.trae/skills/rimworld-modding/
+cp -r rimworld-modding-skill/* ~/.trae/skills/rimworld-modding/
+```
+
+> TRAE 原生支持 `SKILL.md` 格式，Skill 放入 `.trae/skills/` 后自动识别。
+
+**MCP 配置**：
+
+TRAE 支持 `.mcp.json`（项目级）和 `.trae/mcp.json`（项目级）。将 `.mcp.json.example` 复制为 `.mcp.json` 即可。
+
+```bash
+cp .mcp.json.example .mcp.json
+```
+
+也可在 TRAE 设置 → MCP 中手动添加 HTTP 类型的 MCP Server，URL 填 `https://mcp.rimsage.com/mcp`。
+
+**工具映射**：
+
+| 本 Skill 中的操作 | TRAE 工具 |
+|------------------|----------|
+| 读取文件 | `Read` / 文件读取 |
+| 创建/写入文件 | `Write` / 文件写入 |
+| 编辑文件 | `Edit` / 文件编辑 |
+| 搜索文件内容 | `Grep` / 内容搜索 |
+| 按文件名搜索 | `Glob` / 文件搜索 |
+| 运行命令 | `Bash` / 终端 |
+| 并行子任务 | `Agent`（Subagent） |
+| 加载 Skill | 原生 SKILL.md 自动加载 |
+
+> **注意**：TRAE 的中国版和国际版功能可能略有差异，建议更新到最新版本以获得完整的 Agent + MCP 支持。
+
+---
+
 ### Cursor / Windsurf / 其他 IDE 插件
 
 这些 IDE 插件通常不支持 MCP。使用以下降级方案：
