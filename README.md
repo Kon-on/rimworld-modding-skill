@@ -47,10 +47,13 @@ rimworld-modding-skill/
 │       ├── formalize-mod.md
 │       ├── add-item.md
 │       ├── add-building.md
+│       ├── batch-process.md
 │       ├── patch-vanilla.md
 │       └── debug-crash.md
+├── learnings/               # 错误学习记录
+│   └── errors.txt           # 历史错误（每次加载 Skill 时自动读取）
 ├── assets/                  # 静态资源
-│   └── templates/           # 代码模板（8 个）
+│   └── templates/           # 代码模板（9 个）
 │       ├── weapon-melee.xml
 │       ├── weapon-ranged.xml
 │       ├── apparel.xml
@@ -58,7 +61,8 @@ rimworld-modding-skill/
 │       ├── building.xml
 │       ├── recipe.xml
 │       ├── harmony-patch.cs
-│       └── thingcomp.cs
+│       ├── thingcomp.cs
+│       └── requirements-template.md
 └── tests/                   # 测试用例
     └── evals.json
 ```
