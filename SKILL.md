@@ -98,6 +98,26 @@ description: |
 
 ---
 
+## 🧠 学习系统
+
+每次加载此 Skill 时，必须先读取 `learnings/errors.txt` 中的历史错误记录，
+并在后续工作中避免重复犯错。
+
+排查完错误并修复后，必须将关键教训总结为一句话追加到 `learnings/errors.txt`。
+格式：`YYYY-MM-DD | <类别> | <一句话总结>`
+
+| 类别 | 适用场景 |
+|------|---------|
+| XML | ThingDef/RecipeDef/Def 属性写错、枚举值错误、ParentName 错误 |
+| C# | 编译错误、空引用、类型错误、DLL 加载问题 |
+| Harmony | Patch ID 冲突、补丁未生效、Prefix/Postfix 签名错误 |
+| Path | 文件路径错误、资源缺失、加载顺序问题 |
+| Other | 上述类别之外的错误 |
+
+此文件仅在 rimworld-modding skill 上下文中读取，其他场景不读取。
+
+---
+
 ## 核心工作流：测试版先行（Test → Verify → Formalize）
 
 **所有 mod 生成后，默认先生成测试版本。开发者确认无 bug 后，再正规化并可选发布。**
@@ -124,7 +144,9 @@ description: |
 | 🎵 **用 Harmony 拦截方法** | `references/06-harmony.md` + `templates/harmony-patch.cs` |
 | 🖼️ **添加纹理/音效资源** | `references/07-assets.md` |
 | 🐛 **排查报错/崩溃/红字** | `references/08-debugging.md` |
+| 📖 **查看历史错误记录** | `learnings/errors.txt`（自动读取） |
 | ✅ **测试通过，正规化 mod** | `workflows/formalize-mod.md` |
+| 📦 **批量处理多个需求** | `workflows/batch-process.md` + `templates/requirements-template.md` |
 | 📦 **发布到 Steam Workshop** | `references/09-workshop.md` |
 | 📖 **查询 API/类/方法** | `references/10-api-reference.md`（建议先接入 RimSage MCP） |
 | 🔄 **适配其他 AI 平台** | `references/11-platform-adaptation.md`（Copilot/Codex/Gemini 等工具映射） |
@@ -189,7 +211,13 @@ description: |
 - **再看源码**：优先使用 RimSage MCP 搜索 RimWorld 源码
 - **模仿原版**：`RimWorld/Data/Core/Defs/` 中的原版 Def 是最好的参考。**优先使用 RimSage MCP 直接查询原版结构**，避免凭记忆猜测 ParentName 或字段名。
 
-### 5. ⚠️ 三层决策详解
+### 5. AI 生成标注
+每次使用模板生成 mod 代码（XML/C#）后，必须在代码注释中标注 AI 辅助生成：
+- 标注位置最多 5 处，集中在文件头部注释或关键字段旁
+- 使用代码注释（`<!-- ... -->` 或 `// ...`），不在 label/description 等游戏内可见字段中标注
+- mod 使用者（游戏玩家）不可见，mod 开发者可见即可
+
+### 6. ⚠️ 三层决策详解
 
 #### ① 有模板 → 直接用，不调 MCP
 
@@ -306,6 +334,10 @@ grep -rh "techLevel" "D:/steam/steamapps/common/RimWorld/Data/Core/Defs/" | sort
 - `templates/thingcomp.cs` — ThingComp 骨架
 - `templates/apparel.xml` — 服装/护甲 Def（含衣物、护甲、头饰注释）
 - `templates/resource-stuff.xml` — 原材料/建筑材料 Def（含 stuffProps 完整注释）
+- `templates/requirements-template.md` — 批量需求文件格式模板
+
+### 错误学习 (learnings/)
+- `learnings/errors.txt` — 历史错误记录（每次加载 Skill 时自动读取）
 
 ### 工作流 (workflows/)
 - `workflows/new-mod.md` — 从零创建 mod（测试版先行）
@@ -313,4 +345,5 @@ grep -rh "techLevel" "D:/steam/steamapps/common/RimWorld/Data/Core/Defs/" | sort
 - `workflows/debug-crash.md` — 崩溃排查
 - `workflows/add-item.md` — 添加物品
 - `workflows/add-building.md` — 添加建筑
+- `workflows/batch-process.md` — 批量处理需求清单
 - `workflows/patch-vanilla.md` — 修改原版

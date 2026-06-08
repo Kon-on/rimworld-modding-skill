@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   远程武器模板（已验证——基于原版 BaseWeapons.xml）
+  AI 辅助生成
   替换所有 <Your...> 占位符为你的实际值
 
   ⚠️ 重要：生成后务必对比原版 Def 验证！

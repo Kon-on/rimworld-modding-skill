@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   建筑模板
+  AI 辅助生成
   替换所有 <Your...> 占位符为你的实际值
   前缀示例：SR → SR_Building_ArcFurnace
 -->

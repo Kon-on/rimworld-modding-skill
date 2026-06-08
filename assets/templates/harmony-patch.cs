@@ -1,4 +1,5 @@
 // Harmony 补丁模板
+// AI 辅助生成
 // 替换 <YourNamespace> 和 <YourModID> 为你的实际值
 // 使用方法：
 //   1. 替换 TargetClass 为目标类名（用 dnSpy 或 RimSage 查找）

@@ -27,6 +27,16 @@
 - [ ] **兼容性测试**完成（与主要 DLC 和热门 mod 无冲突）
 - [ ] **版本号**已设定（`About.xml` 或 `ModSync.xml`）
 
+### 多语言支持
+
+发布前询问用户需要支持哪些语言，并在 `Languages/` 目录下创建对应文件夹：
+
+- `Languages/English/Keyed/` — 必选，创建 `ModName.xml`（英文 key-value 翻译）
+- `Languages/ChineseSimplified/Keyed/` — 可选，创建对应中文翻译
+- 其他语言由用户选择
+
+确认方式：直接问用户"需要支持哪些语言？至少 English 为必选。"
+
 ## Steam Workshop 上传步骤
 
 ### 方法 1：游戏内直接上传（推荐）
