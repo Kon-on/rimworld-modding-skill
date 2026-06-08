@@ -19,7 +19,10 @@ Claude Code agent skill for full-cycle RimWorld mod development.
 - **原版验证**: 所有 Def 模式均对照 RimWorld 1.6 原版文件验证
 - **RimSage MCP 集成**: 实时源码搜索，写 Def 前先查原版
 - **测试版先行**: 测试版 → 验证 → 正规化 → 可选发布
-- **代码模板**: 近战/远程武器、服装/护甲、原材料、建筑、配方、ThingComp、Harmony 补丁 (8 个)
+- **错误学习系统**: 自动记录排查过的错误，加载 Skill 时读取，避免重复犯错
+- **批量处理**: 支持 Markdown 需求清单，批量生成多个 Mod 内容，逐项确认
+- **AI 生成标注**: 生成的代码自动标记 AI 辅助来源，透明合规
+- **代码模板**: 近战/远程武器、服装/护甲、原材料、建筑、配方、ThingComp、Harmony 补丁、需求清单 (9 个)
 
 ## 目录结构
 
@@ -42,7 +45,7 @@ rimworld-modding-skill/
 │   ├── 09-workshop.md
 │   ├── 10-api-reference.md
 │   ├── 11-platform-adaptation.md  # 跨平台适配
-│   └── workflows/           # 任务工作流（6 个）
+│   └── workflows/           # 任务工作流（7 个）
 │       ├── new-mod.md
 │       ├── formalize-mod.md
 │       ├── add-item.md
@@ -125,7 +128,10 @@ MIT
 - **Vanilla-verified**: All Def patterns validated against RimWorld 1.6 base game files
 - **RimSage MCP**: Real-time source code search for verifying Def structures
 - **Test-first pipeline**: Test version → verify → formalize → optional publish
-- **Templates**: Ready-to-use XML/C# templates for weapons, apparel/armor, resources/stuff, buildings, recipes, ThingComp, Harmony (8 templates)
+- **Error Learning**: Auto-records debugged errors, reads them on skill load
+- **Batch Processing**: Markdown requirement lists, batch generate multiple mod items with per-item confirmation
+- **AI Attribution**: Auto-annotates AI-generated code in comments
+- **Templates**: Ready-to-use XML/C# templates for weapons, apparel/armor, resources/stuff, buildings, recipes, ThingComp, Harmony, requirements (9 templates)
 
 ## Installation (EN)
 
