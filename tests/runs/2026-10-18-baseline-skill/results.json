@@ -1,0 +1,74 @@
+{
+  "run": "2026-10-18-baseline-skill",
+  "date": "2026-10-18",
+  "summary": {
+    "promptsOk": 1,
+    "promptsTotal": 4,
+    "assertionsPassed": 18,
+    "assertionsTotal": 24,
+    "score": 75
+  },
+  "results": [
+    {
+      "id": "create-melee-weapon",
+      "ok": true,
+      "passed": 8,
+      "failed": 0,
+      "failures": []
+    },
+    {
+      "id": "create-ranged-weapon",
+      "ok": false,
+      "passed": 3,
+      "failed": 2,
+      "failures": [
+        {
+          "kind": "contains",
+          "needle": "verbClass=\"Verb_Shoot\"",
+          "note": "未找到"
+        },
+        {
+          "kind": "not_contains",
+          "needle": "costList",
+          "note": "不应出现，却在第 104 行出现"
+        }
+      ]
+    },
+    {
+      "id": "check-techlevel-enum",
+      "ok": false,
+      "passed": 6,
+      "failed": 1,
+      "failures": [
+        {
+          "kind": "not_contains",
+          "needle": "Ultratech",
+          "note": "不应出现，却在第 16 行出现"
+        }
+      ]
+    },
+    {
+      "id": "debug-missing-def",
+      "ok": false,
+      "passed": 1,
+      "failed": 3,
+      "failures": [
+        {
+          "kind": "contains",
+          "needle": "RimSage",
+          "note": "未找到"
+        },
+        {
+          "kind": "contains",
+          "needle": "Data/Core/Defs",
+          "note": "未找到"
+        },
+        {
+          "kind": "contains",
+          "needle": "先查原版",
+          "note": "未找到"
+        }
+      ]
+    }
+  ]
+}

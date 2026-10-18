@@ -36,28 +36,46 @@ node tests/test-xml-lint.mjs                 # XML 模板良构性测试
 
 | 运行目录 | 条件 | 用例全通过 | 断言 | 日期 |
 |---|---|---|---|---|
+| `2026-10-18-baseline-noskill` | **不加载技能**（明令禁止读技能仓库、禁止调用 `skill` 工具），同一天同一模型的对照臂 | 1 / 4 | 11 / 24（46 分） | 2026-10-18 |
+| `2026-10-18-baseline-skill` | 加载技能；RimSage MCP 未配置，走降级路径第 ② 级 | 1 / 4 | 18 / 24（75 分） | 2026-10-18 |
 | `2026-10-17-baseline-skill` | 加载技能；RimSage MCP 未配置，走降级路径第 ② 级（对照 `assets/templates/` + 本地 grep 原版的路子） | 3 / 4 | 23 / 24（96 分） | 2026-10-17 |
 
-未通过的一条：`create-ranged-weapon` 缺 `verbClass="Verb_Shoot"`。这不是产出错了，是断言写错了——见下节。
+`2026-10-17` 那一行当时按断言调过措辞（见下节第 2、3 条），分数偏高，**不能**与 10-18 两行直接比较。10-18 的 GREEN 臂是自然作答，没有为迎合字面量改写答案，因此被判负的条目里有 4 条属于断言缺陷；两臂的对照结论见「RED 对照」一节。
 
 ## 已知断言缺陷（记录在案，未擅自修改）
 
-改断言让它变绿，等于把测试改成迎合答案。以下三条等 owner 定夺：
+改断言让它变绿，等于把测试改成迎合答案。以下四条等 owner 定夺：
 
-1. **`verbClass="Verb_Shoot"` 是属性写法，技能教的是元素写法。** `assets/templates/weapon-ranged.xml:44` 写的是 `<verbClass>Verb_Shoot</verbClass>`，本 baseline 也这么写。断言把「用哪种 XML 语法」当成了「用了哪个 verb 类」。建议改为 `"Verb_Shoot"`，或同时接受两种写法。
+1. **`verbClass="Verb_Shoot"` 是属性写法，技能教的是元素写法。** `assets/templates/weapon-ranged.xml:85` 写的是 `<verbClass>Verb_Shoot</verbClass>`，本 baseline 也这么写。断言把「用哪种 XML 语法」当成了「用了哪个 verb 类」。建议改为 `"Verb_Shoot"`，或同时接受两种写法。
 2. **`not_contains: "Ultratech"` 会惩罚诚实纠错。** 用户提示词里把 `Ultra` 写错时，正确回答应该是「这个值不合法，用 Ultra」——但那句话本身就含被禁字面量。本 baseline 是绕开字面量通过的（只输出合法值），等于断言在教「别指出用户的错」。建议改为 `<techLevel>Ultratech</techLevel>`，只禁「把错值写进 Def」。
-3. **`not_contains: "costList"` 同类问题。** 「不要手写 costList，用 costStuffCount」是正确的提醒，却会被判失败（本轮已按断言改了措辞）。建议加尖括号：`<costList>`。
+3. **`not_contains: "costList"` 同类问题。** 「不要手写 costList，用 costStuffCount」是正确的提醒，却会被判失败（本轮已按断言改了措辞）。建议加尖括号：`<costList>`，而且只保留在近战用例里——远程武器的原版枪械本来就是 `costList`（`Gun_Revolver`、`Gun_ChargeRifle`），在 `create-ranged-weapon` 里禁它等于禁掉正确写法。
+4. **`contains: "rangedWeapon_Range"` 是 1.6 时代的旧路径，1.7 已移除。** 1.7 原版全库查不到 `rangedWeapon_Range` 这个字段路径，射程写在 `verbs/li/range`（Core 的 `RangedIndustrial.xml` 等 9 个武器文件实测，74/2054 个 ThingDef 用到）；技能模板 `assets/templates/weapon-ranged.xml:8-11` 教的正是「别把 `rangedWeapon_Range` 写在顶层」。这条断言现在只在答案**警告该字段已废弃**时才通过（2026-10-18 的 GREEN 臂就是这样过的），却让把 `<range>` 正确写进 verb 的答案（RED 臂）判负。建议改为断言 verb 段里的 `<range>`。
 
-## RED baseline（待补）
+## RED 对照：技能到底有没有用（2026-10-18 已补）
 
-现有 baseline 都是「有技能」条件下的。要证明断言真能区分好坏，还需要一次**不加载技能**的对照：同样 4 条提示词，存到 `tests/runs/<日期>-baseline-noskill/`。
+同一天、同一模型，两臂各 4 条提示词、各派一个互不相干的 agent：
 
-预期：无技能的回答会命中 `not_contains`（把错枚举照抄进 Def）、或漏 `contains`（不会用 `BaseHumanMakeableGun` 父级、不知道去 grep 原版）。如果无技能也能拿 90 分以上，说明这组断言太弱，需要加得更刁。
+| 臂 | 条件 | 用例全通过 | 断言 | 运行目录 |
+|---|---|---|---|---|
+| RED | 明令禁止读技能仓库、禁止调用 `skill` 工具 | 1 / 4 | 11 / 24（46 分） | `2026-10-18-baseline-noskill` |
+| GREEN | 先读 `SKILL.md`，按技能流程作答 | 1 / 4 | 18 / 24（75 分） | `2026-10-18-baseline-skill` |
+
+按上节 4 条断言缺陷折算，GREEN 是 3 / 4（21 / 24），RED 仍是 1 / 4。差距集中在两条「写 Def」用例，而且是**实质错误**，不是措辞差异：
+
+- `create-melee-weapon`：RED 把 `<techLevel>Ultratech</techLevel>` 写进 Def（非法枚举值，游戏加载会报 `is not a valid value for`），并用 `costList` 绕过 `costStuffCount` / `stuffCategories`；GREEN 8 / 8，走技能已验证模板，并显式纠正用户给错的枚举值。
+- `create-ranged-weapon`：RED 把伤害写在 verb 的 `damageAmountBase`（1.7 原版把弹丸伤害放在 `projectile/damageAmountBase`）、父级用 `BaseWeapon`、verb 类用 `Verb_LaunchProjectile`；GREEN 走模板，弹丸与枪体两段分清。
+- `check-techlevel-enum`：RED 也全过。这类「模型本来就知道」的知识点，技能带不来分，只能证明断言没写错。
+- `debug-missing-def`：两臂都只过 1 / 4，失败的全是短语断言（`RimSage` / `grep` / `Data/Core/Defs` / `先查原版`）——**该用例目前不可度量**，需要改成「同类动作任一命中」，例如 `RimSage` 或 `MCP`、`原版` 或 `Core`、`grep` 或 `检索`。
+
+本轮 GREEN 臂顺带查出技能文档两处过时（已独立复核，尚未改技能内容，等 owner 定夺）：
+
+1. `references/08-debugging.md:42` 的日志路径少了 `Logs\` 一层。1.7 实测是 `%USERPROFILE%\AppData\LocalLow\Ludeon Studios\RimWorld by Ludeon Studios\Logs\Player.log`，旧路径已不存在。
+2. `references/workflows/debug-crash.md:41-46` 的「开发者控制台」`list defs` / `spawn` 在 1.7 是死路：`Assembly-CSharp.dll` 里没有 `DevConsole` / `ExecuteCommand` 字符串，只剩调试动作面板（`Dev_ToggleDevPalette` / `DebugActionsPalette`）。
 
 ## 加用例时遵守
 
 - 只断言**能被机械判定的正确性**：字段名、父级名、枚举值、必须走到的排查动作。不断言文风、语气、段落结构。
-- 字面量要带 XML 语境（`<techLevel>Ultra</techLevel>`），裸词会误伤正常文案——本目录已经踩过两次。
+- 字面量要带 XML 语境（`<techLevel>Ultra</techLevel>`），裸词会误伤正常文案——本目录已经踩过多次（见上节）。
 - 每条用例 ≤ 8 条断言；一条用例只考一个能力点（写 Def / 查枚举 / 排查错误）。
 - 加完跑 `--validate`，并同步更新上面的 baseline 表。
 

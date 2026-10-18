@@ -1,0 +1,109 @@
+{
+  "run": "2026-10-18-baseline-noskill",
+  "date": "2026-10-18",
+  "summary": {
+    "promptsOk": 1,
+    "promptsTotal": 4,
+    "assertionsPassed": 11,
+    "assertionsTotal": 24,
+    "score": 46
+  },
+  "results": [
+    {
+      "id": "create-melee-weapon",
+      "ok": false,
+      "passed": 1,
+      "failed": 7,
+      "failures": [
+        {
+          "kind": "contains",
+          "needle": "ParentName=\"BaseMeleeWeapon_Sharp_Quality\"",
+          "note": "未找到"
+        },
+        {
+          "kind": "contains",
+          "needle": "costStuffCount",
+          "note": "未找到"
+        },
+        {
+          "kind": "contains",
+          "needle": "stuffCategories",
+          "note": "未找到"
+        },
+        {
+          "kind": "contains",
+          "needle": "Metallic",
+          "note": "未找到"
+        },
+        {
+          "kind": "contains",
+          "needle": "possessionCount",
+          "note": "未找到"
+        },
+        {
+          "kind": "not_contains",
+          "needle": "costList",
+          "note": "不应出现，却在第 55 行出现"
+        },
+        {
+          "kind": "not_contains",
+          "needle": "Ultratech",
+          "note": "不应出现，却在第 3 行出现"
+        }
+      ]
+    },
+    {
+      "id": "create-ranged-weapon",
+      "ok": false,
+      "passed": 2,
+      "failed": 3,
+      "failures": [
+        {
+          "kind": "contains",
+          "needle": "ParentName=\"BaseHumanMakeableGun\"",
+          "note": "未找到"
+        },
+        {
+          "kind": "contains",
+          "needle": "verbClass=\"Verb_Shoot\"",
+          "note": "未找到"
+        },
+        {
+          "kind": "contains",
+          "needle": "rangedWeapon_Range",
+          "note": "未找到"
+        }
+      ]
+    },
+    {
+      "id": "check-techlevel-enum",
+      "ok": true,
+      "passed": 7,
+      "failed": 0,
+      "failures": []
+    },
+    {
+      "id": "debug-missing-def",
+      "ok": false,
+      "passed": 1,
+      "failed": 3,
+      "failures": [
+        {
+          "kind": "contains",
+          "needle": "RimSage",
+          "note": "未找到"
+        },
+        {
+          "kind": "contains",
+          "needle": "grep",
+          "note": "未找到"
+        },
+        {
+          "kind": "contains",
+          "needle": "先查原版",
+          "note": "未找到"
+        }
+      ]
+    }
+  ]
+}
