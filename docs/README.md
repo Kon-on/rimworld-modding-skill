@@ -31,6 +31,8 @@ node docs/verify-testmod.mjs
 python docs/verify_templates.py
 ```
 
+> 这些脚本都用**脚本自身位置**推导仓库根（Python `Path(__file__).resolve().parents[1]`、PowerShell `Split-Path -Parent $PSScriptRoot`、Node `import.meta.url`），在任意工作目录下执行都可以，换机器、换 clone 都不用改路径。仍然与具体机器绑定的只剩**原版游戏安装路径** `E:\SteamLibrary\steamapps\common\RimWorld`（核验原版所必需，可用 `--rimworld` 参数覆盖）。
+
 ## 不在这里的东西
 
 - 原始游戏文件：本目录只存**提取结果**，不含任何原版 `Data/` 内容或游戏 DLL。

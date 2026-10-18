@@ -217,7 +217,7 @@ SoundDef 是 RimWorld 里所有声音的注册表：枪声、环境音、UI 点�
 
 ## 核验
 
-- **字段说明表**：全部行取自 `<REPO_ROOT>\docs\def-schema.json` 的 `defTypes.SoundDef`（1233 个实例、113 条路径），脚本逐条断言路径存在（0 缺失）；出现率数字与 `03-全量字段参考\字段\SoundDef.md` 同源。
+- **字段说明表**：全部行取自 `docs/def-schema.json` 的 `defTypes.SoundDef`（1233 个实例、113 条路径），脚本逐条断言路径存在（0 缺失）；出现率数字与 `03-全量字段参考\字段\SoundDef.md` 同源。
 - **① oneshot**：逐字对照 `Core/Defs/SoundDefs/Building_Oneshots_Misc.xml` 的 `CrateOpeningStarted`（context=MapOnly、`grains/li Class="AudioGrain_Clip"`、clipPath=Interact/CrateOpeningStarted、distRange=25~50、volumeRange=14）。
 - **② 文件夹随机音**：`AudioGrain_Folder` + `clipFolderPath` 写法对照 `Core/Defs/SoundDefs/Building_Oneshots_Misc.xml`（clipFolderPath=Misc/Shuttle/Boarding）与 `Anomaly/Defs/SoundDefs/Buildings_Misc.xml` 的 `PitGateOpen`（volumeRange=30）；`repeatMode`、`randomStartPoint`、`startDelayRange`、`muteWhenPaused`、`onCamera` 的用法取自 SoundDef 全量字段表（分别为 7.3%、0.7%、0.9%、19.0%、15.2%）。
 - **③ sustainer**：顶层 `sustain` / `maxSimultaneous` / `priorityMode` / `sustainStartSound` / `sustainFadeoutTime` 与 `subSounds` 内的 `onCamera`、`pitchRange`、`sustainLoop` 结构逐字对照 `Core/Defs/SoundDefs/UI_Sustainers_Designation.xml` 的 `Designate_DragBuilding`；`sustainLoop`+`sustainAttack`/`sustainRelease`/`sustainLoopDurationRange` 组合对照 `Anomaly/Defs/SoundDefs/Pawn_Sustainers_Misc.xml` 的 `Pawn_SelfResurrection`；`sustainStopSound` 引用的 `GeothermalPlant_Ambience_Stop` 来自 `Core/Defs/SoundDefs/Building_Sustainers_Ambiences.xml`。

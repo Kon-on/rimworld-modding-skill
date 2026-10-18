@@ -1,6 +1,6 @@
 {
-  "mod": "<REPO_ROOT>\\examples\\rimtest-mod\\RimTestMod",
-  "generatedAt": "2026-10-18T11:52:15.430Z",
+  "mod": "examples/rimtest-mod/RimTestMod",
+  "generatedAt": "2026-10-18T12:13:25.185Z",
   "counts": {
     "xmlFiles": 19,
     "defs": 9,

@@ -1,7 +1,10 @@
 
 import json, sys
+from pathlib import Path
 sys.stdout.reconfigure(encoding='utf-8')
-d = json.load(open(r"<REPO_ROOT>\docs\def-schema.json", encoding='utf-8'))
+# 仓库根 = 本脚本所在目录（docs/）的上一级；换机器、换 clone 都不用改路径
+ROOT = Path(__file__).resolve().parents[1]
+d = json.load(open(ROOT / "docs" / "def-schema.json", encoding='utf-8'))
 print("TOP KEYS:", list(d.keys()))
 print("meta:", json.dumps({k:v for k,v in d.items() if not isinstance(v,(dict,list))}, ensure_ascii=False)[:600])
 dt = d["defTypes"]
@@ -25,7 +28,7 @@ for k in list(td.keys()):
         for pk, pv in items:
             print("   ", pk, "->", json.dumps(pv, ensure_ascii=False)[:300])
         break
-e = json.load(open(r"<REPO_ROOT>\docs\def-examples.json", encoding='utf-8'))
+e = json.load(open(ROOT / "docs" / "def-examples.json", encoding='utf-8'))
 print()
 print("EXAMPLES N:", len(e))
 print("TraitDef ex keys:", list(e["TraitDef"].keys()))

@@ -1,10 +1,12 @@
 $ErrorActionPreference='Stop'
+# 仓库根 = 本脚本所在目录（docs/）的上一级；换机器、换 clone 都不用改路径
+$Docs = Join-Path (Split-Path -Parent $PSScriptRoot) 'docs'
 $dir='E:\SteamLibrary\steamapps\common\RimWorld'
 $us=[System.Reflection.Assembly]::LoadFrom((Join-Path $dir 'UnityStubs.dll'))
 function Get-Types($asm){ try { return $asm.GetTypes() } catch [System.Reflection.ReflectionTypeLoadException] { return ($_.Exception.Types | Where-Object { $_ -ne $null }) } }
 $types=Get-Types $us
 $map=@{}
-foreach($line in (Get-Content '<REPO_ROOT>\docs\unitystubs-stubs.txt')){
+foreach($line in (Get-Content (Join-Path $Docs 'unitystubs-stubs.txt'))){
   if($line -notmatch ' :: '){ continue }
   $parts=$line -split ' :: ',2
   $tn=$parts[0].Trim(); $mn=$parts[1].Trim()
@@ -27,7 +29,7 @@ foreach($tn in ($map.Keys | Sort-Object)){
     }
   }
 }
-$out | Set-Content -Path '<REPO_ROOT>\docs\unitystubs-stub-signatures.txt' -Encoding UTF8
+$out | Set-Content -Path (Join-Path $Docs 'unitystubs-stub-signatures.txt') -Encoding UTF8
 'sigLines=' + $out.Count
 '=== TYPE METHOD TOTALS ==='
 $common=@('UnityEngine.Vector3','UnityEngine.Vector2','UnityEngine.Rect','UnityEngine.Mathf','UnityEngine.Color','UnityEngine.Color32','UnityEngine.GameObject','UnityEngine.Transform','UnityEngine.MonoBehaviour','UnityEngine.Texture2D','UnityEngine.Material','UnityEngine.Shader','UnityEngine.GUI','UnityEngine.Screen','UnityEngine.Application','UnityEngine.Debug','UnityEngine.Input','UnityEngine.Time','UnityEngine.CullingGroup','UnityEngine.CommandBuffer','UnityEngine.ComputeShader','UnityEngine.Camera','UnityEngine.Graphics','UnityEngine.Resources','UnityEngine.Mesh','UnityEngine.RenderTexture','UnityEngine.SceneManagement.SceneManager')

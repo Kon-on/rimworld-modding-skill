@@ -264,7 +264,7 @@ MemeDef 是意识形态的「思想内核」：一条 meme 决定了这个理念
 
 ## 核验
 
-- **每个字段路径**都逐条对照 `<REPO_ROOT>\docs\def-schema.json` 中 `defTypes.MemeDef`（38 个实例、102 条路径）生成字段说明表，写入前用脚本断言路径存在（0 个缺失）；出现率数字与 `03-全量字段参考\字段\MemeDef.md` 一致。
+- **每个字段路径**都逐条对照 `docs/def-schema.json` 中 `defTypes.MemeDef`（38 个实例、102 条路径）生成字段说明表，写入前用脚本断言路径存在（0 个缺失）；出现率数字与 `03-全量字段参考\字段\MemeDef.md` 一致。
 - **① 普通 Meme 骨架**逐字核对 `Ideology/Defs/MemeDefs/Memes_Misc.xml` 的 `Darkness`（defName/label/description/iconPath/groupDef=Misc/impact=3/exclusionTags/requireOne/generalRules/descriptionMaker/rules/renderOrder）与 `Blindsight`（requiredRituals 结构）。
 - **groupDef 七个合法值**：核对 `MemeGroupDef` 在全库的 defName 全集（GenderSupremacy、GroupRelation、Individualism、Misc、Primacy、Theist_Embodied、Theist_Abstract）。
 - **② 仪式联动**：`requiredRituals/li/{precept,pattern}` 取自 `Ideology/Defs/MemeDefs/Memes_Misc.xml` 的 `Blindsight`；`selectOneOrNone/{noneChance,preceptThingPairs}` 取自 `Ideology/Defs/MemeDefs/Memes_GenderSupremacy.xml`；`styleItemTags` 与 `thingStyleCategories`（含 `li MayRequire` 写法）取自 `Anomaly/Defs/MemeDefs/Memes_Misc.xml` 的 `Inhuman` 与 `Ritualist`；`consumableBuildings` 取自 `Ideology/Defs/MemeDefs/Memes_GroupRelation.xml` 的 `Supremacist`；`agreeableTraits` 取自 `Memes_GenderSupremacy.xml` 的 `MaleSupremacy`。

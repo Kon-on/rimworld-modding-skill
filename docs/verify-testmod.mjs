@@ -5,12 +5,15 @@
 //         字段路径对照 1.7 字段总表 / techLevel 等枚举合法性 / Patch 结构与 xpath 语法 / C# 类型在 DLL 里真实存在
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
+// 仓库根 = 本脚本所在目录（docs/）的上一级；换机器、换 clone 都不用改路径
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const args = process.argv.slice(2);
 const argOf = (k, d) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : d; };
-const MOD = argOf("--mod", "<REPO_ROOT>\\examples\\rimtest-mod\\RimTestMod");
+const MOD = argOf("--mod", path.join(ROOT, "examples", "rimtest-mod", "RimTestMod"));
 const RIMWORLD = argOf("--rimworld", "E:\\SteamLibrary\\steamapps\\common\\RimWorld");
-const LIBRARY = argOf("--library", "<REPO_ROOT>\\library");
+const LIBRARY = argOf("--library", path.join(ROOT, "library"));
 const JSON_OUT = argOf("--out", path.join(MOD, "..", "核验报告.json"));
 
 const problems = [];
@@ -297,7 +300,7 @@ console.log("[8] DLL：" + (asms.length ? asms.join(", ") : "（尚无）") + "�
 const errs = problems.filter(p => p.level === "error");
 const warns = problems.filter(p => p.level === "warn");
 const report = {
-  mod: MOD, generatedAt: new Date().toISOString(),
+  mod: path.relative(ROOT, MOD).split(path.sep).join("/"), generatedAt: new Date().toISOString(),
   counts: { xmlFiles: xmlFiles.length, defs: defs.length, vanillaXml: vanillaFiles.length, vanillaNames: vanillaNames.size, texRefs: texChecks.length, fieldChecks, assemblies: asms },
   errors: errs, warnings: warns, notes,
 };

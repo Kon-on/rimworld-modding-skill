@@ -184,7 +184,7 @@ FleckDef 描述一个「飞溅物」：尘土、血花、火花、水花、法�
 
 ## 核验
 
-- **字段说明表**：全部行取自 `<REPO_ROOT>\docs\def-schema.json` 的 `defTypes.FleckDef`（327 个实例、115 条路径），脚本逐条断言路径存在（0 缺失）；出现率与 `03-全量字段参考\字段\FleckDef.md` 同源。
+- **字段说明表**：全部行取自 `docs/def-schema.json` 的 `defTypes.FleckDef`（327 个实例、115 条路径），脚本逐条断言路径存在（0 缺失）；出现率与 `03-全量字段参考\字段\FleckDef.md` 同源。
 - **① 单图形态**：`altitudeLayer`/`fadeInTime`/`solidTime`/`fadeOutTime`/`growthRate`/`graphicData{texPath,shaderType,drawSize,color}` 的组合逐字对照 `Anomaly/Defs/Effects/Fleck_Visual.xml`（`ParentName="FleckBase"` 的 `MonolithLevelChanged`）与 `Core/Defs/Effects/Fleck_Visual.xml`。
 - **② 随机多图 + scalers + 弧线**：逐字对照 `Core/Defs/Effects/Fleck_Visual.xml` 的 `GroundWaterSplash`（randomGraphics/li 的 graphicClass/shaderType/texPath/drawSize/color、unattachedDrawOffset、archHeight、scalingAnchor、scalers/li 的 scaleAmt/scaleTime/axisMask/curve/points/li 文本曲线点）。
 - **③ 抽象基类 + 继承**：逐字对照 `Core/Defs/Effects/Fleck_Meta.xml` 的 `FleckFeedbackBase`（`Name="FleckFeedbackBase" Abstract="True"` + altitudeLayer=MetaOverlays + realTime=true + solidTime=0.25 + fadeOutTime=0.15 + growthRate=-0.3 + graphicData/drawSize=1.25）与它的子 def `FeedbackGoto`（只覆写 graphicData/texPath）。

@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 """Build Tier B: full field reference for ALL 254 def types found in RimWorld 1.7."""
 import os, json, csv, collections
+from pathlib import Path
 
-WS   = r"<REPO_ROOT>"
+# 仓库根 = 本脚本所在目录（docs/）的上一级；换机器、换 clone 都不用改路径
+WS   = str(Path(__file__).resolve().parents[1])
 PROC = os.path.join(WS, "docs")
 OUT  = os.path.join(WS, "library", "03-全量字段参考")
 

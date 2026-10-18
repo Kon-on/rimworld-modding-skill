@@ -304,7 +304,7 @@ EffecterDef 描述一套「触发式/持续式视觉+声音特效组合」：谁
 
 ## 核验
 
-- **字段说明表**：82 行全部取自 `<REPO_ROOT>\docs\def-schema.json` 的 `defTypes.EffecterDef`（285 个实例、82 条路径），脚本逐条断言路径存在（0 缺失、0 遗漏）；出现率与 `03-全量字段参考\字段\EffecterDef.md` 同源。
+- **字段说明表**：82 行全部取自 `docs/def-schema.json` 的 `defTypes.EffecterDef`（285 个实例、82 条路径），脚本逐条断言路径存在（0 缺失、0 遗漏）；出现率与 `03-全量字段参考\字段\EffecterDef.md` 同源。
 - **① 最简骨架**：`Core/Defs/Effects/Effecter_Construction.xml:104` 的 `RoofWork`（subEffecterClass=SubEffecter_SprayerChance、fleckDef=DustPuff、chancePerTick=0.07、scale=0.9~1.3、rotationRate=-60~60、speed=0.6~1.8），补入的 `spawnLocType`/`angle`/`positionOffset`/`fleckUsesAngleForVelocity` 取自同族样例 `Core/Defs/Effects/Effecter_Misc.xml:695` 的 `EmergencePointSustained8X8`。
 - **② 抽象基类 + 继承 + moteDef/Sustainer**：`Core/Defs/Effects/Effecter_Misc.xml:333` 的 `<EffecterDef Name="Power_Cell_Burning_Base" Abstract="True">`（SubEffecter_SprayerContinuous + moteDef=Mote_PowerCellBurning + ticksBetweenMotes=50 + positionOffset=(0,0,0.4)）、`:360` 的 `Power_Cell_Burning`（ParentName 继承 + SubEffecter_SoundTriggered/SubEffecter_Sustainer + soundDef=BurningPowerCell_Start/Loop + `maintainTicks` 为顶层字段的写法见 `Anomaly/Defs/Effects/Effecter_Misc.xml:434` 的 TachycardiacArrest `maintainTicks=720`）；另一处 Abstract 写法见 `Biotech/Defs/Effects/Effecter_GivingBirth.xml:33`。
 - **③ 嵌套 + 间歇音**：`Core/Defs/Effects/Effecter_Misc.xml:695` 的 `EmergencePointSustained8X8`（GroupedChance + chancePerTick .01 + chancePeriodTicks 20 + 嵌套 CameraShakeSingle{cameraShake .1~.3, distanceAttenuationScale, distanceAttenuationMax 30, soundDef Emergence_Quake} + 嵌套 SprayerTriggered 全字段），`intermittentSoundInterval` 的最小可用样例是 `Core/Defs/Effects/Effecter_Misc.xml:62` 的 `PlayPoker`（SubEffecter_SoundIntermittent + soundDef=PokerChips + min 750/max 4300）。

@@ -4,12 +4,15 @@
 Deterministic + reproducible: re-run to regenerate the same JSON.
 """
 import os, json, sys
+from pathlib import Path
 from lxml import etree
 from collections import defaultdict
 
+# 仓库根 = 本脚本所在目录（docs/）的上一级；换机器、换 clone 都不用改路径
+ROOT = Path(__file__).resolve().parents[1]
 GAME = r"E:\SteamLibrary\steamapps\common\RimWorld"
 DATA = os.path.join(GAME, "Data")
-OUT  = r"<REPO_ROOT>\docs"
+OUT  = str(ROOT / "docs")
 
 MAX_SAMPLES = 4
 MAX_DEFNAMES = 40

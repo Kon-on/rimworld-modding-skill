@@ -1,7 +1,9 @@
 
 $ErrorActionPreference='Stop'
+# 仓库根 = 本脚本所在目录（docs/）的上一级；换机器、换 clone 都不用改路径
+$Docs = Join-Path (Split-Path -Parent $PSScriptRoot) 'docs'
 $dir='E:\SteamLibrary\steamapps\common\RimWorld'
-$out='<REPO_ROOT>\docs\unitystubs-stubs.txt'
+$out=Join-Path $Docs 'unitystubs-stubs.txt'
 $us=[System.Reflection.Assembly]::LoadFrom((Join-Path $dir 'UnityStubs.dll'))
 $sw=$us.GetType('UnityStubs.Internal.StubWarner')
 $logstub=$sw.GetMethod('LogStub',[System.Reflection.BindingFlags]'Public,NonPublic,Static,Instance')

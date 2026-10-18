@@ -146,7 +146,7 @@ RitualPatternDef 描述「一场仪式长什么样、什么时候能办、办完
 
 ## 核验
 
-- **字段说明表**：全部 33 行路径逐条从 `<REPO_ROOT>\docs\def-schema.json` 的 `defTypes.RitualPatternDef`（31 个实例、34 条路径）提取，写入前用脚本断言路径存在（0 缺失）；出现率数字与 `03-全量字段参考\字段\RitualPatternDef.md` 一致。
+- **字段说明表**：全部 33 行路径逐条从 `docs/def-schema.json` 的 `defTypes.RitualPatternDef`（31 个实例、34 条路径）提取，写入前用脚本断言路径存在（0 缺失）；出现率数字与 `03-全量字段参考\字段\RitualPatternDef.md` 一致。
 - **① 骨架**逐字对照 `Ideology/Defs/PreceptDefs/RitualPatternDefs/RitualPatterns.xml` 的 `LeaderSpeech`（ritualBehavior/ritualObligationTargetFilter/ritualTargetFilter/alwaysStartAnytime/ritualOnlyForIdeoMembers/canMergeGizmosFromDifferentIdeos）与 `Conversion`（ritualOutcomeEffect/ritualExplanation）。
 - **② 义务型**对照同文件 `CelebrationPartyChat`（ritualObligationTriggers + `Class="RitualObligationTrigger_DateProperties"` + mustBePlayerIdeo、tags/li=CelebratedDate、patternGroupTag=CelebratedDate、ritualBehavior=DateRitual、ritualOutcomeEffect=CelebratedDate）与 `CelebrationTree`（iconPathOverride、descOverride、shortDescOverride、ignoreConsumableBuildingRequirement）。
 - **`tags` 的 `Inherit` 属性与 `Inherit="False"` 用法**：取自同文件 `CelebrationConsumable`（Abstract 且 `<tags Inherit="False">`）。

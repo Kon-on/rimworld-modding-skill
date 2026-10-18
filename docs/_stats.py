@@ -1,8 +1,11 @@
 
 # -*- coding: utf-8 -*-
 import json, sys, os, collections
+from pathlib import Path
 sys.stdout.reconfigure(encoding='utf-8')
-P = r"<REPO_ROOT>\docs"
+# 仓库根 = 本脚本所在目录（docs/）的上一级；换机器、换 clone 都不用改路径
+ROOT = Path(__file__).resolve().parents[1]
+P = str(ROOT / "docs")
 s = json.load(open(os.path.join(P,"def-schema.json"), encoding="utf-8"))
 types = s["defTypes"]
 import importlib.util

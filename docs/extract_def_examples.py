@@ -3,11 +3,14 @@
 """Extract, for every Def type in RimWorld 1.7, the smallest and the median-size
 real vanilla instance (as literal XML) plus an instance index."""
 import os, json
+from pathlib import Path
 from lxml import etree
 
+# 仓库根 = 本脚本所在目录（docs/）的上一级；换机器、换 clone 都不用改路径
+ROOT = Path(__file__).resolve().parents[1]
 GAME = r"E:\SteamLibrary\steamapps\common\RimWorld"
 DATA = os.path.join(GAME, "Data")
-OUT  = r"<REPO_ROOT>\docs"
+OUT  = str(ROOT / "docs")
 
 def nodecount(el):
     return sum(1 for _ in el.iter())
