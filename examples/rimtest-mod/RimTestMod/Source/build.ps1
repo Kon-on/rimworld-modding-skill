@@ -12,6 +12,10 @@
     -UseCsc   dotnet exec "<sdk>\Roslyn\bincore\csc.dll"
               手动 -r: 全部 net10.0 ref pack + 游戏 DLL，不做 restore
 
+  游戏目录 / Harmony 目录：优先用 -GameDir / -HarmonyDir 指定；未指定时按
+  环境变量 RIMWORLD_DIR / HARMONY_DIR → Steam 注册表与库清单（libraryfolders.vdf）自动探测，
+  探不到就报错并说明怎么指定。脚本不写死任何本机路径。
+
   硬约束（脚本自身保证）：
     * 绝不把游戏 DLL 复制进 Assemblies\（所有 <Reference> 都是 Private=false）
     * 从不写入游戏安装目录，只读取
@@ -21,11 +25,13 @@
 .EXAMPLE
   pwsh -File .\build.ps1
   pwsh -File .\build.ps1 -UseCsc
+  pwsh -File .\build.ps1 -GameDir '<游戏安装目录>'
+  $env:RIMWORLD_DIR = '<游戏安装目录>'; pwsh -File .\build.ps1
 #>
 [CmdletBinding()]
 param(
-    [string]$GameDir    = 'E:\SteamLibrary\steamapps\common\RimWorld',
-    [string]$HarmonyDir = 'E:\SteamLibrary\steamapps\workshop\content\294100\2009463077\1.7\Assemblies',
+    [string]$GameDir    = '',   # 留空则自动定位（RIMWORLD_DIR → Steam 注册表/库清单）
+    [string]$HarmonyDir = '',   # 留空则自动定位（HARMONY_DIR → 创意工坊 294100 下找 0Harmony.dll）
     [string]$Configuration = 'Release',
     [switch]$UseCsc,
     [switch]$SkipVerify
@@ -52,10 +58,102 @@ function XmlEsc([string]$s) {
     return $s.Replace('&','&amp;').Replace('<','&lt;').Replace('>','&gt;').Replace('"','&quot;')
 }
 
+# ------------------------------------------------- 定位辅助（不写死本机路径）
+# 优先级：显式参数 > 环境变量 > Steam 注册表与库清单（libraryfolders.vdf）
+function Get-SteamLibraryDirs {
+    $roots = New-Object System.Collections.Generic.List[string]
+    foreach ($k in @(
+            @{ p = 'HKCU:\Software\Valve\Steam';             v = 'SteamPath'   },
+            @{ p = 'HKLM:\SOFTWARE\WOW6432Node\Valve\Steam'; v = 'InstallPath' })) {
+        try {
+            $v = (Get-ItemProperty -Path $k.p -Name $k.v -ErrorAction Stop).($k.v)
+            if ($v) { $roots.Add([string]$v) }
+        } catch { }
+    }
+    foreach ($e in @(${env:ProgramFiles(x86)}, $env:ProgramFiles)) {
+        if ($e) { $roots.Add((Join-Path $e 'Steam')) }
+    }
+
+    $libs = New-Object System.Collections.Generic.List[string]
+    foreach ($r in $roots) {
+        if (-not (Test-Path -LiteralPath $r -ErrorAction SilentlyContinue)) { continue }
+        $libs.Add($r)
+        $vdf = Join-Path $r 'steamapps\libraryfolders.vdf'
+        if (Test-Path -LiteralPath $vdf -ErrorAction SilentlyContinue) {
+            foreach ($m in [regex]::Matches((Get-Content -LiteralPath $vdf -Raw), '"path"\s+"([^"]+)"')) {
+                $libs.Add($m.Groups[1].Value.Replace('\\', '\'))
+            }
+        }
+    }
+    return ($libs | Select-Object -Unique)
+}
+
+function Find-RimWorldDir {
+    $cands = New-Object System.Collections.Generic.List[string]
+    if ($env:RIMWORLD_DIR) { $cands.Add($env:RIMWORLD_DIR) }
+    foreach ($lib in Get-SteamLibraryDirs) { $cands.Add((Join-Path $lib 'steamapps\common\RimWorld')) }
+    foreach ($c in $cands) {
+        if (Test-Path -LiteralPath (Join-Path $c 'Assembly-CSharp.dll') -ErrorAction SilentlyContinue) {
+            return (Resolve-Path -LiteralPath $c).Path
+        }
+    }
+    return ''
+}
+
+function Find-RimWorldHarmonyDir([string]$GameDir) {
+    if ($env:HARMONY_DIR) { return $env:HARMONY_DIR }
+    # 创意工坊里不止 Harmony 一个 mod 会附带 0Harmony.dll（例如 Killfeed 带的是 1.0.9.1），
+    # 所以先认官方 Harmony mod 的固定 id，再兜底扫描（1.7 目录优先、版本号次之）。
+    $roots = New-Object System.Collections.Generic.List[string]
+    if ($GameDir) { $roots.Add((Split-Path -Parent (Split-Path -Parent (Resolve-Path -LiteralPath $GameDir).Path))) }
+    foreach ($lib in Get-SteamLibraryDirs) { $roots.Add((Join-Path $lib 'steamapps')) }
+
+    $KnownId = '2009463077'   # 官方 Harmony mod 的公开创意工坊 id
+    foreach ($r in ($roots | Select-Object -Unique)) {
+        foreach ($sub in @('1.7\Assemblies', 'Assemblies', '1.6\Assemblies')) {
+            $d = Join-Path (Join-Path (Join-Path $r 'workshop\content\294100') $KnownId) $sub
+            if (Test-Path -LiteralPath (Join-Path $d '0Harmony.dll') -ErrorAction SilentlyContinue) { return $d }
+        }
+    }
+
+    $best = ''; $bestScore = -1
+    foreach ($r in ($roots | Select-Object -Unique)) {
+        $content = Join-Path $r 'workshop\content\294100'
+        if (-not (Test-Path -LiteralPath $content -ErrorAction SilentlyContinue)) { continue }
+        foreach ($mod in Get-ChildItem -LiteralPath $content -Directory -ErrorAction SilentlyContinue) {
+            foreach ($sub in @('1.7\Assemblies', 'Assemblies', '1.6\Assemblies')) {
+                $dll = Join-Path (Join-Path $mod.FullName $sub) '0Harmony.dll'
+                if (-not (Test-Path -LiteralPath $dll -ErrorAction SilentlyContinue)) { continue }
+                $ver = [version]'0.0'
+                try { $ver = [version]((Get-Item -LiteralPath $dll).VersionInfo.FileVersion) } catch { }
+                $score = $ver.Major * 10 + $ver.Minor + $(if ($sub -eq '1.7\Assemblies') { 100 } else { 0 })
+                if ($score -gt $bestScore) { $bestScore = $score; $best = (Join-Path $mod.FullName $sub) }
+            }
+        }
+    }
+    return $best
+}
+
 Head "RimTestMod build.ps1"
 Say "  Source : $SourceDir"
 Say "  Output : $AssembliesDir"
 Say "  配置   : $Configuration / 编译路径 = $(if ($UseCsc) { 'Roslyn csc.dll (手动 -r:)' } else { 'dotnet build' })"
+
+# ---------------------------------------------------------------- 0. 定位游戏目录
+if (-not $GameDir)    { $GameDir    = Find-RimWorldDir }
+if (-not $HarmonyDir) { $HarmonyDir = Find-RimWorldHarmonyDir -GameDir $GameDir }
+if (-not $GameDir) {
+    Bad "找不到 RimWorld 游戏目录（该层应含 Assembly-CSharp.dll）"
+    Say '  指定方式：-GameDir "<游戏安装目录>"，或先设环境变量 RIMWORLD_DIR'
+    exit 1
+}
+if (-not $HarmonyDir) {
+    Bad "找不到含 0Harmony.dll 的目录"
+    Say '  指定方式：-HarmonyDir "<含 0Harmony.dll 的目录>"，或先设环境变量 HARMONY_DIR'
+    exit 1
+}
+Info "GameDir    = $GameDir"
+Info "HarmonyDir = $HarmonyDir"
 
 # ---------------------------------------------------------------- 1. 依赖校验
 Head "1. 检查外部依赖（只读，不修改游戏目录）"
@@ -197,14 +295,15 @@ if (-not $UseCsc) {
 } else {
     Head "3. 编译（Roslyn csc.dll，手动 -r:）"
 
-    $cscDll = Get-ChildItem 'C:\Program Files\dotnet\sdk' -Directory |
+    $dotnetRoot = if ($env:ProgramFiles) { Join-Path $env:ProgramFiles 'dotnet' } else { 'C:\Program Files\dotnet' }
+    $cscDll = Get-ChildItem (Join-Path $dotnetRoot 'sdk') -Directory |
         Sort-Object { [version]($_.Name -replace '[^0-9.].*$','') } -Descending |
         ForEach-Object { Join-Path $_.FullName 'Roslyn\bincore\csc.dll' } |
         Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
     if (-not $cscDll) { Fail "找不到 Roslyn csc.dll"; exit 1 }
     Ok "csc.dll = $cscDll"
 
-    $refPack = Get-ChildItem 'C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref' -Directory -ErrorAction SilentlyContinue |
+    $refPack = Get-ChildItem (Join-Path $dotnetRoot 'packs\Microsoft.NETCore.App.Ref') -Directory -ErrorAction SilentlyContinue |
         Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName 'ref\net10.0') } |
         Sort-Object Name -Descending | Select-Object -First 1
     if (-not $refPack) { Fail "找不到 Microsoft.NETCore.App.Ref\*\ref\net10.0"; exit 1 }

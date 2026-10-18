@@ -1,8 +1,9 @@
 # RimWorld 1.7 下 C# mod 与 Harmony 补丁可行性验证报告
 
-- 验证对象：RimWorld 1.7.4981 rev136（E:\SteamLibrary\steamapps\common\RimWorld\Version.txt 内容为 `1.7.4981 rev136`）
-- 创意工坊 mod 目录：E:\SteamLibrary\steamapps\workshop\content\294100（136 个 mod）
+- 验证对象：RimWorld 1.7.4981 rev136（<游戏安装目录>\Version.txt 内容为 `1.7.4981 rev136`）
+- 创意工坊 mod 目录：<创意工坊目录>（136 个 mod）
 - 验证方式：**纯静态分析**（PE/CLI 元数据解析 + IL 反编译式读取 + 原生字符串搜索），**未启动 RimWorld 本体**（任务硬性要求）
+> 路径占位符：`<游戏安装目录>` = 含 `Assembly-CSharp.dll` 的 RimWorld 根目录；`<创意工坊目录>` = `<Steam 库>\steamapps\workshop\content\294100`；`<Steam 库>` = Steam 库根目录。
 - 结论标注约定：凡没有直接证据的推断一律以「推测：」开头；有证据的行给出「文件路径 + 实际命令 + 真实输出」
 - 本报告只写入本文件，工作区其它文件未被修改
 
@@ -34,7 +35,7 @@
 
 命令：
 
-    $g = "E:\SteamLibrary\steamapps\common\RimWorld"
+    $g = "<游戏安装目录>"
     Get-Content -LiteralPath "$g\Version.txt"
     Get-ChildItem -LiteralPath $g -Recurse -File -Filter "*Harmony*"
     Get-ChildItem -LiteralPath $g -Recurse -File -Filter "UnityEngine*.dll"
@@ -63,7 +64,7 @@
 
 程序集元数据（命令 `asmrefs.ps1 <dll>`，读 AssemblyDefinition + AssemblyRefs + TargetFrameworkAttribute）：
 
-    DLL: E:\SteamLibrary\steamapps\common\RimWorld\Assembly-CSharp.dll
+    DLL: <游戏安装目录>\Assembly-CSharp.dll
          name=Assembly-CSharp asmver=1.7.9786.4087
          refs(31): System.Runtime 10.0.0.0; UnityStubs 1.0.0.0; System.Collections 10.0.0.0; System.Threading 10.0.0.0;
                    System.Linq 10.0.0.0; System.Text.RegularExpressions 10.0.0.0; com.rlabrecque.steamworks.net 0.0.0.0;
@@ -111,7 +112,7 @@
 
 #### (1) mod 2009463077 的 1.7 子目录文件清单
 
-命令：`Get-ChildItem -LiteralPath "E:\SteamLibrary\steamapps\workshop\content\294100\2009463077" -Recurse -File`
+命令：`Get-ChildItem -LiteralPath "<创意工坊目录>\2009463077" -Recurse -File`
 
     LICENSE 1073 | LoadFolders.xml 335 | README.md 1145
     About\About.xml 445 | About\Manifest.xml 480 | About\ModIcon.png 5605 | About\Preview.png 100538 | About\PublishedFileId.txt 10
@@ -214,7 +215,7 @@
 
 ### 2.2 问题 2：UnityStubs.dll 是什么
 
-文件：`E:\SteamLibrary\steamapps\common\RimWorld\UnityStubs.dll`（961536 字节）
+文件：`<游戏安装目录>\UnityStubs.dll`（961536 字节）
 
 #### (1) 规模与性质
 
@@ -443,7 +444,7 @@
 
 ### 2.3 问题 3：实际可用的 1.7 C# mod 范本
 
-命令：`Get-ChildItem -LiteralPath "E:\SteamLibrary\steamapps\workshop\content\294100" -Directory` 后对每个 mod 检查 `1.7` 目录、递归 DLL、`About\About.xml`、`LoadFolders.xml`。
+命令：`Get-ChildItem -LiteralPath "<创意工坊目录>" -Directory` 后对每个 mod 检查 `1.7` 目录、递归 DLL、`About\About.xml`、`LoadFolders.xml`。
 
 **136 个 mod 中 22 个含 `1.7` 目录，其中 20 个在 1.7 下有 DLL**（2 个无 DLL）。带 DLL 清单：
 
@@ -620,7 +621,7 @@
 
 ### 2.6 复现用工具与产物
 
-所有辅助工具都在临时目录 `C:\Users\<user>\AppData\Local\Temp\rw17\`（未写入工作区）：
+所有辅助工具都在临时目录 `%TEMP%\rw17\`（未写入工作区）：
 
 | 工具 | 作用 |
 | --- | --- |
@@ -631,13 +632,13 @@
 | IlDump2.cs | `Dump(path,w,exactType,withIl,methodFilter)`：单类型完整字段/属性/方法签名 + 逐条 IL |
 | IlStr.cs | `FindString(path,w,needle,withCalls,withIl)`：找含指定 ldstr 的方法 |
 
-产物：`C:\Users\<user>\AppData\Local\Temp\rw17\stubwarner.txt`（258 行，257 个 stub 方法）、`...\acsharp_unityrefs.txt`（173 条 UnityStubs typeRef）、`...\loadfolders.txt`。
+产物：`%TEMP%\rw17\stubwarner.txt`（258 行，257 个 stub 方法）、`...\acsharp_unityrefs.txt`（173 条 UnityStubs typeRef）、`...\loadfolders.txt`。
 
 常用命令骨架：
 
-    Add-Type -Path "C:\Users\<user>\AppData\Local\Temp\rw17\IlDump2.cs"
+    Add-Type -Path "%TEMP%\rw17\IlDump2.cs"
     $sw = New-Object System.IO.StringWriter
-    [IlDump2]::Dump("E:\SteamLibrary\steamapps\common\RimWorld\Assembly-CSharp.dll", $sw, "Verse.Mod", $true, "")
+    [IlDump2]::Dump("<游戏安装目录>\Assembly-CSharp.dll", $sw, "Verse.Mod", $true, "")
     $sw.ToString()
 
 （注：PowerShell 中 System.Reflection.Metadata 的扩展方法不能直接调用，须写 `[System.Reflection.Metadata.PEReaderExtensions]::GetMetadataReader($pe)`。）
@@ -679,11 +680,11 @@
     </PropertyGroup>
     <ItemGroup>
       <!-- 全部是 Private=false 的参考程序集，编译 DLL 里不应复制它们 -->
-      <Reference Include="Assembly-CSharp"><HintPath>E:\SteamLibrary\steamapps\common\RimWorld\Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
-      <Reference Include="UnityStubs"><HintPath>E:\SteamLibrary\steamapps\common\RimWorld\UnityStubs.dll</HintPath><Private>false</Private></Reference>
-      <Reference Include="0Harmony"><HintPath>E:\SteamLibrary\steamapps\workshop\content\294100\2009463077\1.7\Assemblies\0Harmony.dll</HintPath><Private>false</Private></Reference>
+      <Reference Include="Assembly-CSharp"><HintPath><游戏安装目录>\Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
+      <Reference Include="UnityStubs"><HintPath><游戏安装目录>\UnityStubs.dll</HintPath><Private>false</Private></Reference>
+      <Reference Include="0Harmony"><HintPath><创意工坊目录>\2009463077\1.7\Assemblies\0Harmony.dll</HintPath><Private>false</Private></Reference>
       <!-- 需要引擎能力时才引： -->
-      <Reference Include="Waylith"><HintPath>E:\SteamLibrary\steamapps\common\RimWorld\Waylith.dll</HintPath><Private>false</Private></Reference>
+      <Reference Include="Waylith"><HintPath><游戏安装目录>\Waylith.dll</HintPath><Private>false</Private></Reference>
     </ItemGroup>
 
 **不要引用** `UnityEngine.CoreModule / UnityEngine.IMGUIModule / UnityEngine.TextRenderingModule` 等——1.7 已不存在这些文件（根目录 `UnityEngine*.dll` 递归 0 命中）。

@@ -6,7 +6,7 @@
 > 因此移到 `examples/rimtest-mod/_SPEC.md` 保存。正文除 §1 的「mod 工作目录」一行外未作改动。
 
 ## 0. 这是什么
-用 skills 仓库（<REPO_ROOT>，技能名 rimworld-modding）从零做出的一个 RimWorld mod，
+用 skills 仓库（<仓库根>，技能名 rimworld-modding）从零做出的一个 RimWorld mod，
 目的是端到端完整测试该技能：XML Def 模板路径、无模板新类型路径、C# ThingComp、Harmony 补丁、
 XML PatchOperations、贴图资源、本地化、静态核验。
 
@@ -16,10 +16,10 @@ XML PatchOperations、贴图资源、本地化、静态核验。
 - packageId：test.rimtestmod
 - 作者：占位符（发布前必须替换）
 - mod 显示名：完整测试 Mod (Test)
-- mod 工作目录：<REPO_ROOT>\examples\rimtest-mod\RimTestMod
+- mod 工作目录：examples/rimtest-mod/RimTestMod
 
 ## 2. 本机 1.7 平台现实（已实测，写代码/写 XML 必须按这个来）
-- 游戏：E:\SteamLibrary\steamapps\common\RimWorld，Version.txt = 1.7.4981 rev136
+- 游戏：<游戏安装目录>，Version.txt = 1.7.4981 rev136
 - 运行时：.NET 10（RimWorld.runtimeconfig.json → tfm net10.0；Microsoft.NETCore.App 10.0.13-waylithclr.dev）
 - Unity 已被移除：全盘无 UnityEngine*.dll；runtimeconfig 里 WaylithClr.AssemblyNameRedirects = "UnityEngine*=UnityStubs;...;Assembly-CSharp-firstpass=UnityStubs"，UnityEngine 只剩存根（UnityStubs）。**不要写依赖 UnityEngine 具体成员的代码**。
 - 游戏 DLL 在安装根目录：Assembly-CSharp.dll（14.91 MB）、RimWorld.dll、mscorlib.dll、netstandard.dll、System.*.dll、coreclr.dll、hostfxr.dll
@@ -27,15 +27,15 @@ XML PatchOperations、贴图资源、本地化、静态核验。
 - 游戏本体**不自带** 0Harmony.dll（全盘搜不到 *armony*）
 - 原版数据：Data\{Core,Anomaly,Biotech,Ideology,Odyssey,Royalty}\**\*.xml
 - 贴图：纯 Textures\ 目录在 1.7 仍可用（至少 4 个支持 1.7 的创意工坊 mod 这么用）；1.7 另有 Assets.zip 打包形态，本次不用
-- 工具链：dotnet SDK 10.0.401（C:\Program Files\dotnet\sdk）；C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe
+- 工具链：dotnet SDK 10.0.401（%ProgramFiles%\dotnet\sdk）；%WINDIR%\Microsoft.NET\Framework64\v4.0.30319\csc.exe
 
 ## 3. 核验源（写任何字段前必须核对，禁止凭记忆）
-- 1.7 字段与模板库（首选，来自本机 1.7.4981 实测提取）：<REPO_ROOT>\library\
+- 1.7 字段与模板库（首选，来自本机 1.7.4981 实测提取）：library/
   - 02-模板/ 下按线分的模板（含最小真实范例）
   - 03-全量字段参考\字段总表.csv（全量字段 + 出现率）与 03-全量字段参考\字段\<DefType>.md
-  - 检索命令：node "<REPO_ROOT>\scripts\find-template.mjs" --def ThingDef；--field <字段名>；--list
-- 原版游戏数据（最终权威）：E:\SteamLibrary\steamapps\common\RimWorld\Data\**\*.xml
-- 技能自带模板（1.6 时代，可能过时，仅作起点）：<REPO_ROOT>\assets\templates\
+  - 检索命令：node "scripts/find-template.mjs" --def ThingDef；--field <字段名>；--list
+- 原版游戏数据（最终权威）：<游戏安装目录>\Data\**\*.xml
+- 技能自带模板（1.6 时代，可能过时，仅作起点）：assets/templates/
 
 ## 4. 文件清单与归属（文件级互斥，谁也别碰别人的文件）
 
@@ -97,7 +97,7 @@ XML PatchOperations、贴图资源、本地化、静态核验。
 - 补丁 ID 必须唯一（例如 Demo.RimTestMod.VerbShootPatch）；补丁目标方法签名必须先用程序集元数据核验存在，不能凭记忆
 
 ## 7. 硬约束（违反即返工）
-1. 不修改游戏安装目录的任何文件（最终安装副本由 Lead 统一做，别人不许写 E:\SteamLibrary）
+1. 不修改游戏安装目录的任何文件（最终安装副本由 Lead 统一做，别人不许写 <Steam 库>）
 2. 不复制原版 C# 源码；不把游戏 DLL 打进 mod；不使用第三方 IP 素材
 3. 不写 examples\ 目录（那是 Lead 的收尾动作）；不写 assets\templates\（模板回写是 Lead 的活）
 4. defName 必须唯一且全部以 DM_ 开头；XML 文件末尾留一个空行

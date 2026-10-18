@@ -2,12 +2,13 @@
 $ErrorActionPreference='Stop'
 # 仓库根 = 本脚本所在目录（docs/）的上一级；换机器、换 clone 都不用改路径
 $Docs = Join-Path (Split-Path -Parent $PSScriptRoot) 'docs'
-$dir='E:\SteamLibrary\steamapps\common\RimWorld'
+. (Join-Path $PSScriptRoot '_rimworld.ps1')
+$dir = Get-RimWorldDir
 $out=Join-Path $Docs 'csharp-api.json'
 
 $us=[System.Reflection.Assembly]::LoadFrom((Join-Path $dir 'UnityStubs.dll'))
 $ac=[System.Reflection.Assembly]::LoadFrom((Join-Path $dir 'Assembly-CSharp.dll'))
-$harm=[System.Reflection.Assembly]::LoadFrom('E:\SteamLibrary\steamapps\workshop\content\294100\2009463077\1.7\Assemblies\0Harmony.dll')
+$harm=[System.Reflection.Assembly]::LoadFrom((Join-Path (Get-RimWorldHarmonyDir -GameDir $dir) '0Harmony.dll'))
 function Get-Types($asm){ try { return $asm.GetTypes() } catch [System.Reflection.ReflectionTypeLoadException] { return ($_.Exception.Types | Where-Object { $_ -ne $null }) } }
 $acTypes = Get-Types $ac; $usTypes = Get-Types $us; $hTypes = Get-Types $harm
 $idx=New-Object 'System.Collections.Generic.List[string]'

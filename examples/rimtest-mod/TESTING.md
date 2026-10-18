@@ -7,7 +7,7 @@
 | mod 显示名 | 完整测试 Mod (Test) |
 | packageId | `test.rimtestmod`（测试版前缀；正式发布前须按技能「测试版先行」流程正规化） |
 | 目标版本 | RimWorld **1.7**（本机 Steam 版 `1.7.4981 rev136`） |
-| 已安装位置 | `E:\SteamLibrary\steamapps\common\RimWorld\Mods\RimTestMod\` |
+| 已安装位置 | `<游戏安装目录>\Mods\RimTestMod\` |
 | 交付副本 | [RimTestMod](RimTestMod)（44 个文件；逐文件 sha256 见 [文件清单-sha256.txt](文件清单-sha256.txt)） |
 | 静态核验报告 | [核验报告.md](核验报告.md) 与机器可读的 [核验报告.json](核验报告.json) |
 | 文档定稿时间 | 2026-10-18 |
@@ -32,7 +32,7 @@
 
 ## 1. 本机环境事实（实测，不是抄文档）
 
-- 游戏：RimWorld **1.7.4981 rev136**，`E:\SteamLibrary\steamapps\common\RimWorld`
+- 游戏：RimWorld **1.7.4981 rev136**，`<游戏安装目录>`
 - 目标框架：**net10.0**（`RimWorld.runtimeconfig.json` 里 includedFrameworks = Microsoft.NETCore.App 10.0.13-waylithclr.dev）
 - 引擎：**Unity 已被移除**；全盘没有 `UnityEngine*.dll`，`WaylithClr.AssemblyNameRedirects` 把 UnityEngine\* 重定向到 UnityStubs
 - 程序集位置：`Assembly-CSharp.dll`、`RimWorld.dll` 等**全在安装根目录**；老文档说的 `RimWorldWin64_Data/Managed/` **已不存在**

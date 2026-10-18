@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 // 环世界完整测试 mod —— 静态核验器
-// 用法：node docs/verify-testmod.mjs [--mod <目录>] [--json]
+// 用法：node docs/verify-testmod.mjs [--mod <目录>] [--rimworld <游戏根目录>] [--json]
 // 核验项：XML 良构 / defName 唯一与前缀 / ParentName 与 defName 引用可解析 / texPath 文件存在 /
 //         字段路径对照 1.7 字段总表 / techLevel 等枚举合法性 / Patch 结构与 xpath 语法 / C# 类型在 DLL 里真实存在
+import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -11,8 +12,47 @@ import { fileURLToPath } from "node:url";
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const args = process.argv.slice(2);
 const argOf = (k, d) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : d; };
+// ---------- 定位游戏安装目录（不写死本机路径）----------
+// 顺序：--rimworld → 环境变量 RIMWORLD_DIR → Steam 注册表 + steamapps/libraryfolders.vdf
+function steamLibraryDirs() {
+  const roots = [];
+  const add = (p) => {
+    if (!p) return;
+    const c = path.normalize(String(p).replace(/\//g, "\\"));
+    if (!roots.some((r) => r.toLowerCase() === c.toLowerCase())) roots.push(c);
+  };
+  for (const [key, name] of [["HKCU\\Software\\Valve\\Steam", "SteamPath"], ["HKLM\\SOFTWARE\\WOW6432Node\\Valve\\Steam", "InstallPath"]]) {
+    try {
+      const out = execFileSync("reg", ["query", key, "/v", name], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
+      const m = out.match(new RegExp(name + "\\s+REG_SZ\\s+(.+)"));
+      if (m) add(m[1].trim());
+    } catch { /* 注册表读不到（非 Windows / 无权限）就跳过 */ }
+  }
+  for (const env of ["ProgramFiles(x86)", "ProgramFiles"]) if (process.env[env]) add(path.join(process.env[env], "Steam"));
+  const libs = [];
+  for (const root of roots) {
+    try { if (!fs.statSync(root).isDirectory()) continue; } catch { continue; }
+    libs.push(root);
+    try {
+      const vdf = fs.readFileSync(path.join(root, "steamapps", "libraryfolders.vdf"), "utf8");
+      for (const m of vdf.matchAll(/"path"\s+"([^"]+)"/g)) libs.push(m[1].replace(/\\\\/g, "\\"));
+    } catch { /* 没有库清单就只用默认库 */ }
+  }
+  return libs;
+}
+function detectGameDir() {
+  const cands = process.env.RIMWORLD_DIR ? [process.env.RIMWORLD_DIR] : [];
+  for (const lib of steamLibraryDirs()) cands.push(path.join(lib, "steamapps", "common", "RimWorld"));
+  for (const c of cands) {
+    try { if (fs.statSync(path.join(c, "Assembly-CSharp.dll")).isFile()) return path.resolve(c); } catch { /* 下一个候选 */ }
+  }
+  return null;
+}
+
 const MOD = argOf("--mod", path.join(ROOT, "examples", "rimtest-mod", "RimTestMod"));
-const RIMWORLD = argOf("--rimworld", "E:\\SteamLibrary\\steamapps\\common\\RimWorld");
+const RIMWORLD = argOf("--rimworld", null) || detectGameDir();
+// 原版数据缺失时，整套「对照原版」的核验降级为跳过并记 note，而不是全量误报
+const HAS_VANILLA = !!RIMWORLD && fs.existsSync(path.join(RIMWORLD, "Data"));
 const LIBRARY = argOf("--library", path.join(ROOT, "library"));
 const JSON_OUT = argOf("--out", path.join(MOD, "..", "核验报告.json"));
 
@@ -101,30 +141,41 @@ for (const d of defs) {
 console.log("[2] Def 数量：" + defs.length + "（defName 唯一性、DM_ 前缀已查）");
 
 // ---------- 3. 原版 defName / Name 索引 ----------
-const vanillaNames = new Set();
-const vanillaFiles = [];
-for (const dlc of fs.readdirSync(path.join(RIMWORLD, "Data"))) {
-  const dir = path.join(RIMWORLD, "Data", dlc, "Defs");
-  if (!fs.existsSync(dir)) continue;
-  for (const f of walk(dir)) if (f.toLowerCase().endsWith(".xml")) vanillaFiles.push(f);
+function buildVanillaIndex() {
+  const files = [];
+  const names = new Set();
+  if (!HAS_VANILLA) return { files, names };
+  for (const dlc of fs.readdirSync(path.join(RIMWORLD, "Data"))) {
+    const dir = path.join(RIMWORLD, "Data", dlc, "Defs");
+    if (!fs.existsSync(dir)) continue;
+    for (const f of walk(dir)) if (f.toLowerCase().endsWith(".xml")) files.push(f);
+  }
+  for (const f of files) {
+    const src = fs.readFileSync(f, "utf8");
+    for (const m of src.matchAll(/<(?:defName|Name)>([^<]+)<\/(?:defName|Name)>/g)) names.add(m[1].trim());
+    for (const m of src.matchAll(/\sName="([^"]+)"/g)) names.add(m[1].trim());
+  }
+  return { files, names };
 }
-for (const f of vanillaFiles) {
-  const src = fs.readFileSync(f, "utf8");
-  for (const m of src.matchAll(/<(?:defName|Name)>([^<]+)<\/(?:defName|Name)>/g)) vanillaNames.add(m[1].trim());
-  for (const m of src.matchAll(/\sName="([^"]+)"/g)) vanillaNames.add(m[1].trim());
-}
+const { files: vanillaFiles, names: vanillaNames } = buildVanillaIndex();
 for (const f of xmlFiles) { const s = fs.readFileSync(f, "utf8"); for (const m of s.matchAll(/\sName="([^"]+)"/g)) nameSeen.set(m[1].trim(), rel(f, MOD)); }
-console.log("[3] 原版索引：" + vanillaFiles.length + " 个 XML，" + vanillaNames.size + " 个 defName/Name");
+if (!HAS_VANILLA) {
+  notes.push("找不到原版数据目录，已跳过「对照原版」的核验（ParentName / defName 引用 / C# 类名索引）；用 --rimworld <游戏根目录> 或环境变量 RIMWORLD_DIR 指定后重跑可恢复");
+  console.log("[3] 原版索引：跳过（未找到游戏安装目录）");
+} else {
+  console.log("[3] 原版索引：" + vanillaFiles.length + " 个 XML，" + vanillaNames.size + " 个 defName/Name");
+}
 
 for (const d of defs) {
   const pn = d.node.attrs["ParentName"];
-  if (pn && !vanillaNames.has(pn) && !nameSeen.has(pn)) P("error", "parent-exists", d.name + " 的 ParentName=\"" + pn + "\" 在原版 1.7 与本 mod 里都找不到");
+  if (pn && HAS_VANILLA && !vanillaNames.has(pn) && !nameSeen.has(pn)) P("error", "parent-exists", d.name + " 的 ParentName=\"" + pn + "\" 在原版 1.7 与本 mod 里都找不到");
 }
 // 被引用为「某个 defName 值」的字段（挑选会真实影响加载的那些）
 const REF_FIELDS = new Set(["thingDefs", "thingDef", "harvestedThingDef", "recipeUsers", "stuff", "minifiedDef", "recipe", "researchPrerequisite"]);
 const CS_FIELDS = new Set(["graphicClass", "verbClass", "thingClass", "workerClass", "compClass"]);
 // 游戏程序集里的类型名索引（用于核验 XML 里写的 C# 类是否真实存在）
 const dllIndex = (() => {
+  if (!HAS_VANILLA) return "";
   let s = "";
   for (const n of ["Assembly-CSharp.dll", "RimWorld.dll"]) {
     const p = path.join(RIMWORLD, n);
@@ -139,14 +190,14 @@ for (const d of defs) {
     for (const c of n.children) {
       if (REF_FIELDS.has(c.tag)) {
         const v = c.text.trim();
-        if (v && !v.includes(".") && !nameSeen.has(v) && !vanillaNames.has(v)) {
+        if (HAS_VANILLA && v && !v.includes(".") && !nameSeen.has(v) && !vanillaNames.has(v)) {
           P("warn", "def-ref", d.name + " 的 <" + c.tag + "> 引用了 " + v + "，原版与本 mod 都查不到");
         }
       }
       if (CS_FIELDS.has(c.tag)) {
         const v = c.text.trim();
         const short = v.split(".").pop();
-        if (v && !dllIndex.includes(short)) {
+        if (v && dllIndex && !dllIndex.includes(short)) {
           P("warn", "csharp-class", d.name + " 的 <" + c.tag + "> 指向 C# 类 " + v + "，在 Assembly-CSharp.dll / RimWorld.dll 的类名索引里找不到（若是 mod 自带类可忽略）");
         }
       }

@@ -216,7 +216,7 @@ RecipeDef 描述"在某个台子上把输入变成输出"：`ingredients`（输�
 
 - **逐字段对照**：上表出现率取自 `03-全量字段参考/字段/RecipeDef.md`（分母 212），可用机器可读版复核：
   `Select-String -Path '03-全量字段参考\字段总表.csv' -Pattern ',RecipeDef,ingredients/li/count,'`。
-- **结构照抄原版**（路径相对 `E:\SteamLibrary\steamapps\common\RimWorld\Data\`）：
+- **结构照抄原版**（路径相对 `<游戏安装目录>\Data\`）：
   - `Core/Defs/RecipeDefs/Recipes_Production.xml`：MakeStoneBlocksBase（第 4 行，workAmount/workSpeedStat/recipeUsers 写法）、Make_StoneBlocksAny（第 18 行，ingredients+fixedIngredientFilter+specialProducts 三件套）、Make_ComponentIndustrial（第 356 行，`products` 的正确写法 `<ComponentIndustrial>1</ComponentIndustrial>`）。
   - `Core/Defs/RecipeDefs/Recipes_Butchery.xml`：ButcherCorpseFlesh（第 4 行，specialProducts + fixedIngredientFilter + forceHiddenSpecialFilters + workerCounterClass）。
 - **字段表出处说明**：`RecipeDef.md` 的"原版出处"记为 `Core/Defs/HediffDefs/BodyParts/Hediffs_BodyParts_Base.xml` 与 `..._Prosthetic.xml`（手术类配方与 HediffDef 写在一起），因此 `addsHediff` 一类手术字段占比很高；制造类字段请对照 `Core/Defs/RecipeDefs/*.xml`。

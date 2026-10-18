@@ -1,6 +1,7 @@
 
 $ErrorActionPreference='Stop'
-$dir='E:\SteamLibrary\steamapps\common\RimWorld'
+. (Join-Path $PSScriptRoot '_rimworld.ps1')
+$dir = Get-RimWorldDir
 $us=[System.Reflection.Assembly]::LoadFrom((Join-Path $dir 'UnityStubs.dll'))
 $sw=$us.GetType('UnityStubs.Internal.StubWarner')
 "StubWarner: " + $sw.FullName

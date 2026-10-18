@@ -124,7 +124,7 @@ IncidentDef 是"事件"的定义：故事叙述者按 `baseChance` / `mtbDaysByB
 ## 核验
 
 - **字段合法性**：逐条对照 `library/03-全量字段参考/字段/IncidentDef.md` 的「全量字段表（70 条路径）」，模板中所有元素名均能在表中找到。
-- **原版写法依据**（相对 `E:\SteamLibrary\steamapps\common\RimWorld\Data\`）：
+- **原版写法依据**（相对 `<游戏安装目录>\Data\`）：
   - `Core/Defs/Storyteller/Incidents_Map_Misc.xml`：`ToxicFallout`（category / targetTags / workerClass / gameCondition / letterLabel / letterDef / baseChance / earliestDay / minRefireDays / disabledWhen / durationDays / tale 的完整真实写法）、`ShortCircuit`、`ResourcePodCrash`、`PsychicSoothe`。
   - `Core/Defs/Storyteller/Incidents_Caravan_All.xml`：`CaravanMeeting`（`mtbDaysByBiome` 的 12 个生物群系键与取值）。
   - `Core/Defs/Storyteller/Incidents_Map_Threats.xml`：`RaidEnemy`（`pointsScaleable`、`ignoreRecentSelectionWeighting`）。

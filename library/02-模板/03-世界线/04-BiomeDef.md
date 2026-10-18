@@ -213,7 +213,7 @@ BiomeDef 定义一个生物群系：地形怎么长（`terrainsByFertility` + `t
 ## 核验
 
 - **字段合法性**：逐条对照 `library/03-全量字段参考/字段/BiomeDef.md` 的「全量字段表（288 条路径）」。模板中所有元素名都能在该表命中；`rocks` / `plantWildnessByLayer` 的缺失也由该表 + `docs/def-schema.json` 双重确认。
-- **原版写法依据**（相对 `E:\SteamLibrary\steamapps\common\RimWorld\Data\`）：
+- **原版写法依据**（相对 `<游戏安装目录>\Data\`）：
   - `Core/Defs/BiomeDefs/Biomes_Temperate.xml`：`TemperateForest`（本模板骨架：workerClass / animalDensity / plantDensity / settlementSelectionWeight / movementDifficulty / lakeBeachTerrain / riverbankTerrain / riverbankSizeRange / texture / forageability / foragedFood / wildPlantRegrowDays / diseaseMtbDays / diseases / terrainsByFertility / terrainPatchMakers / baseWeatherCommonalities / wildPlants / wildAnimals / pollutionWildAnimals / coastalWildAnimals / allowedPackAnimals）。
   - `Core/Defs/BiomeDefs/Biomes_Misc.xml`：`Biome_Underground`（带 `Name` 的抽象/特殊群系写法）。
   - `Odyssey/Defs/BiomeDefs/Space.xml`：`SpaceBiome`（抽象父定义 + `ParentName` 继承的实例）。

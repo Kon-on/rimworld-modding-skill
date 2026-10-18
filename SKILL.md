@@ -319,15 +319,17 @@ description: |
 
 ### grep（MCP 不可用时的兜底）
 
+> `<游戏安装目录>` 指游戏根目录（含 `Assembly-CSharp.dll` 的那一层）；换机器时替换成实际路径，脚本里则用环境变量 `RIMWORLD_DIR` / `HARMONY_DIR`，不要把本机路径写进交付物。
+
 ```bash
 # 搜索字段的所有用法
-grep -r "extraMeleeDamages" "D:/steam/steamapps/common/RimWorld/Data/Core/Defs/" | head -10
+grep -r "extraMeleeDamages" "<游戏安装目录>/Data/Core/Defs/" | head -10
 
 # 搜索 ParentName 定义
-grep -r 'Name="BaseMeleeWeapon"' "D:/steam/steamapps/common/RimWorld/Data/Core/Defs/"
+grep -r 'Name="BaseMeleeWeapon"' "<游戏安装目录>/Data/Core/Defs/"
 
 # 搜索所有 techLevel 取值
-grep -rh "techLevel" "D:/steam/steamapps/common/RimWorld/Data/Core/Defs/" | sort -u | head -20
+grep -rh "techLevel" "<游戏安装目录>/Data/Core/Defs/" | sort -u | head -20
 ```
 
 ### dnSpy（第三选择——反编译 C# 源码）

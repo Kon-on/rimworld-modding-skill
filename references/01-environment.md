@@ -14,6 +14,8 @@ RimWorld mod 开发需要以下工具链。根据你要做的 mod 类型选择�
 
 > **1.7 起不再需要 Unity**：游戏引擎已换掉 Unity 运行时，Unity 类型由随游戏发布的兼容层提供（见下节）。
 
+> **路径写法**：本技能与全仓库文档统一用占位符——`<游戏安装目录>`（游戏根目录，含 `Assembly-CSharp.dll`）、`<创意工坊目录>`（`<Steam 库>\steamapps\workshop\content\294100`）、`<仓库根>`（本仓库检出目录）；配套脚本用环境变量 `RIMWORLD_DIR` / `HARMONY_DIR`，未设置时按 Steam 注册表与库清单自动探测。
+
 ## 1.7 的环境变化（与 1.6 及更早版本的差异）
 
 从 1.6 升级到 1.7 后，网上绝大多数教程与旧模板里的这几件事**已经全错**，先记住现实：
@@ -79,7 +81,7 @@ dotnet --version    # 应为 10.x 或更高
 ```
 
 ```bash
-dotnet build 你的Mod.csproj -c Release -p:RimWorldDir="E:/SteamLibrary/steamapps/common/RimWorld"
+dotnet build 你的Mod.csproj -c Release -p:RimWorldDir="<游戏安装目录>"
 ```
 
 ### 编译方式 B：csc + 引用框架（不想用 SDK 项目文件时）

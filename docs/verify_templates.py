@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-"""核验 02-模板 下所有 xml 代码块里的元素路径是否真实存在于原版 1.7 数据中。
+r"""核验 02-模板 下所有 xml 代码块里的元素路径是否真实存在于原版 1.7 数据中。
 
-事实来源：docs/def-schema.json（由 extract_def_schema.py 从
-E:\\SteamLibrary\\steamapps\\common\\RimWorld\\Data\\<资料片>\\Defs 提取）
+事实来源：docs/def-schema.json（由 extract_def_schema.py 从原版
+Data\<资料片>\Defs 提取；游戏目录由环境变量 RIMWORLD_DIR 或 Steam 探测定位）
 产出：library/04-核验/核验结果.md 与 核验结果.csv
 复现：python verify_templates.py
 """

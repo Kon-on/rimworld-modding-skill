@@ -214,7 +214,7 @@ FactionDef 定义一个派系：世界生成时按它决定生成多少据点、
 ## 核验
 
 - **本模板字段是否合法**：逐条对照 `library/03-全量字段参考/字段/FactionDef.md` 的「全量字段表（325 条路径）」，模板里出现的每个元素名都能在该表中找到同名路径。
-- **原版写法依据**（相对 `E:\SteamLibrary\steamapps\common\RimWorld\Data\`）：
+- **原版写法依据**（相对 `<游戏安装目录>\Data\`）：
   - `Core/Defs/FactionDefs/Factions_Base.xml`：唯一父定义 `FactionBase` 的全部内容（2 个字段）。
   - `Core/Defs/FactionDefs/Factions_Misc.xml`：`OutlanderFactionBase`（pawnsPlural / categoryTag / caravanTraderKinds / baseTraderKinds / maxPawnCostPerTotalPointsCurve / pawnGroupMakers 全量写法）、`OutlanderCivil`（colorSpectrum + worldCreation 配置字段）、`TribeRough`（raidCommonalityFromPointsCurve 曲线）、`PirateBandBase`（maxTotalPoints / disallowedStrategies）。
   - `Core/Defs/FactionDefs/Factions_Hidden.xml`：`Ancients`（该 DefType 的最小实例）。

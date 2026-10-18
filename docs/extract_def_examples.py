@@ -2,13 +2,15 @@
 # -*- coding: utf-8 -*-
 """Extract, for every Def type in RimWorld 1.7, the smallest and the median-size
 real vanilla instance (as literal XML) plus an instance index."""
-import os, json
+import os, json, sys
 from pathlib import Path
 from lxml import etree
 
 # 仓库根 = 本脚本所在目录（docs/）的上一级；换机器、换 clone 都不用改路径
 ROOT = Path(__file__).resolve().parents[1]
-GAME = r"E:\SteamLibrary\steamapps\common\RimWorld"
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _rimworld import game_dir
+GAME = game_dir()   # 环境变量 RIMWORLD_DIR 优先，其次按 Steam 注册表/库清单自动探测
 DATA = os.path.join(GAME, "Data")
 OUT  = str(ROOT / "docs")
 

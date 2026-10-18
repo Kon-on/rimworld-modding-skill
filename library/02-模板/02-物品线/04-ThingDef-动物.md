@@ -259,7 +259,7 @@
 - **逐字段对照**：ThingDef 部分取自 `03-全量字段参考/字段/ThingDef.md`（分母 2054），PawnKindDef 部分取自 `03-全量字段参考/字段/PawnKindDef.md`（分母 333）。可用机器可读版复核：
   `Select-String -Path '03-全量字段参考\字段总表.csv' -Pattern ',ThingDef,race/lifeStageAges/li/minAge,'` 与 `-Pattern ',PawnKindDef,lifeStages/li/bodyGraphicData/texPath,'`。
 - **负面结论的核验方式**：`bodyDef`、顶层 `lifeStageAges` 在字段表与 `docs/def-schema.json` 中均 0 命中，故本文件明确改写成 `race/body`、`race/lifeStageAges`。
-- **结构照抄原版**（路径相对 `E:\SteamLibrary\steamapps\common\RimWorld\Data\`）：
+- **结构照抄原版**（路径相对 `<游戏安装目录>\Data\`）：
   - `Core/Defs/ThingDefs_Races/Races_Animal_Hares.xml`：BaseHare（第 4 行，race 全部字段的来源）、Hare ThingDef（第 88 行）、PawnKindDef HareBase（第 81 行）、PawnKindDef Hare（第 103 行，lifeStages 三档写法）。
   - `Core/Defs/ThingDefs_Races/Races_Animal_Base.xml`：BasePawn 与 AnimalThingBase（第 4 行起，第 104 行结束）——本模板 `ParentName` 来源，提供 category=Pawn、thinkTree、thingCategories(Animals)、recipes 等。
   - `Core/Defs/BodyDefs/...`（body 取值）、`Core/Defs/LifeStageDefs/LifeStages.xml`（AnimalBaby / AnimalJuvenile / AnimalAdult）、`Core/Defs/BodyPartGroupDefs/...`（Teeth / HeadAttackTool）。

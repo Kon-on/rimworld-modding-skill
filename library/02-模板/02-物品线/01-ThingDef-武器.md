@@ -284,7 +284,7 @@ ThingDef 是物品、建筑、动物、投射物等一切"实体"的通用定义
 
 - **逐字段对照**：上表每条出现率都取自 `03-全量字段参考/字段/ThingDef.md` 的"全量字段表"，分母 2054。可用机器可读版复核：
   `Select-String -Path '03-全量字段参考\字段总表.csv' -Pattern ',ThingDef,verbs/li/range,'`（列顺序 line,defType,path,present,instances,ratio,kind,samples,sourceFile）。
-- **结构照抄原版**（原版路径均相对 `E:\SteamLibrary\steamapps\common\RimWorld\Data\`）：
+- **结构照抄原版**（原版路径均相对 `<游戏安装目录>\Data\`）：
   - `Core/Defs/ThingDefs_Misc/Weapons/BaseWeapons.xml`：BaseWeapon（第 4 行起）、BaseGun、BaseGunWithQuality、BaseMakeableGun、BaseHumanMakeableGun、BaseBullet、BaseMeleeWeapon / _Sharp / _Blunt / _Sharp_Quality 抽象链——本模板三个 `ParentName` 都指向这里的抽象 Def。
   - `Core/Defs/ThingDefs_Misc/Weapons/RangedIndustrial.xml`：Bullet_Revolver（第 7 行）、Gun_Revolver（第 20 行）、Gun_AssaultRifle（第 946 行）——本项目标 `projectile` 与 `verbs` 的写法来源。
   - `Core/Defs/ThingDefs_Misc/Weapons/MeleeMedieval.xml`：MeleeWeapon_Mace（第 5 行）、MeleeWeapon_LongSword（第 121 行）——近战 `tools` 与 `costStuffCount`+`stuffCategories` 来源。

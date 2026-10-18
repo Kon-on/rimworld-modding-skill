@@ -507,16 +507,13 @@ def mk_bloom():
 
 # ─────────────────────────── 素材 9: mod 预览图（640x360，含 mod 名文字）───────────────────────────
 
+# 字体目录由环境变量推导（不写死盘符）；全都不存在时 resolve_font() 返回 None，退回 Pillow 默认字体
+_FONT_DIR = os.path.join(os.environ.get("WINDIR") or os.environ.get("SystemRoot") or "C:/Windows", "Fonts")
 FONT_CANDIDATES = [
-    "C:/Windows/Fonts/msyhbd.ttc",
-    "C:/Windows/Fonts/msyh.ttc",
-    "C:/Windows/Fonts/msyhl.ttc",
-    "C:/Windows/Fonts/simhei.ttf",
-    "C:/Windows/Fonts/Dengb.ttf",
-    "C:/Windows/Fonts/Deng.ttf",
-    "C:/Windows/Fonts/segoeuib.ttf",
-    "C:/Windows/Fonts/arialbd.ttf",
-    "C:/Windows/Fonts/arial.ttf",
+    os.path.join(_FONT_DIR, _n) for _n in (
+        "msyhbd.ttc", "msyh.ttc", "msyhl.ttc", "simhei.ttf", "Dengb.ttf", "Deng.ttf",
+        "segoeuib.ttf", "arialbd.ttf", "arial.ttf",
+    )
 ]
 CJK_HINTS = ("msyh", "simhei", "deng", "simsun", "noto")
 

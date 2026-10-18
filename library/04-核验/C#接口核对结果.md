@@ -8,9 +8,9 @@
 
 | 文件 | 路径 | 版本 / 规模 |
 |---|---|---|
-| 游戏主程序集 | `E:\SteamLibrary\steamapps\common\RimWorld\Assembly-CSharp.dll` | 程序集版本 **1.7.9786.4087**、**16,221** 个类型 |
-| Unity 兼容层 | `E:\SteamLibrary\steamapps\common\RimWorld\UnityStubs.dll` | **934** 个类型 / **6,653** 个方法（DeclaredOnly 口径） |
-| Harmony | `E:\SteamLibrary\steamapps\workshop\content\294100\2009463077\1.7\Assemblies\0Harmony.dll` | **3.0.0.0**、2,326 个类型（来自创意工坊 mod **2009463077**） |
+| 游戏主程序集 | `<游戏安装目录>\Assembly-CSharp.dll` | 程序集版本 **1.7.9786.4087**、**16,221** 个类型 |
+| Unity 兼容层 | `<游戏安装目录>\UnityStubs.dll` | **934** 个类型 / **6,653** 个方法（DeclaredOnly 口径） |
+| Harmony | `<创意工坊目录>\2009463077\1.7\Assemblies\0Harmony.dll` | **3.0.0.0**、2,326 个类型（来自创意工坊 mod **2009463077**） |
 
 被核对的模板：`02-模板/07-CSharp/` 下的 6 份（01-Mod入口与DefModExtension、02-ThingComp与HediffComp、03-JobDriver与WorkGiver、04-Harmony补丁、05-自定义Def类、06-UnityStubs兼容层与失效API），以及配套附录 `07-附录-UnityStubs失效成员清单.md`。
 

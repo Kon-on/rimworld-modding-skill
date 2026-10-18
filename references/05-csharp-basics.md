@@ -294,9 +294,9 @@ if (ext?.ignoresShield == true)
 
 ```powershell
 # 找类型或字段名是否存在（UTF-8 元数据）
-Select-String -Path "E:\SteamLibrary\steamapps\common\RimWorld\Assembly-CSharp.dll" -Pattern "SetAmount" -Encoding utf8 -SimpleMatch
+Select-String -Path "<游戏安装目录>\Assembly-CSharp.dll" -Pattern "SetAmount" -Encoding utf8 -SimpleMatch
 # 找日志字符串（UTF-16）
-Select-String -Path "E:\SteamLibrary\steamapps\common\RimWorld\Assembly-CSharp.dll" -Pattern "Collection cannot init" -Encoding unicode -SimpleMatch
+Select-String -Path "<游戏安装目录>\Assembly-CSharp.dll" -Pattern "Collection cannot init" -Encoding unicode -SimpleMatch
 ```
 
 > 元数据里**能搜到 ≠ 会被使用**：还要回原版 XML 数一下实际出现次数（例如 `productHasIngredientStuff` 只在 DLL 里存在，原版 XML 0 处使用）。

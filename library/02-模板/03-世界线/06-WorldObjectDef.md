@@ -98,7 +98,7 @@ WorldObjectDef 定义星球视图上的"物件"：据点、商队、坠毁飞船
 ## 核验
 
 - **字段合法性**：逐条对照 `library/03-全量字段参考/字段/WorldObjectDef.md` 的「全量字段表（36 条路径）」；该文件同时给出"没有出现率≥90% 的字段"这一结论，本模板据此明确标注为"最小可跑组合"。
-- **原版写法依据**（相对 `E:\SteamLibrary\steamapps\common\RimWorld\Data\`）：
+- **原版写法依据**（相对 `<游戏安装目录>\Data\`）：
   - `Core/Defs/WorldObjectDefs/WorldObjects.xml`：`StaticWorldObjectBase`（父定义：三个 inspectorTabs）、`Site`（本模板骨架：worldObjectClass + expandingIcon + comps + IncidentTargetTags）、`Camp`（`overrideMapSize`、`isTempIncidentMapOwner`、`texture`、`expandingIconTexture` 的真实写法）、`Caravan`、`AttackedNonPlayerCaravan`、`RoutePlannerWaypoint`（`saved=false`、`drawAltitudeOffset`）、`Settlement`（`canBePlayerHome`、`comps`）。
   - `Odyssey/Defs/WorldObjectDefs/WorldObjects.xml`：`nameMaker` 用法与 `AsteroidMiningSite`。
   - `Royalty/Defs/WorldObjectDefs/WorldObjects.xml`、`Ideology/Defs/WorldObjectDefs/WorldObjects.xml`、`Core/Defs/Storyteller/Incidents_Caravan_All.xml`（内嵌 WorldObjectDef 的写法）。

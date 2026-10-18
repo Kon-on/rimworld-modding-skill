@@ -17,7 +17,7 @@
 
 ## 1. 本机环境事实（实测，2026-10-18）
 
-- 游戏：RimWorld **1.7.4981 rev136**，安装目录 `E:\SteamLibrary\steamapps\common\RimWorld`
+- 游戏：RimWorld **1.7.4981 rev136**，安装目录 `<游戏安装目录>`
 - 目标框架：**net10.0**（`RimWorld.runtimeconfig.json` 的 includedFrameworks = Microsoft.NETCore.App 10.0.13-waylithclr.dev）
 - 引擎：Unity **已移除**；全盘无 `UnityEngine*.dll`，`WaylithClr.AssemblyNameRedirects` 把 UnityEngine* 重定向到 UnityStubs
 - 程序集位置：`Assembly-CSharp.dll`、`RimWorld.dll` 等**全在安装根目录**；`RimWorldWin64_Data/Managed/` 已不存在

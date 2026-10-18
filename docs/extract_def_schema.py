@@ -10,7 +10,9 @@ from collections import defaultdict
 
 # 仓库根 = 本脚本所在目录（docs/）的上一级；换机器、换 clone 都不用改路径
 ROOT = Path(__file__).resolve().parents[1]
-GAME = r"E:\SteamLibrary\steamapps\common\RimWorld"
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _rimworld import game_dir
+GAME = game_dir()   # 环境变量 RIMWORLD_DIR 优先，其次按 Steam 注册表/库清单自动探测
 DATA = os.path.join(GAME, "Data")
 OUT  = str(ROOT / "docs")
 
@@ -120,7 +122,8 @@ for dtype, sch in schemas.items():
 
 os.makedirs(OUT, exist_ok=True)
 with open(os.path.join(OUT, "def-schema.json"), "w", encoding="utf-8") as f:
-    json.dump({"game": GAME, "defFilesParsed": file_count, "defTypes": out}, f,
+    # 来源用占位符记录，不把本机绝对路径写进产物
+    json.dump({"game": "$RIMWORLD_DIR", "defFilesParsed": file_count, "defTypes": out}, f,
               ensure_ascii=False, separators=(",", ":"))
 
 with open(os.path.join(OUT, "def-types-index.csv"), "w", encoding="utf-8-sig", newline="") as f:

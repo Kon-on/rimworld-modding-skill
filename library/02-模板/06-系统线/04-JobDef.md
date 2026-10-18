@@ -104,7 +104,7 @@ JobDef 自己不会发生：必须有东西去「派」它——`WorkGiverDef` �
 
 ## 核验
 
-本模板逐字段对照的原版位置（相对 E:\SteamLibrary\steamapps\common\RimWorld\Data\）：
+本模板逐字段对照的原版位置（相对 <游戏安装目录>\Data\）：
 
 | 模板里的写法 | 原版依据 |
 |---|---|

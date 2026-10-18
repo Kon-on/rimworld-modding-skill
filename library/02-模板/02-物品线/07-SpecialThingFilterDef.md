@@ -66,7 +66,7 @@ SpecialThingFilterDef 定义存储区/清单界面里的"特殊过滤项"——�
 
 - **逐字段对照**：`03-全量字段参考/字段/SpecialThingFilterDef.md` 全类型只有 8 条路径，本文件的字段说明表已把它们全部列出（分母 49）。可用机器可读版复核：
   `Select-String -Path '03-全量字段参考\字段总表.csv' -Pattern ',SpecialThingFilterDef,'`。
-- **结构照抄原版**（路径相对 `E:\SteamLibrary\steamapps\common\RimWorld\Data\`）：
+- **结构照抄原版**（路径相对 `<游戏安装目录>\Data\`）：
   - `Core/Defs/Misc/SpecialThingFilterDefs/SpecialThingFilters.xml`：AllowCorpsesColonist（第 4 行，`parentCategory=CorpsesHumanlike` + `allowedByDefault=false` + `saveKey` + `workerClass` 的标准六件套）、AllowLargeCorpses（第 24 行，带 `configurable=true`）、AllowRotten（第 35 行）、AllowFresh（第 45 行）、BaseBookResearchFilter（第 248 行，抽象基类只写 `parentCategory`+`allowedByDefault`）、AllowMainResearch（第 253 行，通过 `ParentName` 继承）。
 - **取值来源**：`parentCategory` 的可用值来自原版实际写法（Root / Corpses / CorpsesHumanlike / CorpsesMechanoid / CorpsesEntity / ResearchGain / SkillGain / Animals / Meat 等）；`workerClass` 的可用值只能取自原版已有类名（字段表 examples 列出的 12 个 `SpecialThingFilterWorker_*` 样例即出自上述文件）。
 - **Def 级属性说明**：`ParentName` / `Abstract` / `Name` 不在字段表内，属 Def 框架属性，本模板照抄原版 `BaseBookResearchFilter` 的抽象写法。

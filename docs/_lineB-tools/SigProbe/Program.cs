@@ -10,14 +10,22 @@ using System.Runtime.Loader;
 
 internal static class Program
 {
-    private const string GameDir = @"E:\SteamLibrary\steamapps\common\RimWorld";
-    private const string HarmonyDir = @"E:\SteamLibrary\steamapps\workshop\content\294100\2009463077\1.7\Assemblies";
+    // 不写死本机路径：运行时从环境变量取（缺失时报错并说明该指到哪里）
+    //   RIMWORLD_DIR = 游戏根目录（含 Assembly-CSharp.dll / UnityStubs.dll / RimWorld.dll 的那一层）
+    //   HARMONY_DIR  = 含 0Harmony.dll 的目录（创意工坊 Harmony mod 的 1.7\Assemblies）
+    private static readonly string GameDir = Environment.GetEnvironmentVariable("RIMWORLD_DIR") ?? "";
+    private static readonly string HarmonyDir = Environment.GetEnvironmentVariable("HARMONY_DIR") ?? "";
     private const char BackTick = (char)96;
 
     private static int Main(string[] args)
     {
         AssemblyLoadContext.Default.Resolving += Resolve;
-        if (args.Length == 0) { Console.WriteLine("usage: one <GAME|HARMONY|path> <typeFullName> | dump <...> <substr> | list <...> <substr>"); return 2; }
+        if (args.Length == 0)
+        {
+            Console.WriteLine("usage: one <GAME|HARMONY|UNITYSTUBS|RIMWORLD|path> <typeFullName> | dump <...> <substr> | list <...> <substr>");
+            Console.WriteLine("       GAME/UNITYSTUBS/RIMWORLD 取环境变量 RIMWORLD_DIR，HARMONY 取 HARMONY_DIR；也可直接给 DLL 路径");
+            return 2;
+        }
         string cmd = args[0];
         try
         {
@@ -59,12 +67,18 @@ internal static class Program
         return null;
     }
 
+    private static string Need(string dir, string env, string what)
+    {
+        if (string.IsNullOrEmpty(dir)) throw new InvalidOperationException("缺少环境变量 " + env + "，应指向" + what);
+        return dir;
+    }
+
     private static Assembly Load(string spec)
     {
-        if (spec == "GAME") return AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(GameDir, "Assembly-CSharp.dll"));
-        if (spec == "HARMONY") return AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(HarmonyDir, "0Harmony.dll"));
-        if (spec == "UNITYSTUBS") return AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(GameDir, "UnityStubs.dll"));
-        if (spec == "RIMWORLD") return AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(GameDir, "RimWorld.dll"));
+        if (spec == "GAME") return AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(Need(GameDir, "RIMWORLD_DIR", " RimWorld 游戏根目录（含 Assembly-CSharp.dll）"), "Assembly-CSharp.dll"));
+        if (spec == "HARMONY") return AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(Need(HarmonyDir, "HARMONY_DIR", "含 0Harmony.dll 的目录"), "0Harmony.dll"));
+        if (spec == "UNITYSTUBS") return AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(Need(GameDir, "RIMWORLD_DIR", " RimWorld 游戏根目录（含 UnityStubs.dll）"), "UnityStubs.dll"));
+        if (spec == "RIMWORLD") return AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(Need(GameDir, "RIMWORLD_DIR", " RimWorld 游戏根目录（含 RimWorld.dll）"), "RimWorld.dll"));
         return AssemblyLoadContext.Default.LoadFromAssemblyPath(spec);
     }
 

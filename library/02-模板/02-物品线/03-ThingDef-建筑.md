@@ -250,7 +250,7 @@
 - **逐字段对照**：上表每条出现率都取自 `03-全量字段参考/字段/ThingDef.md` 的"全量字段表"（分母 2054），可用机器可读版复核：
   `Select-String -Path '03-全量字段参考\字段总表.csv' -Pattern ',ThingDef,statBases/WorkToBuild,'`（列顺序 line,defType,path,present,instances,ratio,kind,samples,sourceFile）。
 - **负面结论的核验方式**：`filthAffordance`、`workToBuild` 在字段表与 `docs/def-schema.json` 中均检索不到（0 命中），故本文件明确不写这两个路径。
-- **结构照抄原版**（路径相对 `E:\SteamLibrary\steamapps\common\RimWorld\Data\`）：
+- **结构照抄原版**（路径相对 `<游戏安装目录>\Data\`）：
   - `Core/Defs/ThingDefs_Buildings/Buildings_Production.xml`：BenchBase（第 125 行）、HandTailoringBench（第 290 行，本模板工作台的逐字段来源）、TableMachining（第 592 行）、TableStonecutter（第 860 行）。
   - `Core/Defs/ThingDefs_Buildings/Buildings_Structure.xml`：Wall（第 218 行，本模板第二个 def 的来源）、DoorBase（第 7 行）、Door（第 65 行）。
   - `Core/Defs/ThingDefs_Buildings/Buildings_Base.xml`：BuildingBase（第 4 行，提供 category/thingClass/altitudeLayer 等基类字段）。

@@ -1,5 +1,6 @@
 $ErrorActionPreference='Stop'
-$dir='E:\SteamLibrary\steamapps\common\RimWorld'
+. (Join-Path $PSScriptRoot '_rimworld.ps1')
+$dir = Get-RimWorldDir
 $ac=[System.Reflection.Assembly]::LoadFrom((Join-Path $dir 'Assembly-CSharp.dll'))
 function Get-Types($asm){ try { return $asm.GetTypes() } catch [System.Reflection.ReflectionTypeLoadException] { return ($_.Exception.Types | Where-Object { $_ -ne $null }) } }
 $acTypes=Get-Types $ac

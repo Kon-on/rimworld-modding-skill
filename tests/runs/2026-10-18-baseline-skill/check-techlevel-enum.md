@@ -34,7 +34,7 @@
 
 ## 核验来源
 
-以下都对过本机安装版 RimWorld 1.7.4981 rev136（`E:\SteamLibrary\steamapps\common\RimWorld`）：
+以下都对过本机安装版 RimWorld 1.7.4981 rev136（`<游戏安装目录>`）：
 
 1. **枚举本体**——反射 `Assembly-CSharp.dll` 的 `RimWorld.TechLevel`，得到 `Undefined=0, Animal=1, Neolithic=2, Medieval=3, Industrial=4, Spacer=5, Ultra=6, Archotech=7`；
 2. **实际用法**——扫 `Data` 下 Core / Royalty / Ideology / Biotech / Anomaly / Odyssey 全部 XML，`<techLevel>` 共 258 处，分布为 Industrial 110、Spacer 60、Neolithic 40、Medieval 23、Ultra 13、Archotech 10、Animal 2——`Undefined` 一次都没被显式写过，也确实没有 `Ultratech`。

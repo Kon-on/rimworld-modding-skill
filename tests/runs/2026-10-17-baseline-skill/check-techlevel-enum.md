@@ -34,7 +34,7 @@
 
 ```bash
 # Windows（把路径换成你的游戏安装目录）
-grep -rho "<techLevel>[^<]*</techLevel>" "C:/Program Files (x86)/Steam/steamapps/common/RimWorld/Data/Core/Defs" | sort | uniq -c | sort -rn
+grep -rho "<techLevel>[^<]*</techLevel>" "<游戏安装目录>/Data/Core/Defs" | sort | uniq -c | sort -rn
 ```
 
 找不全时按技能的三级降级路径走：

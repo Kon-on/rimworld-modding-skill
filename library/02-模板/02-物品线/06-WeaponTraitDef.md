@@ -127,7 +127,7 @@ WeaponTraitDef 是"武器词条"：给武器加属性偏移（`statOffsets`）�
 
 - **逐字段对照**：上表出现率取自 `03-全量字段参考/字段/WeaponTraitDef.md`（分母 62），可用机器可读版复核：
   `Select-String -Path '03-全量字段参考\字段总表.csv' -Pattern ',WeaponTraitDef,statFactors/AccuracyLong,'`。
-- **结构照抄原版**（路径相对 `E:\SteamLibrary\steamapps\common\RimWorld\Data\`）：
+- **结构照抄原版**（路径相对 `<游戏安装目录>\Data\`）：
   - `Royalty/Defs/WeaponTraitDefs/WeaponTraitDefs.xml`：BladelinkBase（第 6 行，`weaponCategory` 抽象基类写法）、PsychicSensitivityUpMajor（第 10 行，`commonality 0.75` + `equippedStatOffsets` + `exclusionTags`）、PsyfocusMeditationBonus（第 256 行，`marketValueOffset 500`）、NeverBond（第 369 行，`neverBond true`）、Jealous（第 380 行，`workerClass WeaponTraitWorker_Jealous`）。
   - `Odyssey/Defs/WeaponTraitDefs/WeaponTraitDefs.xml`：AimAssistance / CustomGrip / QuickReload / ExtendedMagazine / JadeInlay / GoldInlay 等词条与 `abilityProps` 用法。
   - `Odyssey/Defs/WeaponTraitDefs/WeaponCategoryDefs.xml`：`weaponCategory` 的 16 个合法取值（Ranged / BulletFiring / Bow / Rifle / Sighted / Scoped / Shotgun / BurstFire / LowStoppingPower / Gun / PelletFiring / PulseCharge / Pistol / BeamWeapon / Attachable / BladeLink），对应 `03-全量字段参考/字段/WeaponCategoryDef.md`。

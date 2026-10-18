@@ -162,7 +162,7 @@ TerrainDef 定义一种地表：贴图、通行代价、可建造性（`affordan
 ## 核验
 
 - **字段合法性**：逐条对照 `library/03-全量字段参考/字段/TerrainDef.md` 的「全量字段表（160 条路径）」。
-- **原版写法依据**（相对 `E:\SteamLibrary\steamapps\common\RimWorld\Data\`）：
+- **原版写法依据**（相对 `<游戏安装目录>\Data\`）：
   - `Core/Defs/TerrainDefs/Terrain_Natural.xml`：`NaturalTerrainBase`（父定义全貌）与 `Soil`（本模板 ② 的骨架：texturePath / pollutedTexturePath / edgeType / categoryType / renderPrecedence / pathCost / statBases / scatterType / affordances / generatedFilth / fertility / takeFootprints / tools / tags）。
   - `Core/Defs/TerrainDefs/Terrain_Floors.xml`：`FloorBase`（父定义全貌）与 `WoodPlankFloor`（本模板 ① 的骨架：renderPrecedence / description / texturePath / burnedDef / color / pollutionShaderType / isPaintable / statBases / costList / constructEffect / designationHotKey / uiOrder）。
   - `Core/Defs/TerrainDefs/Terrain_Water.xml`：`WaterShallow`（`waterDepthShader`、`driesTo` 的写法）。

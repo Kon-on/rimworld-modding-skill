@@ -284,7 +284,7 @@
 
 - **逐字段对照**：上表出现率取自 `03-全量字段参考/字段/ThingDef.md`（分母 2054），可用 `字段总表.csv` 复核，例如
   `Select-String -Path '03-全量字段参考\字段总表.csv' -Pattern ',ThingDef,apparel/bodyPartGroups,'`。
-- **结构照抄原版**（路径相对 `E:\SteamLibrary\steamapps\common\RimWorld\Data\`）：
+- **结构照抄原版**（路径相对 `<游戏安装目录>\Data\`）：
   - `Core/Defs/ThingDefs_Misc/Apparel_Various.xml`：ApparelNoQualityBase（第 4 行）、ApparelBase（第 36 行）、ApparelMakeableBase（第 45 行）、ArmorSmithableBase（第 76 行）、ArmorMachineableBase（第 104 行）、Apparel_Duster（第 454 行）、Apparel_FlakVest（第 705 行）——本模板两件衣物的字段与取值逐条对照这两件原版衣物。
   - `Core/Defs/ThingDefs_Misc/Apparel_Headgear.xml`：CowboyHat（第 40 行）、Apparel_SimpleHelmet（第 414 行）、Apparel_AdvancedHelmet（第 467 行）——头盔类的参照物。
   - `Core/Defs/ThingDefs_Items/Items_Resource_Base.xml`（ResourceBase，第 4 行）与 `Core/Defs/ThingDefs_Items/Items_Resource_Stuff_Leather.xml`（LeatherBase 第 4 行、Leather_Plain 第 44 行）——第 3 个 def（材料）的字段来源。

@@ -31,7 +31,9 @@ node docs/verify-testmod.mjs
 python docs/verify_templates.py
 ```
 
-> 这些脚本都用**脚本自身位置**推导仓库根（Python `Path(__file__).resolve().parents[1]`、PowerShell `Split-Path -Parent $PSScriptRoot`、Node `import.meta.url`），在任意工作目录下执行都可以，换机器、换 clone 都不用改路径。仍然与具体机器绑定的只剩**原版游戏安装路径** `E:\SteamLibrary\steamapps\common\RimWorld`（核验原版所必需，可用 `--rimworld` 参数覆盖）。
+> 这些脚本都用**脚本自身位置**推导仓库根（Python `Path(__file__).resolve().parents[1]`、PowerShell `Split-Path -Parent $PSScriptRoot`、Node `import.meta.url`），在任意工作目录下执行都可以，换机器、换 clone 都不用改路径。原版游戏目录也不写死：先看环境变量 `RIMWORLD_DIR`，再看 Steam 注册表与库清单（`libraryfolders.vdf`）自动探测，也可以用 `--rimworld <游戏安装目录>` 显式指定。
+>
+> 文档与脚本统一用占位符表示机器相关路径：`<游戏安装目录>` = 含 `Assembly-CSharp.dll` 的 RimWorld 根目录；`<创意工坊目录>` = `<Steam 库>\steamapps\workshop\content\294100`；`<Steam 库>` = Steam 库根目录。 仓库自身路径用仓库相对写法（如 `docs/def-schema.json`）。
 
 ## 不在这里的东西
 

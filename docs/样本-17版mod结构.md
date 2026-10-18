@@ -1,7 +1,8 @@
 # RimWorld 1.7 mod 规范结构与元数据实测报告
 
-> 被测游戏：**1.7.4981 rev136**（命令：`Get-Content -LiteralPath 'E:\SteamLibrary\steamapps\common\RimWorld\Version.txt'` → 输出 `1.7.4981 rev136`）
-> 样本范围：创意工坊 `E:\SteamLibrary\steamapps\workshop\content\294100`（共 136 个 mod 目录）
+> 被测游戏：**1.7.4981 rev136**（命令：`Get-Content -LiteralPath '<游戏安装目录>\Version.txt'` → 输出 `1.7.4981 rev136`）
+> 样本范围：创意工坊 `<创意工坊目录>`（共 136 个 mod 目录）
+> 路径占位符：`<游戏安装目录>` = 含 `Assembly-CSharp.dll` 的 RimWorld 根目录；`<创意工坊目录>` = `<Steam 库>\steamapps\workshop\content\294100`；`<Steam 库>` = Steam 库根目录。
 > 报告性质：一切结论均附「文件路径 + 实际命令 + 真实输出」；无证据的推断一律显式标注「**推测：**」。
 > 采集方式：PowerShell（pwsh）逐文件读取 + `System.Xml.XmlDocument` 解析 + `Select-String` / 正则扫描；全部为静态读取，**未启动 RimWorld 游戏本体**。
 
@@ -12,7 +13,7 @@
 ### 1.1 样本枚举命令与真实输出
 
 ```powershell
-$base='E:\SteamLibrary\steamapps\workshop\content\294100'
+$base='<创意工坊目录>'
 Get-ChildItem -LiteralPath $base -Directory |
   Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName '1.7') } |
   Select-Object -ExpandProperty Name
@@ -110,7 +111,7 @@ Get-ChildItem -LiteralPath (Join-Path $root 'About') -Force
 
 ### 2.1 官方文档（游戏自带）原文
 
-文件：`E:\SteamLibrary\steamapps\common\RimWorld\ModUpdating.txt`（404 行）
+文件：`<游戏安装目录>\ModUpdating.txt`（404 行）
 命令：`Get-Content -LiteralPath '<上述路径>' -Encoding UTF8`
 
 第 74-82 行原文：
@@ -188,7 +189,7 @@ To learn more on how to setup multi-version support, refer to this page: https:/
 
 ### 2.3 LoadFolders.xml 实测写法（原文摘录）
 
-**（a）最简写法：只列版本夹**（`E:\SteamLibrary\steamapps\workshop\content\294100\1504723424\loadFolders.xml`，196 字节，注意文件名全小写）
+**（a）最简写法：只列版本夹**（`<创意工坊目录>\1504723424\loadFolders.xml`，196 字节，注意文件名全小写）
 
 ```xml
 <loadFolders>
@@ -209,7 +210,7 @@ To learn more on how to setup multi-version support, refer to this page: https:/
 
 `/` = mod 根目录；`1.7` = 版本夹（相对 mod 根的 POSIX 相对路径）。**顺序即加载顺序。**
 
-**（b）带条件加载（IfModActive）**（`E:\SteamLibrary\steamapps\workshop\content\294100\2599942235\LoadFolders.xml`，456 字节）
+**（b）带条件加载（IfModActive）**（`<创意工坊目录>\2599942235\LoadFolders.xml`，456 字节）
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -229,7 +230,7 @@ To learn more on how to setup multi-version support, refer to this page: https:/
 
 （该文件 v1.3/v1.4/v1.5 段同样是 `<li>1.x</li><li>/</li>`；条件夹 `1.7/ModCompat/TradeUIRevised/Assemblies/DragSelectTradeUIRevisedCompat.dll` 实际存在。）
 
-**（c）累加式（老版本内容继续叠加）**（`E:\SteamLibrary\steamapps\workshop\content\294100\3526354009\LoadFolders.xml`，724 字节）
+**（c）累加式（老版本内容继续叠加）**（`<创意工坊目录>\3526354009\LoadFolders.xml`，724 字节）
 
 ```xml
   <v1.6>
@@ -253,7 +254,7 @@ To learn more on how to setup multi-version support, refer to this page: https:/
 	</v1.7>
 ```
 
-**（d）DLC 门控（IfModActive + 子路径）**（`E:\SteamLibrary\steamapps\workshop\content\294100\839005762\loadFolders.xml`，911 字节）
+**（d）DLC 门控（IfModActive + 子路径）**（`<创意工坊目录>\839005762\loadFolders.xml`，911 字节）
 
 ```xml
 	<v1.7>
@@ -264,7 +265,7 @@ To learn more on how to setup multi-version support, refer to this page: https:/
 	</v1.7>
 ```
 
-**（e）Common 共享夹需显式声明**（`E:\SteamLibrary\steamapps\workshop\content\294100\3769804600\LoadFolders.xml`，180 字节）
+**（e）Common 共享夹需显式声明**（`<创意工坊目录>\3769804600\LoadFolders.xml`，180 字节）
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -280,14 +281,14 @@ To learn more on how to setup multi-version support, refer to this page: https:/
 </loadFolders>
 ```
 
-（同款写法见 `E:\SteamLibrary\steamapps\workshop\content\294100\3264193512\LoadFolders.xml`：各版本均为 `<li>Common</li><li>1.x</li>`，其 `Common/Assets.zip` 10349954 字节。）
+（同款写法见 `<创意工坊目录>\3264193512\LoadFolders.xml`：各版本均为 `<li>Common</li><li>1.x</li>`，其 `Common/Assets.zip` 10349954 字节。）
 
 ### 2.4 引擎侧的验证（二进制字符串证据）
 
 命令：
 
 ```powershell
-$b=[System.IO.File]::ReadAllBytes('E:\SteamLibrary\steamapps\common\RimWorld\RimWorld.dll')
+$b=[System.IO.File]::ReadAllBytes('<游戏安装目录>\RimWorld.dll')
 $u=[System.Text.Encoding]::Unicode.GetString($b)
 ([regex]::Matches($u,[regex]::Escape('LoadFolders'))).Count    # -> 1
 ```
@@ -304,7 +305,7 @@ setPacks BakeModAssetPacks: | BakeModAssetPacks: mod folder not found: | has no 
  did not load any content. Following load folders were used: | ... for mod | LoadDefs called with already existing def packages Load defs via DirectXmlLoader Defs/ Parse loaded defs | Unable to parse version string on mod | " | : targetVersion field is obsolete, use supportedVersions instead. | : <supportedVersions> in mod About.xml must specify at least one version. | <packageId> contains word "Ludeon", which is reserved for official content. | has a dependency with no <packageId> specified. | has a dependency with invalid <packageId>: | has a dependency ( ) with empty display name.
 ```
 
-配套可读文本（`E:\SteamLibrary\steamapps\common\RimWorld\Data\Core\Languages\English\Keyed\Menus_Main.xml`，`Select-String -Pattern 'ModLoadFolder'` 的真实输出）：
+配套可读文本（`<游戏安装目录>\Data\Core\Languages\English\Keyed\Menus_Main.xml`，`Select-String -Pattern 'ModLoadFolder'` 的真实输出）：
 
 ```text
 L153: <ModLoadFolderDoesntExist>Folder {0} specified for version {1} doesn't exist.</ModLoadFolderDoesntExist>
@@ -369,7 +370,7 @@ L160: <ModLoadFolderDefinesUnsupportedGameVersion>Version {0} is defined in load
 
 ### 样例 1｜PatchOperationSequence + Remove/Add/Replace
 
-文件：`E:\SteamLibrary\steamapps\workshop\content\294100\1508341791\1.7\Patches\Filth_Vanishes_With_Rain_And_Time.xml`（1412 字节，50 行）
+文件：`<创意工坊目录>\1508341791\1.7\Patches\Filth_Vanishes_With_Rain_And_Time.xml`（1412 字节，50 行）
 命令：`Get-Content -LiteralPath '<上述路径>' -Encoding UTF8`
 
 ```xml
@@ -429,7 +430,7 @@ L160: <ModLoadFolderDefinesUnsupportedGameVersion>Version {0} is defined in load
 
 ### 样例 2｜PatchOperationConditional + nomatch（1.7 专属文件）
 
-文件：`E:\SteamLibrary\steamapps\workshop\content\294100\3526354009\1.7\Patches\ReplaceStuff16Patches.xml`（531 字节）
+文件：`<创意工坊目录>\3526354009\1.7\Patches\ReplaceStuff16Patches.xml`（531 字节）
 
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
@@ -457,7 +458,7 @@ L160: <ModLoadFolderDefinesUnsupportedGameVersion>Version {0} is defined in load
 
 ### 样例 3｜自定义 Operation 子类 + success=Invert + PatchOperationInsert
 
-文件：`E:\SteamLibrary\steamapps\workshop\content\294100\2888380373\1.7\Patches\00_Patches_Zones.xml`（2980 字节；下方省略原文第 26-58 行整段被注释掉的旧代码）
+文件：`<创意工坊目录>\2888380373\1.7\Patches\00_Patches_Zones.xml`（2980 字节；下方省略原文第 26-58 行整段被注释掉的旧代码）
 
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
@@ -512,7 +513,7 @@ L160: <ModLoadFolderDefinesUnsupportedGameVersion>Version {0} is defined in load
 
 ### 样例 4｜无 XML 声明 + PatchOperationAttributeSet + IgnoreIfNoMatchingField
 
-文件：`E:\SteamLibrary\steamapps\workshop\content\294100\839005762\1.7\Patches\HumansAreAliensToo.xml`（3685 字节，摘录前 20 行）
+文件：`<创意工坊目录>\839005762\1.7\Patches\HumansAreAliensToo.xml`（3685 字节，摘录前 20 行）
 
 ```xml
 <Patch>
@@ -551,7 +552,7 @@ L160: <ModLoadFolderDefinesUnsupportedGameVersion>Version {0} is defined in load
 
 ### 4.1 【新】ShaderDef + `Shaders/*.glsl`（1.7 渲染管线 / Waylith）
 
-**Def 文件**：`E:\SteamLibrary\steamapps\workshop\content\294100\2917732219\1.7\Defs\ShaderDefs\MuzzleFlash.xml`（603 字节）
+**Def 文件**：`<创意工坊目录>\2917732219\1.7\Defs\ShaderDefs\MuzzleFlash.xml`（603 字节）
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -574,7 +575,7 @@ L160: <ModLoadFolderDefinesUnsupportedGameVersion>Version {0} is defined in load
 </Defs>
 ```
 
-**同类第二个样本**：`E:\SteamLibrary\steamapps\workshop\content\294100\3769804600\1.7\Defs\ShaderDefs\MineSight.xml`（1070 字节，两个 ShaderDef）
+**同类第二个样本**：`<创意工坊目录>\3769804600\1.7\Defs\ShaderDefs\MineSight.xml`（1070 字节，两个 ShaderDef）
 
 ```xml
 <Defs>
@@ -610,11 +611,11 @@ L160: <ModLoadFolderDefinesUnsupportedGameVersion>Version {0} is defined in load
 **「这是 1.7 新增而非 1.6 已有」的证据链（四条）：**
 
 1. **两个 mod 的 1.6 夹里完全没有 ShaderDef 相关文件**：命令 `Get-ChildItem -LiteralPath '<mod>\1.6' -Recurse` 的输出中不存在 `Defs\ShaderDefs`、不存在 `Shaders`；对应 `<mod>\1.7` 才新增（见 1.3 表）。
-2. **引擎侧存在对应类型**：命令 `([regex]::Matches([System.Text.Encoding]::Unicode.GetString([System.IO.File]::ReadAllBytes('E:\SteamLibrary\steamapps\common\RimWorld\Assembly-CSharp.dll')), 'ShaderDef')).Count` → 命中 **4** 次；`'shaderProgram'` → 命中 **1** 次。
-3. **官方 Core 用同一写法**：`E:\SteamLibrary\steamapps\common\RimWorld\Data\Core\Defs\ShaderDefs\Shaders.Map.xml` 与 `Shaders.World.xml` 存在同名字段（并额外使用了 `<flipTextureST>false</flipTextureST>`、`<textureWrapOverrides><li><key>_MainTex</key><value>Repeat</value></li></textureWrapOverrides>`）。
+2. **引擎侧存在对应类型**：命令 `([regex]::Matches([System.Text.Encoding]::Unicode.GetString([System.IO.File]::ReadAllBytes('<游戏安装目录>\Assembly-CSharp.dll')), 'ShaderDef')).Count` → 命中 **4** 次；`'shaderProgram'` → 命中 **1** 次。
+3. **官方 Core 用同一写法**：`<游戏安装目录>\Data\Core\Defs\ShaderDefs\Shaders.Map.xml` 与 `Shaders.World.xml` 存在同名字段（并额外使用了 `<flipTextureST>false</flipTextureST>`、`<textureWrapOverrides><li><key>_MainTex</key><value>Repeat</value></li></textureWrapOverrides>`）。
 4. **全工坊只此 2 例**：命令 `Get-ChildItem -LiteralPath <workshop> -Recurse -Include *.xml | Select-String -Pattern '<ShaderDef' -List` 恰好输出两个文件（2917732219 与 3769804600），其余 134 个 mod 均无。
 
-**GLSL 源码规范**（文件 `E:\SteamLibrary\steamapps\workshop\content\294100\3769804600\1.7\Shaders\MineSight\MineSightStripes.vert.glsl`，413 字节，前 17 行原文）：
+**GLSL 源码规范**（文件 `<创意工坊目录>\3769804600\1.7\Shaders\MineSight\MineSightStripes.vert.glsl`，413 字节，前 17 行原文）：
 
 ```glsl
 #version 450
@@ -636,7 +637,7 @@ void main()
 }
 ```
 
-要点：`#version 450`（Vulkan 风格 GLSL）；`set = 0, binding = 0` 的 `VertexUniforms.ViewProj`；`push_constant` 里的 `modelMatrix`；顶点属性用 `// @vertex Position required` 注释声明语义。游戏自身也带同类文件：`E:\SteamLibrary\steamapps\common\RimWorld\Rendering\Shaders\`（如 `SceneDefault.frag.glsl`），根目录并有 `slang*.dll`、`Brutal.Vulkan*.dll`。
+要点：`#version 450`（Vulkan 风格 GLSL）；`set = 0, binding = 0` 的 `VertexUniforms.ViewProj`；`push_constant` 里的 `modelMatrix`；顶点属性用 `// @vertex Position required` 注释声明语义。游戏自身也带同类文件：`<游戏安装目录>\Rendering\Shaders\`（如 `SceneDefault.frag.glsl`），根目录并有 `slang*.dll`、`Brutal.Vulkan*.dll`。
 
 **结论**：1.7 的 shader 类 mod 不再依赖预编译 Unity AssetBundle，而是 `1.7/Defs/ShaderDefs/*.xml` + `1.7/Shaders/*.glsl` 的**纯文本管线**（该结论同时被 2917732219 作者写在 XML 注释里的原话佐证，见上）。
 
@@ -668,7 +669,7 @@ zip 内部结构（`[System.IO.Compression.ZipFile]::OpenRead(...)` 列条目）
 
 **「这是 1.7 机制」的四条独立证据：**
 
-1. `E:\SteamLibrary\steamapps\common\RimWorld\Data\Core\Languages\English\Keyed\Menus_Main.xml` L181-187 原文：
+1. `<游戏安装目录>\Data\Core\Languages\English\Keyed\Menus_Main.xml` L181-187 原文：
    ```text
 L181: <UploadBuildAssetPack>Build asset pack</UploadBuildAssetPack>
 L182: <UploadBuildAssetPackTip>Packs textures and sounds into an asset pack in each load folder before uploading, to improve download and load times. Untick this to upload the mod folder as it is.</UploadBuildAssetPackTip>
@@ -677,31 +678,31 @@ L185: <BakingModAssetPacks>Baking asset packs</BakingModAssetPacks>
 L187: <ModAssetPackBakeFailed>Baking the asset packs for {0} failed, the mod was not uploaded:</ModAssetPackBakeFailed>
    ```
    L184 明确把「asset pack」与「RimWorld 1.6 or earlier」对立 —— **1.7 起才有**。
-2. `E:\SteamLibrary\steamapps\common\RimWorld\RimWorld.dll` 内含 `BakeModAssetPacks: mod folder not found:` 与 `has no load folder with textures or sounds, nothing to bake` —— 「**每个 load folder 各自一份** asset pack」，与实测中 `1.7/Assets.zip`、`Common/Assets.zip` 的分层一致。
-3. `E:\SteamLibrary\steamapps\common\RimWorld\Licenses.txt` L170 原文：`Asset packs use ZstdSharp, Copyright (c) 2021 Oleg Stepanischev, a port of` —— 打包格式为 Zstd。
+2. `<游戏安装目录>\RimWorld.dll` 内含 `BakeModAssetPacks: mod folder not found:` 与 `has no load folder with textures or sounds, nothing to bake` —— 「**每个 load folder 各自一份** asset pack」，与实测中 `1.7/Assets.zip`、`Common/Assets.zip` 的分层一致。
+3. `<游戏安装目录>\Licenses.txt` L170 原文：`Asset packs use ZstdSharp, Copyright (c) 2021 Oleg Stepanischev, a port of` —— 打包格式为 Zstd。
 4. 839005762 的配套元数据文件：`Assets.zip.fingerprint`、`Assets.zip.roles`、`Assets.zip.stamps`；其中 `Assets.zip.roles` 内容形如 `Textures/AlienRace/HARModIcon.png.dds image:Default`。
 
 **结论**：1.7 允许（工坊上传工具默认会）把 `Textures/`、`Sounds/` 预编码进**每个 load folder 的 `Assets.zip`**（`.png.dds` 等已编码资源）。**不写 asset pack、直接放 `Textures/*.png` 依旧可用**——实测 1662119905 的 `1.7/Assets.zip` 与 `1.7/Textures/MMinimap/UI/*.png` **同时存在**，且 3526354009 的 `1.7/Textures/TDReplaceStuffIcon.png` 直接是裸 png、该 mod 无 Assets.zip。
 
 ### 4.3 【新】`Assemblies/*.deps.json` 与多目标框架
 
-- `E:\SteamLibrary\steamapps\workshop\content\294100\2917732219\1.7\Assemblies\MuzzleFlash.deps.json`（1001 字节）、`MuzzleFlash.pdb`
-- `E:\SteamLibrary\steamapps\workshop\content\294100\3216091476\1.7\Assemblies\RestockingStatus.deps.json`（1006 字节）—— **在 1.6 夹里没有**（1.6→1.7 的新增项）
-- `E:\SteamLibrary\steamapps\workshop\content\294100\872762753\1.7\Assemblies\` 下同时存在 `net10.0-windows8.0/` 与 `netstandard2.0/` 两个 TFM 子目录（`MinifyEverything.deps.json` 1026 字节）
-- `E:\SteamLibrary\steamapps\workshop\content\294100\839005762\1.7\Assemblies\AlienRace.deps.json`（995 字节）
+- `<创意工坊目录>\2917732219\1.7\Assemblies\MuzzleFlash.deps.json`（1001 字节）、`MuzzleFlash.pdb`
+- `<创意工坊目录>\3216091476\1.7\Assemblies\RestockingStatus.deps.json`（1006 字节）—— **在 1.6 夹里没有**（1.6→1.7 的新增项）
+- `<创意工坊目录>\872762753\1.7\Assemblies\` 下同时存在 `net10.0-windows8.0/` 与 `netstandard2.0/` 两个 TFM 子目录（`MinifyEverything.deps.json` 1026 字节）
+- `<创意工坊目录>\839005762\1.7\Assemblies\AlienRace.deps.json`（995 字节）
 
 **结论**：1.7 环境下样本普遍使用 **.NET 10（net10.0）** 目标框架编译；`*.deps.json` 出现在 `Assemblies/` 里是被接受的（加载器只取 `*.dll`）。
-注：`E:\SteamLibrary\steamapps\workshop\content\294100\3524116050\1.7\Source\SlowerPawnTickRate\SlowerPawnTickRate\obj\Debug\.NETFramework,Version=v4.7.2.AssemblyAttributes.cs` 说明仍有作者用旧框架编老代码——**1.7 并不强制 net10.0**；`E:\SteamLibrary\steamapps\workshop\content\294100\3216091476\UPGRADE-1.7.md` 第 5 行作者自述「新增独立 net10.0 工程，引用 Krafs.Rimworld.Ref 1.7.4977-alpha.1 和 Lib.Harmony 3.0.0-rc.2」。
+注：`<创意工坊目录>\3524116050\1.7\Source\SlowerPawnTickRate\SlowerPawnTickRate\obj\Debug\.NETFramework,Version=v4.7.2.AssemblyAttributes.cs` 说明仍有作者用旧框架编老代码——**1.7 并不强制 net10.0**；`<创意工坊目录>\3216091476\UPGRADE-1.7.md` 第 5 行作者自述「新增独立 net10.0 工程，引用 Krafs.Rimworld.Ref 1.7.4977-alpha.1 和 Lib.Harmony 3.0.0-rc.2」。
 
 ### 4.4 Odyssey / TileMutatorDef（实测：样本 0 使用）
 
 - 官方引擎类型存在：`Assembly-CSharp.dll` UTF-16 命中 `TileMutatorDef` **2 次**。
-- 官方 Def 样例：`E:\SteamLibrary\steamapps\common\RimWorld\Data\Core\Defs\MapGeneration\TileMutators.xml`（defName：`Mountain`/`Caves`/`Coast`/`River`/`UndergroundCave`；字段 `categories`/`workerClass`/`genOrder`/`priority`）与 `E:\SteamLibrary\steamapps\common\RimWorld\Data\Odyssey\Defs\TileMutators\TileMutators_{AncientStructures,ManMade,Modifiers,Natural,Special}.xml`。
+- 官方 Def 样例：`<游戏安装目录>\Data\Core\Defs\MapGeneration\TileMutators.xml`（defName：`Mountain`/`Caves`/`Coast`/`River`/`UndergroundCave`；字段 `categories`/`workerClass`/`genOrder`/`priority`）与 `<游戏安装目录>\Data\Odyssey\Defs\TileMutators\TileMutators_{AncientStructures,ManMade,Modifiers,Natural,Special}.xml`。
 - **22 个样本 mod 里没有任何一个使用 TileMutatorDef**：命令 `Get-ChildItem -LiteralPath <workshop> -Recurse -Include *.xml | Select-String -Pattern 'TileMutatorDef' -List` → **零输出**（136 个 mod 全覆盖）。
 - 样本里与 Odyssey 有关的写法是**目录门控 + 补丁**，不是新 Def：
-  - `E:\SteamLibrary\steamapps\workshop\content\294100\2888380373\1.7\Odyssey\`（Assemblies/Defs/Patches），由 `loadFolders.xml` 的 `<li IfModActive="brrainz.harmony">1.7/Odyssey</li>` 门控（1.6 段同一位置写的是 `<li IfModActive="ludeon.rimworld.odyssey">1.6/Odyssey</li>`）；
-  - `E:\SteamLibrary\steamapps\workshop\content\294100\839005762\1.7\Mods\Odyssey\`（Languages/Patches），由 `<li IfModActive="Ludeon.RimWorld.Odyssey">1.7/Mods/Odyssey</li>` 门控；
-  - `E:\SteamLibrary\steamapps\workshop\content\294100\3526354009\1.7\Defs\Odyssey.xml`（456 字节，1.6 与 1.7 两个夹里的该文件 `Compare-Object` 结果为 identical content）。
+  - `<创意工坊目录>\2888380373\1.7\Odyssey\`（Assemblies/Defs/Patches），由 `loadFolders.xml` 的 `<li IfModActive="brrainz.harmony">1.7/Odyssey</li>` 门控（1.6 段同一位置写的是 `<li IfModActive="ludeon.rimworld.odyssey">1.6/Odyssey</li>`）；
+  - `<创意工坊目录>\839005762\1.7\Mods\Odyssey\`（Languages/Patches），由 `<li IfModActive="Ludeon.RimWorld.Odyssey">1.7/Mods/Odyssey</li>` 门控；
+  - `<创意工坊目录>\3526354009\1.7\Defs\Odyssey.xml`（456 字节，1.6 与 1.7 两个夹里的该文件 `Compare-Object` 结果为 identical content）。
 - **推测：** TileMutatorDef 属于 Odyssey DLC 的引擎 Def，**不一定是 1.7 相对 1.6 的新增**；本报告无法证明它在 1.6 不存在（无 1.6 版本的游戏数据可对照）。
 
 ### 4.5 关键负面结论：1.6 与 1.7 的**同名 Def/XML 往往一字不差**
@@ -737,7 +738,7 @@ Compare-Object (Get-Content -LiteralPath '<mod>\1.6\<相对路径>') (Get-Conten
 
 ### 4.6 2538411704 的 1.7 专属 MainButtonDef（原文）
 
-`E:\SteamLibrary\steamapps\workshop\content\294100\2538411704\1.7\Defs\MainButtonDefs.xml`（677 字节）：
+`<创意工坊目录>\2538411704\1.7\Defs\MainButtonDefs.xml`（677 字节）：
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -765,7 +766,7 @@ Compare-Object (Get-Content -LiteralPath '<mod>\1.6\<相对路径>') (Get-Conten
 ### 5.1 supportedVersions 到底写什么格式？漏写 1.7 会怎样？
 
 **真实格式（22/22 一致）**：写 `<li>1.7</li>`，即**纯 `Major.Minor` 两段式字符串**，绝不带 rev/build。
-例（`E:\SteamLibrary\steamapps\workshop\content\294100\3524116050\About\About.xml`）：
+例（`<创意工坊目录>\3524116050\About\About.xml`）：
 
 ```xml
 <supportedVersions>
@@ -786,7 +787,7 @@ Compare-Object (Get-Content -LiteralPath '<mod>\1.6\<相对路径>') (Get-Conten
   - **格式不对**也是硬错误：引擎字面量 `Unable to parse version string on mod `。
   - 全部 22 个样本的 `supportedVersions` 都写了 `<li>1.7</li>`；全工坊 136 个 mod 中「**有 1.7 文件夹但 supportedVersions 漏写 1.7**」的数量 = **0**（命令：逐 mod 判断 `Test-Path <mod>\1.7` 与 `About.xml -match '<li>\s*1\.7\s*</li>'`）。
   - 反向数据：**列了 1.7 却没有 1.7 文件夹 = 28 个**（50 - 22）。→ 说明「supportedVersions 写 1.7」与「必须有 1.7 文件夹」**不是**绑定关系；内容放在根目录、Common 或其它 load folder 也能声明支持 1.7。
-- **推测：** 漏写 1.7 不会阻止加载，只会把该 mod 标记为「非本版本 mod」。依据：官方 DLC 的 `About/About.xml`（`E:\SteamLibrary\steamapps\common\RimWorld\Data\{Anomaly,Biotech,Ideology,Odyssey,Royalty}\About\About.xml`）在 1.7.4981 环境下**仍只写 `<li>1.6</li>`**，而这些内容显然被正常加载；配套文案 `Menus_Main.xml` L147-149：`<ModNotMadeForThisVersion>This mod was not made for this version of RimWorld, and will probably not work correctly.</ModNotMadeForThisVersion>`（措辞是「probably not work」，不是「refuse to load」）。
+- **推测：** 漏写 1.7 不会阻止加载，只会把该 mod 标记为「非本版本 mod」。依据：官方 DLC 的 `About/About.xml`（`<游戏安装目录>\Data\{Anomaly,Biotech,Ideology,Odyssey,Royalty}\About\About.xml`）在 1.7.4981 环境下**仍只写 `<li>1.6</li>`**，而这些内容显然被正常加载；配套文案 `Menus_Main.xml` L147-149：`<ModNotMadeForThisVersion>This mod was not made for this version of RimWorld, and will probably not work correctly.</ModNotMadeForThisVersion>`（措辞是「probably not work」，不是「refuse to load」）。
   **但**：在 `Assembly-CSharp.dll`、`RimWorld.dll`、`UnityStubs.dll`、`Waylith.dll` 里用 ASCII 与 UTF-16 两种编码搜 `ModNotMadeForThisVersion` 均 **0 命中**，因此「该文案挂在哪个判定分支上」未能证实；且官方 DLC 走的是 `Data/` 官方内容通道，未必适用第三方 mod 的校验路径。**要 100% 确认，需在游戏里实测（本任务禁止启动游戏本体）。**
 
 ### 5.2 LoadFolders.xml 的完整语法，游戏没有随附文档
@@ -797,7 +798,7 @@ Compare-Object (Get-Content -LiteralPath '<mod>\1.6\<相对路径>') (Get-Conten
 
 ### 5.3 `analyzer.xml` 是什么机制
 
-- `E:\SteamLibrary\steamapps\workshop\content\294100\3769804600\analyzer.xml`（1478 字节，mod **根目录**）根元素为 `<Analyzer>`，内含 `<MineSight><Methods><li>类名:方法名</li>…</Methods></MineSight>`，条目形如 `MineSight.MineHighlightPatch:Postfix`，注释写 `Profile entry points so nested renderer helpers are not counted again. Use Analyzer's internal profiling on a row to investigate its callees.`
+- `<创意工坊目录>\3769804600\analyzer.xml`（1478 字节，mod **根目录**）根元素为 `<Analyzer>`，内含 `<MineSight><Methods><li>类名:方法名</li>…</Methods></MineSight>`，条目形如 `MineSight.MineHighlightPatch:Postfix`，注释写 `Profile entry points so nested renderer helpers are not counted again. Use Analyzer's internal profiling on a row to investigate its callees.`
 - 全工坊扫描：`Get-ChildItem -LiteralPath <workshop> -Recurse -Filter 'analyzer.xml'` → **只此 1 个文件**。
 - 游戏二进制里搜 `analyzer.xml` → ASCII 0 命中；`Assembly-CSharp.dll` UTF-16 亦 0 命中。
 - **推测：** 它是 1.7 的 mod 级性能剖析入口（作者注释提到「Analyzer's internal profiling」），但**未能证实是否为官方机制**；若要写进模板，必须先确认。
@@ -814,12 +815,12 @@ Compare-Object (Get-Content -LiteralPath '<mod>\1.6\<相对路径>') (Get-Conten
 
 1. **未启动 RimWorld 游戏本体**（任务硬性要求），因此所有「加载行为」结论均为静态证据 + 官方文案推导，未经运行验证。
 2. **未联网**：`ModUpdating.txt` L213 外链的 Google Doc（LoadFolders 语法权威文档）未抓取。
-3. 本报告**只写了这一个文件**；未修改、未删除工作区（`<REPO_ROOT>`）内任何其他文件。
+3. 本报告**只写了这一个文件**；未修改、未删除工作区（`<仓库根>`）内任何其他文件。
 4. 扫描过程全部为只读操作（`Get-ChildItem`、`Get-Content`、`Select-String`、`System.Xml.XmlDocument.Load`、`[System.IO.Compression.ZipFile]::OpenRead`、`[System.IO.File]::ReadAllBytes`）。
 
 ### 5.7 一处样本内部的异常，供模板编写者警惕
 
-`E:\SteamLibrary\steamapps\workshop\content\294100\3216091476\LoadFolders.xml.bak`（643 字节）内容为 v1.3/v1.4/v1.5 三段（**无 v1.6/v1.7**），而该 mod 的 `supportedVersions` 是 1.4,1.5,1.6,1.7、根目录存在 `1.4/ 1.5/ 1.6/ 1.7/ Common/`。
+`<创意工坊目录>\3216091476\LoadFolders.xml.bak`（643 字节）内容为 v1.3/v1.4/v1.5 三段（**无 v1.6/v1.7**），而该 mod 的 `supportedVersions` 是 1.4,1.5,1.6,1.7、根目录存在 `1.4/ 1.5/ 1.6/ 1.7/ Common/`。
 **关键点**：文件扩展名是 `.bak`，引擎只认 `LoadFolders.xml`（`RimWorld.dll` 字面量证据见 2.4），因此该 mod 实际走的是「无 LoadFolders → 自动选中版本夹」的回退路径，**`Common/` 下的 `Defs/LetterDef.xml`、`Patches/Patches.xml`、`Textures/RestockingStatus/refresh.png` 是否被加载无从保证**。
 **推测：** 不写 `<li>Common</li>` 声明时 `Common/` 不会被自动加载（反证：3264193512、3769804600 都专门在 LoadFolders 里写 `<li>Common</li>`）。→ 模板必须强调：**自定义共享目录（Common 等）不在默认加载集内，必须显式声明。**
 
@@ -828,8 +829,8 @@ Compare-Object (Get-Content -LiteralPath '<mod>\1.6\<相对路径>') (Get-Conten
 ## 附：证据可复现清单（关键命令）
 
 ```powershell
-$game   = 'E:\SteamLibrary\steamapps\common\RimWorld'
-$ws     = 'E:\SteamLibrary\steamapps\workshop\content\294100'
+$game   = '<游戏安装目录>'
+$ws     = '<创意工坊目录>'
 
 # 1) 游戏版本
 Get-Content -LiteralPath (Join-Path $game 'Version.txt')

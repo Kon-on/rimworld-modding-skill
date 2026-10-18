@@ -1,6 +1,6 @@
 # 附录：UnityStubs 1.7 失效成员完整清单
 
-> 本附录是 `06-UnityStubs兼容层与失效API.md` 的配套数据。核对对象：`E:\SteamLibrary\steamapps\common\RimWorld\UnityStubs.dll`（**934** 个类型 / **6,653** 个方法，口径 Public + NonPublic + Instance + Static + DeclaredOnly）。
+> 本附录是 `06-UnityStubs兼容层与失效API.md` 的配套数据。核对对象：`<游戏安装目录>\UnityStubs.dll`（**934** 个类型 / **6,653** 个方法，口径 Public + NonPublic + Instance + Static + DeclaredOnly）。
 >
 > 判定方式：用 IL 扫描找出每个方法体里对 `UnityStubs.Internal.StubWarner::LogStub`（MetadataToken 100663905）的**调用点** —— 有调用点即该方法是 stub，行为是「记一条警告 + 返回默认值 / 空操作」，**不抛异常**。
 >

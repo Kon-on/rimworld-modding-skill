@@ -153,10 +153,10 @@
 ## 来源：Lead 组装与交付 — 2026-10-18
 
 ### 交付物位置
-- 交付副本：`examples\rimtest-mod\RimTestMod\`（44 文件 / 400,182 B，逐文件 sha256 见 `examples\rimtest-mod\文件清单-sha256.txt`）
+- 交付副本：`examples\rimtest-mod\RimTestMod\`（44 文件 / 405,317 B，逐文件 sha256 见 `examples\rimtest-mod\文件清单-sha256.txt`）
 - 测试指导书：`examples\rimtest-mod\TESTING.md`；静态核验报告：`examples\rimtest-mod\核验报告.md` + `核验报告.json`
-- 已安装副本：`E:\SteamLibrary\steamapps\common\RimWorld\Mods\RimTestMod\`（除下条所述的 `Source/README.md` 外，与交付副本逐字节相同）
-- ⚠️ 2026-10-18 路径修复：交付副本的 `Source/README.md` 修掉 10 处指向已移除工作副本的引用，该文件随之与已安装副本里那一份不再逐字节相同；两个 `.dll`、全部 Def/贴图/本地化未变，**不影响运行时测试**（游戏不读 `Source/README.md`）。用户已于 2026-10-18 决定不同步这一份，故两副本保持该 1 处文档差异。
+- 已安装副本：`<游戏安装目录>\Mods\RimTestMod\`（与交付副本有几处差异，见下条）
+- ⚠️ 2026-10-18 路径修复：交付副本有 3 个文件与已安装副本不同 —— `Source/README.md`（修掉 10 处指向已移除工作副本的引用）、`Source/build.ps1`、`Source/make-textures.py`（去掉本机绝对路径，改为自动定位游戏目录 / 用 `%WINDIR%` 找字体）。两个 `.dll`、全部 Def/贴图/本地化未变，**不影响运行时测试**（游戏只读 `Assemblies\*.dll` 与 Defs/贴图/本地化，不读这几个构建期文件）。用户已于 2026-10-18 决定不同步，故两副本保持这几处差异。
 - 静态核验（对交付副本跑）：19 XML 良构 0 失败 / 9 Def / texPath 8 处缺失 0 / 字段路径 241 处 4 处未收录（全部预期良性）/ 错误 0 警告 4；退出码 0。
 
 ### 组装期做的两处内容修正

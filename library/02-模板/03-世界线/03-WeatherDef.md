@@ -146,9 +146,9 @@ WeatherDef 定义一种天气：地面降雨/降雪速率、移动与射击惩�
 ## 核验
 
 - **字段合法性**：逐条对照 `library/03-全量字段参考/字段/WeatherDef.md` 的「全量字段表（61 条路径）」。
-- **原版写法依据**（相对 `E:\SteamLibrary\steamapps\common\RimWorld\Data\`）：
+- **原版写法依据**（相对 `<游戏安装目录>\Data\`）：
   - `Core/Defs/WeatherDefs/Weathers.xml`：`RainyThunderstorm`（本模板的主要骨架：isBad / temperatureRange / windSpeedFactor / windSpeedOffset / favorability / perceivePriority / weatherThought / accuracyMultiplier / rainRate / moveSpeedMultiplier / ambientSounds / durationRange / eventMakers / overlayClasses / commonalityRainfallFactor / 四组 skyColors）、`Rain`、`Clear`。
   - `Odyssey/Defs/WeatherDefs/Weathers.xml`：`TorrentialRain`（唯一使用 `workerClass` 的实例，以及 `letterDef`/`letterLabel`/`letterText` 的真实写法）。
   - `Anomaly/Defs/WeatherDefs/Weathers.xml`：`UnnaturalDarkness_Stage1`（该 DefType 的最小实例，且展示 `ParentName` 继承用法）。
-- **类名核验**：`WeatherOverlay_Rain`、`WeatherEvent_LightningFlash`、`WeatherEvent_LightningStrike` 均已在本体 `E:\SteamLibrary\steamapps\common\RimWorld\Assembly-CSharp.dll` 中命中字符串。
+- **类名核验**：`WeatherOverlay_Rain`、`WeatherEvent_LightningFlash`、`WeatherEvent_LightningStrike` 均已在本体 `<游戏安装目录>\Assembly-CSharp.dll` 中命中字符串。
 - **跨 Def 引用**：`Ambient_Wind_Storm` / `Ambient_Rain` 为 SoundDef；`SoakingWet` 为 ThoughtDef——两者均已在本体 `Data/**/Defs/**` 中核验存在。

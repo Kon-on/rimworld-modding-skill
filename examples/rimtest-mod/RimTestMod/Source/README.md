@@ -64,7 +64,7 @@ EXITCODE=0
 
 **因为游戏自己就是 net10.0，mod 必须跟它一致。**
 
-读 `E:\SteamLibrary\steamapps\common\RimWorld\RimWorld.runtimeconfig.json` 得到的原文事实：
+读 `<游戏安装目录>\RimWorld.runtimeconfig.json` 得到的原文事实：
 
 ```
 "tfm": "net10.0",
@@ -84,7 +84,7 @@ EXITCODE=0
 - `WaylithClr.LaxAssemblyBinding=true` 是我们能容忍下面那条 CS1701 警告的底气（见 §4 坑 3）。
 
 **目标框架契约：`<TargetFramework>net10.0</TargetFramework>`，本机 SDK `10.0.401`，运行时 `Microsoft.NETCore.App 10.0.2 / 10.0.12`。**
-（引用框架用的是 `C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\10.0.12\ref\net10.0`。）
+（引用框架用的是 `%ProgramFiles%\dotnet\packs\Microsoft.NETCore.App.Ref\10.0.12\ref\net10.0`。）
 
 ---
 
@@ -95,7 +95,7 @@ EXITCODE=0
 | `Assembly-CSharp.dll` | 游戏根目录 | 主程序集 + 补丁 | **所有 `Verse.*` / `RimWorld.*` 游戏类型都在这里面**。注意它同时在 `RimWorld.dll` 里放了一小部分类型，见 §4 坑 1 |
 | `UnityStubs.dll` | 游戏根目录 | 只有补丁程序集 | 1.7 的 Unity 兼容层（935 类型 / 7471 方法）。补丁里用到 `UnityEngine.Vector3`（`Projectile.ExactPosition`）所以才引 |
 | `RimWorld.dll` | 游戏根目录 | 两个都引了，但**都没实际用到** | 保险起见引上；产物 AssemblyRef 里没有它（Roslyn 省略） |
-| `0Harmony.dll` | **创意工坊 Harmony mod**：`E:\SteamLibrary\steamapps\workshop\content\294100\2009463077\1.7\Assemblies\0Harmony.dll` | 只有补丁程序集 | 游戏本体**不带** Harmony，只有装了 Harmony mod 才有 |
+| `0Harmony.dll` | **创意工坊 Harmony mod**：`<创意工坊目录>\2009463077\1.7\Assemblies\0Harmony.dll` | 只有补丁程序集 | 游戏本体**不带** Harmony，只有装了 Harmony mod 才有 |
 
 ### 硬约束遵守情况
 
@@ -110,7 +110,7 @@ EXITCODE=0
 
 ```
 0Harmony.dll
-  来源  : E:\SteamLibrary\steamapps\workshop\content\294100\2009463077\1.7\Assemblies\0Harmony.dll
+  来源  : <创意工坊目录>\2009463077\1.7\Assemblies\0Harmony.dll
   归属  : Harmony mod（packageId brrainz.harmony，作者 Andreas Pardeike，modVersion 3.0.1.0）
   程序集: 0Harmony v3.0.0.0，大小 2,532,864 B
   许可证: MIT License, Copyright (c) 2017 Andreas Pardeike
@@ -131,7 +131,7 @@ EXITCODE=0
 & 'examples\rimtest-mod\RimTestMod\Source\build.ps1' -UseCsc
 
 # 自定义游戏/工坊目录
-& '...\build.ps1' -GameDir 'D:\Steam\...\RimWorld' -HarmonyDir 'D:\...\2009463077\1.7\Assemblies'
+& '...\build.ps1' -GameDir '<游戏安装目录>' -HarmonyDir '<创意工坊目录>\2009463077\1.7\Assemblies'
 ```
 
 脚本自带 6 段：①依赖校验 → ②清目录 → ③编译 → ④产物核验（AssemblyRef）→ ⑤**反向检查**（Assemblies 里不许有游戏 DLL / 0Harmony.dll）→ ⑥摘要。
@@ -149,8 +149,8 @@ dotnet build 'examples\rimtest-mod\RimTestMod\obj\build\proj\RimTestMod.Patches.
 **路径 B（`-UseCsc`，不依赖 MSBuild）**：
 
 ```powershell
-dotnet exec "C:\Program Files\dotnet\sdk\10.0.401\Roslyn\bincore\csc.dll" "@<obj/build/csc-RimTestMod.rsp>"
-dotnet exec "C:\Program Files\dotnet\sdk\10.0.401\Roslyn\bincore\csc.dll" "@<obj/build/csc-RimTestMod.Patches.rsp>"
+dotnet exec "%ProgramFiles%\dotnet\sdk\10.0.401\Roslyn\bincore\csc.dll" "@<obj/build/csc-RimTestMod.rsp>"
+dotnet exec "%ProgramFiles%\dotnet\sdk\10.0.401\Roslyn\bincore\csc.dll" "@<obj/build/csc-RimTestMod.Patches.rsp>"
 ```
 
 响应文件由脚本生成，形状是（`-refDlls` 会把 ref pack 下 167 个 DLL 全量 `-r:` 进去）：
@@ -166,10 +166,10 @@ dotnet exec "C:\Program Files\dotnet\sdk\10.0.401\Roslyn\bincore\csc.dll" "@<obj
 -debug-
 -warn:4
 -out:"examples\rimtest-mod\RimTestMod\Assemblies\RimTestMod.Patches.dll"
--r:"C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\10.0.12\ref\net10.0\System.Runtime.dll"
+-r:"%ProgramFiles%\dotnet\packs\Microsoft.NETCore.App.Ref\10.0.12\ref\net10.0\System.Runtime.dll"
 ...（ref pack 全部 167 个）
--r:"E:\SteamLibrary\steamapps\common\RimWorld\Assembly-CSharp.dll"
--r:"E:\SteamLibrary\steamapps\common\RimWorld\UnityStubs.dll"
+-r:"<游戏安装目录>\Assembly-CSharp.dll"
+-r:"<游戏安装目录>\UnityStubs.dll"
 -r:"...\2009463077\1.7\Assemblies\0Harmony.dll"
 -r:"examples\rimtest-mod\RimTestMod\Assemblies\RimTestMod.dll"
 "examples\rimtest-mod\RimTestMod\Source\Patches\PatchCommon.cs"   ...（补丁源文件）
@@ -257,7 +257,7 @@ PowerShell 会把「所有输出」+「return 的值」拼成数组一起返回�
 ## 5. 补丁目标签名（**从 `Assembly-CSharp.dll` 元数据反射读出的原文，逐字粘贴**）
 
 探针 `docs/_lineB-tools/SigProbe`（自建，net10.0 控制台程序，`System.Reflection` + `AssemblyLoadContext.Default.Resolving`），
-调用形式 `SigProbe one GAME <类型全名>`，`GAME` 解析到 `E:\SteamLibrary\steamapps\common\RimWorld\Assembly-CSharp.dll`。
+调用形式 `SigProbe one GAME <类型全名>`，`GAME` 解析到 `<游戏安装目录>\Assembly-CSharp.dll`。
 以下是探针输出的**原样**行（默认值也保留）：
 
 ```
