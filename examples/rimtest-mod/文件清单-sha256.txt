@@ -1,5 +1,5 @@
 # examples/rimtest-mod / RimTestMod —— 交付副本文件清单（sha256 小写）
-# 生成时间 2026-10-18 19:08；共 44 个文件
+# 生成时间 2026-10-18 19:52（首次生成 2026-10-18；本次因 Source/README.md 修路径重算，其余 43 个文件哈希未变）；共 44 个文件
 # 格式：sha256  字节数  相对路径
 48be3c4df1fae461e742c14e919a8e38db03557b2fcfd69c8272986a2993f675       709  About/About.xml
 26fe3d920ac0a67497d9edf8a1d04c33cf53038cde1394fd5b089b3b43b7354c    144647  About/Preview.png
@@ -31,7 +31,7 @@ b2a17139cb2a129ce8c7e90c1f6b85edcbd272460f9d26c041de2be162637b08     41106  Sour
 9d1a6785eea8f83ba77c81947910b806a497e84aed86c50f211c920ff0613b3b      3398  Source/Patches/ProjectileLaunchPatch.cs
 008d8861fd7fe3f41a31ec9647e4cda44d331ed5b7347efc8bc59f6c82730402      7655  Source/Patches/RimTestMod_PatchBootstrap.cs
 b613382d33a8f45ac4971c16106b6f1c2df9a4ab032dafc520c912da6ae55270      3287  Source/Patches/ThingTakeDamagePatch.cs
-bc79e378b248064f27ebfd6e5ab2f4c0a71c8e65f04f2da0ff0bfd7754222fc7     24928  Source/README.md
+a14797ed4a74f3d5c84b658fa83bd252efe5496c4d70e28e50c09e92e0ce4e0a     25105  Source/README.md
 d06b0b8d96e43d9099b6484a29737c027094754539ae11166f31755b07ef646d     12177  Source/ThingComp_TestShield.cs
 eef99d69dfbdd76ef5d1daad2352a4908c52ca9ab6e8d704bcf12caac2032f5e      7910  Textures/_MANIFEST.json
 fefb45faf3c89de4de85798f9f362f8d851dadee45a45cf885e9557fe9388606      6521  Textures/Things/Building/Production/DM_TestBench.png

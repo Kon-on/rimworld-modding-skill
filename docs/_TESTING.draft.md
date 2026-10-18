@@ -74,7 +74,7 @@
 node docs/verify-testmod.mjs
 ```
 
-检查 8 类问题：XML 良构、defName 唯一且带前缀、ParentName/defName 引用可解析、texPath 贴图存在、字段路径对照 1.7 全量字段总表、枚举值（techLevel / plant.purpose）、Patch 结构与 xpath、XML 引用的自定义 C# 类型在 DLL 中存在。报告写入 `docs/verify-report.json`，有 error 时退出码 1。
+检查 8 类问题：XML 良构、defName 唯一且带前缀、ParentName/defName 引用可解析、texPath 贴图存在、字段路径对照 1.7 全量字段总表、枚举值（techLevel / plant.purpose）、Patch 结构与 xpath、XML 引用的自定义 C# 类型在 DLL 中存在。报告写入 `examples/rimtest-mod/核验报告.json`（本文档成稿时的旧路径 `docs/verify-report.json` 已随重复工作副本一并移除），有 error 时退出码 1。
 
 **最近一次结果（贴图线完成后）**：XML 4 个文件良构；Def 1 个；原版索引 1560 个 XML / 12415 个 defName+Name；texPath 引用 1 处 **缺失 0 处**；字段路径 24 处**全部命中 1.7 字段表**；错误 0 项、警告 0 项。
 

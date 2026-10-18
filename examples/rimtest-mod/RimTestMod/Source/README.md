@@ -3,7 +3,7 @@
 > // AI 辅助生成
 > 本文记录的是**在本机 RimWorld 1.7 实测得到的事实**，不是从 1.6 文档抄来的。
 > 凡是没实测过的，本文一律标注「**未核实**」，不写成结论。
-> 编写者：Line B（C# 编译线）。上游规格：`docs/rimtest-mod/_SPEC.md` 第 6 节。
+> 编写者：Line B（C# 编译线）。上游规格：`examples/rimtest-mod/_SPEC.md` 第 6 节。
 
 ---
 
@@ -11,7 +11,7 @@
 
 **1.7 上可以用这套工具链真正编译出 mod DLL**：`dotnet SDK 10.0.401` + `TargetFramework=net10.0` +
 引用游戏根目录的 `Assembly-CSharp.dll` / `UnityStubs.dll` / `RimWorld.dll`（**全部 `Private=false`**），
-产物落在 `docs/rimtest-mod/Assemblies/`。两条编译路径（SDK / 裸 csc）都已跑通，见 §5。
+产物落在本 mod 自己的 `Assemblies/`（`examples/rimtest-mod/RimTestMod/Assemblies/`）。两条编译路径（SDK / 裸 csc）都已跑通，见 §5。
 
 **但 hjson/XML 时代的 C# 文档几乎全错**：UnityEngine 的具体类型在 1.7 已换成 `UnityStubs.dll` 兼容层，
 1.6 的 `UnityEngine.CoreModule.dll`、`.NET Framework 4.7.2`、`RimWorldWin64_Data/Managed/` 三样东西**在这台机器上全部不存在**。
@@ -104,7 +104,7 @@ EXITCODE=0
 - ✅ **不复制 `0Harmony.dll`**（虽然用户允许作为 MIT 例外）：Harmony mod 自己会提供，重复打包会触发
   `HarmonyMod` 的 *"Another Harmony library was loaded before the Harmony mod could."* 告警并降级。
   build.ps1 只在编译期引用它。
-- ✅ **没有改动游戏安装目录任何文件**：build.ps1 全程只 `Get-ChildItem` / `Test-Path` 游戏目录和工坊目录，写操作只落在 `docs/rimtest-mod/` 下。
+- ✅ **没有改动游戏安装目录任何文件**：build.ps1 全程只 `Get-ChildItem` / `Test-Path` 游戏目录和工坊目录，写操作只落在本 mod 目录（`examples/rimtest-mod/RimTestMod/`）的 `Assemblies/` 与 `obj/build/` 下。
 
 ### 第三方库来源与许可证（按要求标注）
 
@@ -124,11 +124,11 @@ EXITCODE=0
 ### 4.1 日常构建（推荐）
 
 ```powershell
-# 默认：dotnet SDK 路径
-& '<REPO_ROOT>\docs\rimtest-mod\Source\build.ps1'
+# 在仓库根执行（脚本用 $PSScriptRoot 自己定位 mod 目录）；默认 dotnet SDK 路径
+& 'examples\rimtest-mod\RimTestMod\Source\build.ps1'
 
 # 备选：裸 Roslyn csc.dll（不用 MSBuild / 不生成 csproj）
-& '<REPO_ROOT>\docs\rimtest-mod\Source\build.ps1' -UseCsc
+& 'examples\rimtest-mod\RimTestMod\Source\build.ps1' -UseCsc
 
 # 自定义游戏/工坊目录
 & '...\build.ps1' -GameDir 'D:\Steam\...\RimWorld' -HarmonyDir 'D:\...\2009463077\1.7\Assemblies'
@@ -139,11 +139,11 @@ EXITCODE=0
 
 ### 4.2 摊开来讲的话，这两条路径实际执行的命令
 
-**路径 A（默认，`dotnet build`）** —— 脚本自动生成两个临时 csproj 到 `docs/rimtest-mod/obj/build/proj/`：
+**路径 A（默认，`dotnet build`）** —— 脚本自动生成两个临时 csproj 到 mod 的 `obj/build/proj/`（`examples/rimtest-mod/RimTestMod/obj/build/proj/`）：
 
 ```powershell
-dotnet build '<REPO_ROOT>\docs\rimtest-mod\obj\build\proj\RimTestMod.csproj'         -c Release
-dotnet build '<REPO_ROOT>\docs\rimtest-mod\obj\build\proj\RimTestMod.Patches.csproj' -c Release
+dotnet build 'examples\rimtest-mod\RimTestMod\obj\build\proj\RimTestMod.csproj'         -c Release
+dotnet build 'examples\rimtest-mod\RimTestMod\obj\build\proj\RimTestMod.Patches.csproj' -c Release
 ```
 
 **路径 B（`-UseCsc`，不依赖 MSBuild）**：
@@ -165,15 +165,15 @@ dotnet exec "C:\Program Files\dotnet\sdk\10.0.401\Roslyn\bincore\csc.dll" "@<obj
 -platform:anycpu
 -debug-
 -warn:4
--out:"<REPO_ROOT>\docs\rimtest-mod\Assemblies\RimTestMod.Patches.dll"
+-out:"examples\rimtest-mod\RimTestMod\Assemblies\RimTestMod.Patches.dll"
 -r:"C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\10.0.12\ref\net10.0\System.Runtime.dll"
 ...（ref pack 全部 167 个）
 -r:"E:\SteamLibrary\steamapps\common\RimWorld\Assembly-CSharp.dll"
 -r:"E:\SteamLibrary\steamapps\common\RimWorld\UnityStubs.dll"
 -r:"...\2009463077\1.7\Assemblies\0Harmony.dll"
--r:"<REPO_ROOT>\docs\rimtest-mod\Assemblies\RimTestMod.dll"
-"E:\...\Source\Patches\PatchCommon.cs"   ...（补丁源文件）
-"E:\...\obj\build\AssemblyInfo.RimTestMod.Patches.cs"   （脚本生成的版本号，见坑 4）
+-r:"examples\rimtest-mod\RimTestMod\Assemblies\RimTestMod.dll"
+"examples\rimtest-mod\RimTestMod\Source\Patches\PatchCommon.cs"   ...（补丁源文件）
+"examples\rimtest-mod\RimTestMod\obj\build\AssemblyInfo.RimTestMod.Patches.cs"   （脚本生成的版本号，见坑 4）
 ```
 
 ### 坑 1【最重要】命名空间 ≠ 程序集：`RimWorld.MessageTypeDefOf` 其实住在 `Assembly-CSharp.dll` 里

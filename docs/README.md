@@ -18,7 +18,8 @@
 | `unitystubs-stubs.txt` / `unitystubs-stub-signatures.txt` | UnityStubs 兼容层的类型与签名快照（1.7 用 Waylith 替换 Unity 后挖出来的） |
 | `_*.ps1` / `_*.py` / `_*.out.txt` | 一次性探针脚本与原始输出（API 差异、成员搜索、贴图总览等），保留下的是证据不是工具 |
 | `差异-16到17.md` / `验证-csharp-1.7.md` / `样本-17版mod结构.md` / `_TESTING.draft.md` | 梳理阶段的中间分析稿；结论已并入 `references/` 与 `library/` |
-| `rimtest-mod/` | 测试 mod 的工作副本（含 `_SPEC.md` 规格书）；成品与测试指导书在 `examples/rimtest-mod/` |
+
+> **已移除**：原 `rimtest-mod/` 是与 `examples/rimtest-mod/RimTestMod/` 逐文件重复的工作副本（44 个文件全同），2026-10-18 结构整理时移出仓库；其中唯一没有对应产物的一份 `_SPEC.md` 规格书移到 `examples/rimtest-mod/_SPEC.md`。
 
 ## 复算入口
 

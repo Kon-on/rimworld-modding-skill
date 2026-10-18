@@ -1,5 +1,10 @@
 # 环世界完整测试 Mod —— 共享规格（唯一契约，所有人必须遵守）
 
+> **归档说明（2026-10-18 结构整理后补）**：本规格书原与测试 mod 的工作副本一起放在 `docs/rimtest-mod/`。
+> 那份工作副本与 `examples/rimtest-mod/RimTestMod/` 逐文件重复（44 个文件全同），已随结构整理移出仓库；
+> 本文件是副本里**唯一没有对应产物**的一份（`Source/README.md`、`Defs/ThingDefs/Plants.xml`、`Apparel.xml` 都拿它当契约），
+> 因此移到 `examples/rimtest-mod/_SPEC.md` 保存。正文除 §1 的「mod 工作目录」一行外未作改动。
+
 ## 0. 这是什么
 用 skills 仓库（<REPO_ROOT>，技能名 rimworld-modding）从零做出的一个 RimWorld mod，
 目的是端到端完整测试该技能：XML Def 模板路径、无模板新类型路径、C# ThingComp、Harmony 补丁、
@@ -11,7 +16,7 @@ XML PatchOperations、贴图资源、本地化、静态核验。
 - packageId：test.rimtestmod
 - 作者：占位符（发布前必须替换）
 - mod 显示名：完整测试 Mod (Test)
-- mod 工作目录：<REPO_ROOT>\docs\rimtest-mod
+- mod 工作目录：<REPO_ROOT>\examples\rimtest-mod\RimTestMod
 
 ## 2. 本机 1.7 平台现实（已实测，写代码/写 XML 必须按这个来）
 - 游戏：E:\SteamLibrary\steamapps\common\RimWorld，Version.txt = 1.7.4981 rev136
