@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- AI 辅助生成 | 目标平台 RimWorld 1.7.4981 rev136（线 A / XML）
+       核验源：
+         Core/Defs/ThingDefs_Buildings/Buildings_Production.xml:125 BenchBase     <- 本 Def 的父
+         Core/Defs/ThingDefs_Buildings/Buildings_Production.xml:593 TableMachining（机器工作台范本：
+             thingClass=Building_WorkTable / size / passability / interactionCell / inspectorTabs=ITab_Bills / building 节点 / placeWorkers）
+         Core/Defs/ThingDefs_Buildings/Buildings_Production.xml:5   CraftingSpot（1x1 工作台范本：
+             graphicData 用 Graphic_Single、size=(1,1)、interactionCellOffset=(0,0,-1)、comps 里挂 CompProperties_AffectedByFacilities）
+         Core/Defs/ThingDefs_Buildings/Buildings_Base.xml:4         BuildingBase（category/altitudeLayer/terrainAffordanceNeeded 基座）
+       关键实测：
+         * 建造工作量字段是 statBases/WorkToBuild（1.7 没有小写 workToBuild）；本 Def 不另设 StatDef，
+           工作台速度倍率 StatDef=WorkTableWorkSpeedFactor（默认 1）由 BenchBase 的
+           CompProperties_ReportWorkSpeed 读取，因此这里不必重复声明。
+         * 清单页来自 inspectorTabs/li = ITab_Bills；可被工具栏加成来自 comps 的
+           CompProperties_AffectedByFacilities + linkableFacilities/li = ToolCabinet。
+         * 配方入口有两条且都会被 ThingDef.AllRecipes 用 List.Contains 去重，本 mod 两条都写了：
+           本文件 <recipes> 列表 + RecipeDefs 里 RecipeDef/recipeUsers = DM_Building_TestBench。
+       贴图契约：Things/Building/Production/DM_TestBench（只有一张 128x128 俯视图，没有 _north/_east/_south/_west，
+       所以必须 Graphic_Single + drawSize/size 都取 (1,1)，不能照抄 TableMachining 的 3x1 + Graphic_Multi。
+       本 Def 故意不写 researchPrerequisites，保证一开局就能造出来做测试。 -->
+  <ThingDef ParentName="BenchBase">
+    <defName>DM_Building_TestBench</defName>
+    <label>test assembly bench</label>
+    <description>A test-mod workbench. Builds the test plasma dagger and the test ion rifle. Deliberately has no research prerequisite so it can be tested immediately.</description>
+    <thingClass>Building_WorkTable</thingClass>
+    <graphicData>
+      <texPath>Things/Building/Production/DM_TestBench</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+    </graphicData>
+    <altitudeLayer>Building</altitudeLayer>
+    <size>(1,1)</size>
+    <fillPercent>0.5</fillPercent>
+    <useHitPoints>true</useHitPoints>
+    <costList>
+      <Steel>100</Steel>
+      <ComponentIndustrial>3</ComponentIndustrial>
+    </costList>
+    <statBases>
+      <WorkToBuild>2000</WorkToBuild>
+      <MaxHitPoints>180</MaxHitPoints>
+      <Flammability>1.0</Flammability>
+      <Cleanliness>-2</Cleanliness>
+    </statBases>
+    <designationCategory>Production</designationCategory>
+    <uiOrder>2500</uiOrder>
+    <passability>PassThroughOnly</passability>
+    <pathCost>50</pathCost>
+    <hasInteractionCell>true</hasInteractionCell>
+    <interactionCellOffset>(0,0,-1)</interactionCellOffset>
+    <surfaceType>Item</surfaceType>
+    <constructEffect>ConstructMetal</constructEffect>
+    <recipes>
+      <li>DM_Recipe_PlasmaDagger</li>
+      <li>DM_Recipe_IonRifle</li>
+    </recipes>
+    <inspectorTabs>
+      <li>ITab_Bills</li>
+    </inspectorTabs>
+    <building>
+      <spawnedConceptLearnOpportunity>BillsTab</spawnedConceptLearnOpportunity>
+      <workTableRoomRole>Workshop</workTableRoomRole>
+      <workTableNotInRoomRoleFactor>0.8</workTableNotInRoomRoleFactor>
+    </building>
+    <comps>
+      <li Class="CompProperties_AffectedByFacilities">
+        <linkableFacilities>
+          <li>ToolCabinet</li>
+        </linkableFacilities>
+      </li>
+    </comps>
+    <placeWorkers>
+      <li>PlaceWorker_ShowFacilitiesConnections</li>
+      <li>PlaceWorker_ReportWorkSpeedPenalties</li>
+      <li>PlaceWorker_PreventInteractionSpotOverlap</li>
+    </placeWorkers>
+  </ThingDef>
+
+</Defs>
+

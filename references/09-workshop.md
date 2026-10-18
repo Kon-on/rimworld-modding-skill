@@ -1,6 +1,6 @@
 # 09 — Steam Workshop 发布
 
-> **适用版本**: RimWorld 1.6 | **最后更新**: 2026-05-31
+> **适用版本**: RimWorld 1.7（实测 1.7.4981 rev136） | **最后更新**: 2026-10-18
 
 
 ## 目录
@@ -102,7 +102,7 @@
 - 特性 3：xxx
 
 [兼容性]
-- 兼容 1.6
+- 兼容 1.7
 - 需要/不兼容的 DLC
 - 已知兼容/冲突的 mod
 
@@ -131,7 +131,7 @@ A: xxx
 - Harmony (自动订阅)
 
 ### Supported DLCs
-- ✅ Core (1.6)
+- ✅ Core (1.7)
 - ✅ Royalty
 - ✅ Ideology
 - ✅ Biotech

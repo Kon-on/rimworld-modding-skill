@@ -1,0 +1,10 @@
+ParserError: 
+
+Line |
+
+   1 |  $ErrorActionPreference='Stop'
+
+     |  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+     | This script contains malicious content and has been blocked by your antivirus software.
+

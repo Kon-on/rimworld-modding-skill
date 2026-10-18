@@ -1,74 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  远程武器模板（已验证——基于原版 BaseWeapons.xml）
+  远程武器模板（RimWorld 1.7 结构）
+  验证状态：已验证（字段与前缀结构对照原版 1.7 全库：RangedIndustrial.xml 的 Gun_Revolver、RangedSpacer.xml:5 的 Gun_ChargeRifle、BaseWeapons.xml 的 BaseBullet/BaseMakeableGun/BaseHumanMakeableGun）
   AI 辅助生成
-  替换所有 <Your...> 占位符为你的实际值
+  替换所有 {{...}} 占位符为你的实际值
 
-  ⚠️ 重要：生成后务必对比原版 Def 验证！
-  原版武器参考：RimWorld/Data/Core/Defs/ThingDefs_Misc/Weapons/RangedIndustrial.xml
+  ⚠️ 1.6 及更早的写法在 1.7 全部无效，别再照抄旧模板：
+     ❌ <verbClass> / <rangedWeapon_Cooldown> / <rangedWeapon_WarmupTime> / <rangedWeapon_Range> 写在顶层
+     ✅ 冷却 → statBases/RangedWeapon_Cooldown；射程/预热/弹丸/音效 → verbs/li 里
+  ⚠️ 原版 1.7 全库已无 rangedWeapon_Range / rangedWeapon_WarmupTime 这两个路径（改版时被移除）。
 
   ParentName 继承链：
   BaseWeapon → BaseGun → BaseGunWithQuality → BaseMakeableGun → BaseHumanMakeableGun
-  （BaseWeapon 已内置 CompEquippable——无需在 <comps> 中重复）
-  （BaseHumanMakeableGun 已内置 recipeMaker + weaponTags + CompBiocodable）
+  （BaseMakeableGun 已内置 recipeMaker：机械加工台 + Gunsmithing 研究 + UnfinishedGun）
+  （BaseHumanMakeableGun 已内置 weaponTags=Gun、tradeTags=WeaponRanged、CompBiocodable）
+  想改用锻造台/自制体系时，在自己的 <recipeMaker> 里重写（原版近战武器都各自重写 recipeMaker）。
 -->
 <Defs>
+
+  <!--== 第一段：弹丸（必填。子弹的伤害定义在这里，不在枪上） == -->
+  <ThingDef ParentName="BaseBullet">
+    <defName>{{YourPrefix}}_Projectile_{{YourName}}</defName>
+    <label>{{YourProjectileLabel}}</label>
+    <graphicData>
+      <texPath>Things/Projectile/{{YourPrefix}}_{{YourName}}Bullet</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <!-- BaseBullet 已给 shaderType=Transparent，无需重复 -->
+    </graphicData>
+    <projectile>
+      <damageDef>Bullet</damageDef>             <!-- 原版可选：Bullet / Arrow / Beam / Bomb… -->
+      <damageAmountBase>15</damageAmountBase>   <!-- 单发伤害 -->
+      <stoppingPower>1.5</stoppingPower>        <!-- 穿透力 -->
+      <speed>60</speed>                         <!-- 飞行速度 -->
+      <!-- 可加 <explosionRadius> / <preExplosionSpawnThingDef> 等做爆炸弹 -->
+    </projectile>
+  </ThingDef>
+
+  <!--== 第二段：枪本体 == -->
   <ThingDef ParentName="BaseHumanMakeableGun">
-    <defName><YourPrefix>_Gun_<YourName></defName>
-    <label><your gun label></label>
-    <description><your gun description></description>
+    <defName>{{YourPrefix}}_Weapon_{{YourName}}</defName>
+    <label>{{YourGunLabel}}</label>
+    <description>{{YourGunDescription}}</description>
 
     <possessionCount>1</possessionCount>
-    <techLevel>Industrial</techLevel>            <!-- Neolithic / Medieval / Industrial / Spacer / Ultra / Archotech -->
+    <techLevel>Industrial</techLevel>          <!-- 合法值：Animal/Neolithic/Medieval/Industrial/Spacer/Ultra/Archotech（是 Ultra，不是 Ultratech） -->
 
-    <!-- 材料成本 -->
-    <costStuffCount>60</costStuffCount>
-    <stuffCategories>
-      <li>Metallic</li>
-    </stuffCategories>
+    <!-- 材料：两种路线选一
+         A) costList   —— 固定材料（原版枪械用这个，如 Gun_ChargeRifle：Plasteel 50 + ComponentSpacer 2）
+         B) costStuffCount + stuffCategories —— 玩家自选材料（近战/服装常用） -->
+    <costList>
+      <Steel>30</Steel>
+      <ComponentIndustrial>2</ComponentIndustrial>
+    </costList>
 
     <statBases>
-      <WorkToMake>12000</WorkToMake>             <!-- 制作工作量 -->
-      <Mass>3.0</Mass>
-      <AccuracyTouch>0.75</AccuracyTouch>
+      <WorkToMake>12000</WorkToMake>           <!-- 制作工作量 -->
+      <Mass>3.0</Mass>                         <!-- 重量（kg） -->
+      <AccuracyTouch>0.75</AccuracyTouch>      <!-- 四种距离命中率 -->
       <AccuracyShort>0.85</AccuracyShort>
       <AccuracyMedium>0.70</AccuracyMedium>
       <AccuracyLong>0.50</AccuracyLong>
+      <RangedWeapon_Cooldown>1.2</RangedWeapon_Cooldown>   <!-- ❗两次射击间隔（秒）在这里 -->
     </statBases>
 
     <weaponTags>
-      <li><YourPrefix>_<YourTag></li>
+      <!-- 列表默认追加：父类已给 Gun，这里写自己的标签会与 Gun 并存 -->
+      <li>{{YourPrefix}}_{{YourTag}}</li>
     </weaponTags>
-
-    <!-- 远程特有属性 -->
-    <verbClass>Verb_Shoot</verbClass>
-    <rangedWeapon_Cooldown>1.2</rangedWeapon_Cooldown>     <!-- 两次射击间隔（秒） -->
-    <rangedWeapon_WarmupTime>1.0</rangedWeapon_WarmupTime> <!-- 瞄准时间（秒） -->
-    <rangedWeapon_Range>25</rangedWeapon_Range>            <!-- 射程（格） -->
+    <weaponClasses>
+      <li>RangedLight</li>                     <!-- 原版值：RangedLight / RangedHeavy / RangedSpacer… -->
+    </weaponClasses>
 
     <graphicData>
-      <texPath>Things/Item/<YourPrefix>_<YourTexture></texPath>
+      <texPath>Things/Item/Equipment/WeaponRanged/{{YourPrefix}}_{{YourName}}</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <shaderType>CutoutComplex</shaderType>
     </graphicData>
-    <uiIconScale>1.0</uiIconScale>                <!-- UI图标缩放（枪械一般1.0）-->
+    <uiIconScale>1.2</uiIconScale>             <!-- 图标缩放（原版左轮 1.4、电荷步枪 1.15 左右） -->
+    <soundInteract>Interact_Revolver</soundInteract>  <!-- 拾取/选中音效，须是真实存在的 SoundDef -->
 
+    <!--== 射击行为（1.7 结构） == -->
+    <verbs>
+      <li>
+        <verbClass>Verb_Shoot</verbClass>
+        <hasStandardCommand>true</hasStandardCommand>        <!-- 允许手动强制射击 -->
+        <defaultProjectile>{{YourPrefix}}_Projectile_{{YourName}}</defaultProjectile>
+        <warmupTime>1.0</warmupTime>                        <!-- 瞄准/预热（秒） -->
+        <range>25</range>                                   <!-- 射程（格） -->
+        <soundCast>Shot_Revolver</soundCast>                <!-- 必须是真实 SoundDef；原版例：Shot_ChargeRifle / Shot_Revolver / Shot_AssaultRifle -->
+        <soundCastTail>GunTail_Light</soundCastTail>        <!-- 尾音：GunTail_Light / GunTail_Medium -->
+        <muzzleFlashScale>9</muzzleFlashScale>
+        <!-- 连发时加：<burstShotCount>3</burstShotCount> <ticksBetweenBurstShots>12</ticksBetweenBurstShots>
+             不写这两个就是单发。 -->
+        <!-- 弹药系统（可选，一般由 mod 提供）：<li Class="CompProperties_Reloadable">… 属于 comps，不在这里 -->
+      </li>
+    </verbs>
+
+    <!--== 配方（可选） == -->
+    <!-- 不写 <recipeMaker> → 继承 BaseMakeableGun 的（机械加工台 + Gunsmithing）。
+         要自定义时写在这里： -->
     <recipeMaker>
-      <researchPrerequisite>Gunsmithing</researchPrerequisite>
+      <researchPrerequisite>Gunsmithing</researchPrerequisite>  <!-- 研究 Def 名，原版例：Smithing / Machining / Gunsmithing / ChargedShot -->
       <skillRequirements>
         <Crafting>5</Crafting>
       </skillRequirements>
-      <workAmount>15000</workAmount>
+      <displayPriority>300</displayPriority>                    <!-- 配方列表排序（原版左轮 400） -->
+      <workAmount>12000</workAmount>                            <!-- 该字段在 recipeMaker 里存在但原版很少用（6/2054） -->
     </recipeMaker>
-
-    <!-- 需要弹药（可选，取消注释以启用） -->
-    <!--
-    <comps>
-      <li Class="CompProperties_Reloadable">
-        <ammoDef><YourPrefix>_Bullet</ammoDef>
-        <maxCharges>6</maxCharges>
-      </li>
-    </comps>
-    -->
   </ThingDef>
 </Defs>

@@ -31,7 +31,7 @@
   <packageId>konon.modname</packageId>          <!-- 去掉 test. 前缀 -->
   <name>正式 Mod 名称</name>                     <!-- 去掉 (Test) -->
   <author>开发者确认的作者名</author>
-  <supportedVersions><li>1.6</li></supportedVersions>
+  <supportedVersions><li>1.7</li></supportedVersions>
   <description>完整的 mod 描述。\n\n包含特性列表、使用方法等。</description>
 </ModMetaData>
 ```

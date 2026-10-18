@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- AI 辅助生成 | 线 A / 中文注入（DefInjected/RecipeDef）
+       RecipeDef 的 label 与 jobString 都是可翻译字段：不注入的话，账单列表和角色工作标题会显示英文
+       （Def 里的英文 label 是兜底）。写法同 DefInjected/ThingDef。 -->
+  <DM_Recipe_PlasmaDagger.label>制造等离子匕首（测试）</DM_Recipe_PlasmaDagger.label>
+  <DM_Recipe_PlasmaDagger.jobString>正在制造等离子匕首。</DM_Recipe_PlasmaDagger.jobString>
+  <DM_Recipe_IonRifle.label>制造离子步枪（测试）</DM_Recipe_IonRifle.label>
+  <DM_Recipe_IonRifle.jobString>正在制造离子步枪。</DM_Recipe_IonRifle.jobString>
+
+</LanguageData>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--== 模板类型：植物 Def（ThingDef + <plant> 节点）—— 观赏植物与作物两段
+  ============================================================================
+  验证状态：已验证（对照 RimWorld 1.7 原版 Data/Core/Defs/ThingDefs_Plants/ 下的
+            Plants_Bases.xml 继承链、Plants_Cultivated_Decorative.xml（Plant_Rose、Plant_Daylily）、
+            Plants_Cultivated_Farm.xml（Plant_Rice、Plant_Potato）；字段名与出现率逐条对照
+            1.7 全量字段总表：plant/growDays 3.89%、plant/visualSizeRange 3.31%、plant/topWindExposure 2.87%、
+            plant/harvestYield 2.43%、plant/fertilitySensitivity 2.24%、plant/wildOrder 1.90%、
+            plant/sowTags 1.56%、plant/immatureGraphicPath 1.51%、plant/harvestTag 1.36%、
+            plant/maxMeshCount 1.22%、plant/purpose 1.02%、plant/dieIfLeafless 0.97%、plant/growMinGlow 0.78%、
+            plant/lifespanDaysPerGrowDays 0.63%、plant/sowWork 0.58%（分母为 2054 个 ThingDef 实例））
+
+  AI 辅助生成
+  ============================================================================
+  适用版本：RimWorld 1.7（静态核验通过；游戏内表现仍需按 references/workflows/new-mod.md 的测试版流程确认）
+  原版参考路径：Data/Core/Defs/ThingDefs_Plants/Plants_Bases.xml
+                Data/Core/Defs/ThingDefs_Plants/Plants_Cultivated_Decorative.xml
+                Data/Core/Defs/ThingDefs_Plants/Plants_Cultivated_Farm.xml
+  ParentName 继承链：PlantBaseNonEdible → PlantBase →（本模板）→ 你的具体植物
+  ============================================================================
+  关键设计决策：
+    1. ParentName 必须是 PlantBase（或更上层的 PlantBaseNonEdible）。原版在 Plants_Bases.xml 里用
+       Abstract 定义了这条链（category=Plant、thingClass=Plant、altitudeLayer、tickerType=Long 等都在父类里），
+       本模板只写差异字段。不继承它就会出现「植物站在地图上但不会生长／不能收割」这类怪象。
+    2. graphicClass 选 Graphic_Single 还是 Graphic_Random，取决于你的贴图是「一个文件」还是「一个目录」：
+       · Graphic_Single —— texPath 指向单个 png（如 Things/Plant/YourFlower），本模板默认。
+       · Graphic_Random —— texPath 必须指向**目录**（如 Things/Plant/YourFlower/），目录里放多张图，
+         游戏在成片种植时随机挑；目录里一张图都没有会报 "No textures found at path"（Graphic_Collection 初始化失败）。
+       原版 Plant_Rose / Plant_Daylily 用的是目录形态，所以它们写 Graphic_Random；
+       你要是只画了一张图，就老老实实用 Graphic_Single。
+    3. <purpose> 决定种植菜单归类与播种标签：Beauty（观赏）/ Food（食物）/ Health（药物）。
+       观赏植物在 <sowTags> 里必须带 Decorative，食物植物带 Ground（可选 Hydroponic 表示可水培）。
+    4. 观赏植物只写 <harvestTag> 不写 <harvestedThingDef>（原版 Plant_Rose 就是这么定的：
+       可以收割判定，但不产出物品）。要产出物品的作物才写 harvestedThingDef + harvestYield。
+    5. <immatureGraphicPath> 与 <maxMeshCount> 只有需要「未成熟外观」的作物才写（原版稻米、土豆有）。
+    6. 1.7 新增字段 plant/harvestYieldAffectedByDifficulty（收割量是否受难度影响），按需加在 <plant> 里。
+    7. 替换本模板占位符时注意：{{YourPrefix}} 用你自己的 2-4 字符前缀，defName 中不要出现空格。 == -->
+<Defs>
+
+  <!--== 第一段：观赏植物（Beauty） == -->
+  <ThingDef ParentName="PlantBase">
+    <defName>{{YourPrefix}}_Plant_{{YourName}}</defName>
+    <label>{{YourPlantLabel}}</label>
+    <description>{{YourPlantDescription}}</description>
+    <statBases>
+      <!-- 观赏植物的核心价值：美观度（室内 Beauty / 室外 BeautyOutdoors） -->
+      <MaxHitPoints>85</MaxHitPoints>
+      <Beauty>16</Beauty>
+      <BeautyOutdoors>16</BeautyOutdoors>
+      <Nutrition>0.05</Nutrition>
+    </statBases>
+    <graphicData>
+      <texPath>Things/Plant/{{YourTextureName}}</texPath>
+      <!-- 单图用 Graphic_Single；改用 Graphic_Random 时 texPath 必须写成目录并以 / 结尾，目录内放多张图 -->
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <altitudeLayer>Item</altitudeLayer>
+    <selectable>true</selectable>
+    <ingestible>
+      <canAutoSelectAsFoodForCaravan>false</canAutoSelectAsFoodForCaravan>
+    </ingestible>
+    <plant>
+      <dieIfLeafless>true</dieIfLeafless>
+      <harvestTag>Standard</harvestTag>
+      <sowWork>540</sowWork>
+      <sowTags>
+        <li>Ground</li>
+        <li>Decorative</li>
+      </sowTags>
+      <growMinGlow>0.3</growMinGlow>
+      <topWindExposure>0.1</topWindExposure>
+      <growDays>1.5</growDays>
+      <lifespanDaysPerGrowDays>3</lifespanDaysPerGrowDays>
+      <visualSizeRange>0.3~1.05</visualSizeRange>
+      <wildOrder>1</wildOrder>
+      <purpose>Beauty</purpose>
+    </plant>
+  </ThingDef>
+
+  <!--== 第二段：作物（Food，会产出物品） ========================
+       把这一段整段复制出来用；不产出物品的观赏植物请删掉这一段。
+       harvestedThingDef 必须是真实存在的物品 defName（原版例：RawRice、RawPotato、Cloth、RawFungus）。 -->
+  <ThingDef ParentName="PlantBase">
+    <defName>{{YourPrefix}}_Plant_{{YourCropName}}</defName>
+    <label>{{YourCropLabel}}</label>
+    <description>{{YourCropDescription}}</description>
+    <statBases>
+      <MaxHitPoints>85</MaxHitPoints>
+      <Nutrition>0.175</Nutrition>
+    </statBases>
+    <graphicData>
+      <texPath>Things/Plant/{{YourCropTextureName}}</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <selectable>true</selectable>
+    <pathCost>14</pathCost>
+    <ingestible />
+    <plant>
+      <immatureGraphicPath>Things/Plant/{{YourCropTextureName}}_Immature</immatureGraphicPath>
+      <dieIfLeafless>true</dieIfLeafless>
+      <maxMeshCount>4</maxMeshCount>
+      <harvestTag>Standard</harvestTag>
+      <harvestedThingDef>{{YourHarvestedThingDef}}</harvestedThingDef>
+      <harvestYield>6</harvestYield>
+      <sowTags>
+        <li>Ground</li>
+        <li>Hydroponic</li>
+      </sowTags>
+      <topWindExposure>0.1</topWindExposure>
+      <growDays>3</growDays>
+      <visualSizeRange>0.5~0.8</visualSizeRange>
+      <wildOrder>2</wildOrder>
+      <purpose>Food</purpose>
+      <humanFoodPlant>true</humanFoodPlant>
+    </plant>
+  </ThingDef>
+
+</Defs>

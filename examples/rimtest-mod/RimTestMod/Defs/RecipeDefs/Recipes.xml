@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- AI 辅助生成 | 目标平台 RimWorld 1.7.4981 rev136（线 A / XML）
+       核验源：
+         Core/Defs/RecipeDefs/Recipes_Production.xml:356 Make_ComponentIndustrial（RecipeDef 范本：
+             workSpeedStat/workSkill/effectWorking/soundWorking/workAmount/unfinishedThingDef/ingredients/
+             fixedIngredientFilter/skillRequirements/displayPriority）
+         Core/Defs/RecipeDefs/Recipes_Meals.xml:32 CookMealSimple（ingredients/li/filter/categories/li 的真实用法，第 43-52 行）
+         Core/Defs/RecipeDefs/Recipes_Meals.xml:53 products 写法：<产物 defName>数量</产物 defName>
+         Core/Defs/RecipeDefs/Recipes_Production.xml:13 MakeStoneBlocksBase（recipeUsers 真实用法）
+       1.6 -> 1.7 冲突点：1.6 模板把产物写成 <products><li><thingDef>..</thingDef><count>..</count></li></products>，
+       1.7 字段表里 products 下没有 thingDef/count 子路径，正确写法是「子元素名 = 产物 defName，值 = 数量」。
+       productHasIngredientStuff：等离子匕首是「材料决定」的物品（costStuffCount），手写配方必须显式声明
+       productHasIngredientStuff=true，产物才会继承输入材料（否则用默认材料）。
+       该字段在 1.7 DLL 的元数据名表里存在（Assembly-CSharp.dll UTF-8 字符串堆偏移 12707852），
+       但原版 XML 0 处使用 —— 因为原版这类配方都由 RecipeDefGenerator 依 recipeMaker 在代码里生成。
+       配方入口：RecipeDef/recipeUsers = DM_Building_TestBench 与建筑上的 <recipes> 列表互为补充，
+       ThingDef.AllRecipes 用 List.Contains 去重，所以不会出现重复账单（两条都写是双保险）。
+       本文件两条配方都不写 researchPrerequisite，保证一开局就能在测试台上造出来。 -->
+
+  <RecipeDef>
+    <defName>DM_Recipe_PlasmaDagger</defName>
+    <label>make plasma dagger (test)</label>
+    <description>Assemble a test-mod plasma dagger from metallic stuff.</description>
+    <jobString>Making a plasma dagger.</jobString>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <workSkill>Crafting</workSkill>
+    <effectWorking>Smith</effectWorking>
+    <soundWorking>Recipe_Smith</soundWorking>
+    <workAmount>3000</workAmount>
+    <unfinishedThingDef>UnfinishedWeapon</unfinishedThingDef>
+    <ingredients>
+      <li>
+        <filter>
+          <categories>
+            <li>Metallic</li>
+          </categories>
+        </filter>
+        <count>50</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <categories>
+        <li>Metallic</li>
+      </categories>
+      <disallowedThingDefs>
+        <li>Silver</li>
+        <li>Gold</li>
+      </disallowedThingDefs>
+    </fixedIngredientFilter>
+    <productHasIngredientStuff>true</productHasIngredientStuff>
+    <products>
+      <DM_Weapon_PlasmaDagger>1</DM_Weapon_PlasmaDagger>
+    </products>
+    <skillRequirements>
+      <Crafting>3</Crafting>
+    </skillRequirements>
+    <recipeUsers>
+      <li>DM_Building_TestBench</li>
+    </recipeUsers>
+    <displayPriority>410</displayPriority>
+  </RecipeDef>
+
+  <RecipeDef>
+    <defName>DM_Recipe_IonRifle</defName>
+    <label>make ion rifle (test)</label>
+    <description>Assemble a test-mod ion rifle from plasteel and components.</description>
+    <jobString>Making an ion rifle.</jobString>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <workSkill>Crafting</workSkill>
+    <effectWorking>Smith</effectWorking>
+    <soundWorking>Recipe_Machining</soundWorking>
+    <workAmount>6000</workAmount>
+    <unfinishedThingDef>UnfinishedGun</unfinishedThingDef>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>20</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Plasteel</li>
+          </thingDefs>
+        </filter>
+        <count>40</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>ComponentIndustrial</li>
+          </thingDefs>
+        </filter>
+        <count>6</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+        <li>Plasteel</li>
+        <li>ComponentIndustrial</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <DM_Weapon_IonRifle>1</DM_Weapon_IonRifle>
+    </products>
+    <skillRequirements>
+      <Crafting>4</Crafting>
+    </skillRequirements>
+    <recipeUsers>
+      <li>DM_Building_TestBench</li>
+    </recipeUsers>
+    <displayPriority>400</displayPriority>
+  </RecipeDef>
+
+</Defs>
+

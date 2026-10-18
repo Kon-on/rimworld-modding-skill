@@ -1,0 +1,740 @@
+acTypes=16221
+=== CanReserve ===
+  Verse.PawnDestinationReservationManager :: Boolean CanReserve(IntVec3 c, Pawn searcher, Boolean draftedOnly=opt)
+  Verse.AI.AttackTargetReservationManager :: Boolean CanReserve(Pawn claimant, IAttackTarget target)
+  Verse.AI.ReservationManager :: Boolean CanReserve(Pawn claimant, LocalTargetInfo target, Int32 maxPawns=opt, Int32 stackCount=opt, ReservationLayerDef layer=opt, Boolean ignoreOtherReservations=opt)
+  Verse.AI.ReservationUtility :: static Boolean CanReserve(Pawn p, LocalTargetInfo target, Int32 maxPawns=opt, Int32 stackCount=opt, ReservationLayerDef layer=opt, Boolean ignoreOtherReservations=opt)
+=== Reserve ===
+  Verse.PhysicalInteractionReservationManager :: Void Reserve(Pawn claimant, Job job, LocalTargetInfo target)
+  Verse.PawnDestinationReservationManager :: Void Reserve(Pawn p, Job job, IntVec3 loc)
+  Verse.AI.Toils_Reserve :: static Toil Reserve(TargetIndex ind, Int32 maxPawns=opt, Int32 stackCount=opt, ReservationLayerDef layer=opt, Boolean ignoreOtherReservations=opt)
+  Verse.AI.AttackTargetReservationManager :: Void Reserve(Pawn claimant, Job job, IAttackTarget target)
+  Verse.AI.ReservationManager :: Boolean Reserve(Pawn claimant, Job job, LocalTargetInfo target, Int32 maxPawns=opt, Int32 stackCount=opt, ReservationLayerDef layer=opt, Boolean errorOnFailed=opt, Boolean ignoreOtherReservations=opt, Boolean canReserversStartJobs=opt)
+  Verse.AI.ReservationUtility :: static Boolean Reserve(Pawn p, LocalTargetInfo target, Job job, Int32 maxPawns=opt, Int32 stackCount=opt, ReservationLayerDef layer=opt, Boolean errorOnFailed=opt, Boolean ignoreOtherReservations=opt)
+=== IsForbidden ===
+  RimWorld.ForbidUtility :: static Boolean IsForbidden(Thing t, Pawn pawn)
+  RimWorld.ForbidUtility :: static Boolean IsForbidden(IntVec3 c, Pawn pawn)
+  RimWorld.ForbidUtility :: static Boolean IsForbidden(Thing t, Faction faction)
+=== FailOnDespawnedNullOrForbidden ===
+  Verse.AI.ToilFailConditions :: static T FailOnDespawnedNullOrForbidden(T f, TargetIndex ind)
+=== WithProgressBar ===
+  Verse.AI.ToilEffects :: static Toil WithProgressBar(Toil toil, TargetIndex ind, Func`1 progressGetter, Boolean interpolateBetweenActorAndTarget=opt, Single offsetZ=opt, Boolean alwaysShow=opt)
+=== GetNamed ===
+  Verse.DefDatabase`1 :: static T GetNamed(String defName, Boolean errorOnFail=opt)
+=== FailOnThingDestroyed ===
+  (全局无此方法名)
+=== Toil 相关类型 ===
+  Verse.ToilMaker
+  Verse.AI.Toils_Recipe
+  Verse.AI.Toils_Haul
+  Verse.AI.ToilCompleteMode
+  Verse.AI.Toil
+  Verse.AI.ToilEffects
+  Verse.AI.ToilFailConditions
+  Verse.AI.ToilJumpConditions
+  Verse.AI.Toils_Combat
+  Verse.AI.Toils_Effects
+  Verse.AI.Toils_General
+  Verse.AI.Toils_Interact
+  Verse.AI.Toils_JobTransforms
+  Verse.AI.Toils_Jump
+  Verse.AI.Toils_Goto
+  Verse.AI.Toils_Reserve
+  Verse.AI.Toils_ReserveAttackTarget
+  Verse.AI.Toils_Rope
+  Verse.AI.Toils_StyleChange
+  Verse.AI.Group.LordToil_PsychicRitual
+  Verse.AI.Group.PsychicRitualLordToilData
+  Verse.AI.Group.PsychicRitualToilRunner
+  Verse.AI.Group.PsychicRitualToil
+  Verse.AI.Group.PsychicRitualToil_BloodRain
+  Verse.AI.Group.PsychicRitualToil_Brainwipe
+  Verse.AI.Group.PsychicRitualToil_CarryAndGoto
+  Verse.AI.Group.PsychicRitualToil_Chronophagy
+  Verse.AI.Group.PsychicRitualToil_GatherForInvocation
+  Verse.AI.Group.PsychicRitualToil_GatherOfferings
+  Verse.AI.Group.PsychicRitualToil_Goto
+  Verse.AI.Group.PsychicRitualToil_ImbueDeathRefusal
+  Verse.AI.Group.PsychicRitualToil_InvokeHorax
+  Verse.AI.Group.PsychicRitualToil_Wait
+  Verse.AI.Group.PsychicRitualToil_Multiplex
+  Verse.AI.Group.PsychicRitualToil_NeurosisPulse
+  Verse.AI.Group.PsychicRitualToil_Philophagy
+  Verse.AI.Group.PsychicRitualToil_PleasurePulse
+  Verse.AI.Group.PsychicRitualToil_Psychophagy
+  Verse.AI.Group.PsychicRitualToil_SkipAbduction
+  Verse.AI.Group.PsychicRitualToil_SkipAbductionPlayer
+  Verse.AI.Group.PsychicRitualToil_SummonAnimals
+  Verse.AI.Group.PsychicRitualToil_SummonFleshbeastsCultist
+  Verse.AI.Group.PsychicRitualToil_SummonFleshbeastsPlayer
+  Verse.AI.Group.PsychicRitualToil_SummonPitGate
+  Verse.AI.Group.PsychicRitualToil_SummonShamblers
+  Verse.AI.Group.PsychicRitualToil_TargetCleanup
+  Verse.AI.Group.PsychicRitualToil_VoidProvocation
+  Verse.AI.Group.LordToil
+  Verse.AI.Group.LordToilData
+  Verse.AI.Group.LordToil_DefendPoint
+  Verse.AI.Group.LordToilData_DefendPoint
+  Verse.AI.Group.LordToil_DefendSelf
+  Verse.AI.Group.LordToil_End
+  Verse.AI.Group.LordToil_ExitMap
+  Verse.AI.Group.LordToilData_ExitMap
+  Verse.AI.Group.LordToil_ExitMapFighting
+  Verse.AI.Group.LordToil_ExitMapTraderFighting
+  Verse.AI.Group.LordToil_ExitMapNear
+  Verse.AI.Group.LordToil_ExitMapRandom
+  Verse.AI.Group.LordToil_Travel
+  Verse.AI.Group.LordToilData_Travel
+  RimWorld.Toils_Construct
+  RimWorld.Toils_Tend
+  RimWorld.Toils_Misc
+  RimWorld.Toils_Refuel
+  RimWorld.Toils_Interpersonal
+  RimWorld.Toils_Bed
+  RimWorld.Toils_Ingest
+  RimWorld.Toils_LayDown
+  RimWorld.LordToil_BestowingCeremony_MoveInPlace
+  RimWorld.LordToil_BestowingCeremony_Wait
+  RimWorld.LordToil_BestowingCeremony_Perform
+  RimWorld.LordToilData_SanguophageMeeting
+  RimWorld.LordToil_SanguophageMeeting
+  RimWorld.LordToil_PrepareCaravan_GatherDownedPawns
+  RimWorld.LordToil_PrepareCaravan_GatherItems
+  RimWorld.LordToil_PrepareCaravan_Leave
+  RimWorld.LordToil_PrepareCaravan_Pause
+  RimWorld.LordToil_PrepareCaravan_RopeAnimals
+  RimWorld.LordToil_PrepareCaravan_GatherAnimals
+  RimWorld.LordToil_PrepareCaravan_CollectAnimals
+  RimWorld.LordToil_ReturnedCaravan_PenAnimals
+  RimWorld.LordToil_PrepareCaravan_Wait
+  RimWorld.LordToil_AssaultColony
+  RimWorld.LordToil_AssaultColonyBossgroup
+  RimWorld.LordToilData_AssaultColonyBreaching
+  RimWorld.LordToil_AssaultColonyBreaching
+  RimWorld.LordToil_AssaultColonyPrisoners
+  RimWorld.LordToil_AssaultColonySappers
+  RimWorld.LordToilData_AssaultColonySappers
+  RimWorld.LordToil_AssaultThings
+  RimWorld.LordToil_ChimeraAttack
+  RimWorld.LordToil_ChimeraStalk
+  RimWorld.LordToil_DefendAndExpandHive
+  RimWorld.LordToil_DefendBase
+  RimWorld.LordToilData_DefendFleshmassHeart
+  RimWorld.LordToil_DefendFleshmassHeart
+  RimWorld.LordToil_DefendHiveAggressively
+  RimWorld.LordToil_DefendTraderCaravan
+  RimWorld.LordToil_DevourerAssault
+  RimWorld.LordToil_DoOpportunisticTaskOrCover
+  RimWorld.LordToil_EnterShuttleOrLeave
+  RimWorld.LordToil_EntitySwarm
+  RimWorld.LordToilData_EntitySwarm
+  RimWorld.LordToil_EscortPawn
+  RimWorld.LordToil_ExitMapAndDefendSelf
+  RimWorld.LordToil_ExitMapAndEscortCarriers
+  RimWorld.LordToil_FleshbeastAssault
+  RimWorld.LordToil_GorehulkAssault
+  RimWorld.LordToil_HateChant
+  RimWorld.LordToilData_HateChant
+  RimWorld.LordToil_HateChantGeneratePositions
+  RimWorld.LordToilData_HateChantGeneratePositions
+  RimWorld.LordToil_HiveRelated
+  RimWorld.LordToil_HiveRelatedData
+  RimWorld.LordToil_HuntDownColonists
+  RimWorld.LordToil_HuntEnemies
+  RimWorld.LordToilData_HuntEnemies
+  RimWorld.LordToil_KidnapCover
+  RimWorld.LordToil_LoadAndEnterPortal
+  RimWorld.LordToil_LoadAndEnterTransporters
+  RimWorld.LordToil_ManClosestTurrets
+  RimWorld.LordToil_MetalhorrorActive
+  RimWorld.LordToil_MoveInBossgroup
+  RimWorld.LordToil_NestAssault
+  RimWorld.LordToil_PanicFlee
+  RimWorld.LordToil_PrisonerEscape
+  RimWorld.LordToil_PsychicRitualParticipantGoto
+  RimWorld.LordToilData_PsychicRitualParticipantGoto
+  RimWorld.LordToil_ReimplantXenogerm
+  RimWorld.LordToilData_ReimplantXenogerm
+  RimWorld.LordToil_ShamblerAssault
+  RimWorld.LordToil_ShamblerSwarm
+  RimWorld.LordToil_Siege
+  RimWorld.LordToilData_Siege
+  RimWorld.LordToil_SightstealerAssault
+  RimWorld.LordToil_SightstealerSwarm
+  RimWorld.LordToil_Sleep
+  RimWorld.LordToil_SpawnHateChantersDelayed
+  RimWorld.LordToil_Stage
+  RimWorld.LordToilData_Stage
+  RimWorld.LordToil_StealCover
+  RimWorld.LordToil_TakeWoundedGuest
+  RimWorld.LordToil_Venerate
+  RimWorld.LordToilData_Venerate
+  RimWorld.LordToil_VoidAwakeningWander
+  RimWorld.LordToil_Wait
+  RimWorld.IWaitForItemsLordToil
+  RimWorld.LordToil_WaitForItems
+  RimWorld.LordToil_TravelAndWaitForItems
+  RimWorld.LordToil_WanderClose
+  RimWorld.LordToil_WanderNearby
+  RimWorld.LordToil_WanderNest
+  RimWorld.LordToilData_PartyDanceDrums
+  RimWorld.LordToil_PartyDanceDrums
+  RimWorld.LordToil_Ritual
+  RimWorld.LordToil_Concert
+  RimWorld.LordToil_Gathering
+  RimWorld.LordToilData_Gathering
+  RimWorld.LordToil_MarriageCeremony
+  RimWorld.LordToilData_MarriageCeremony
+  RimWorld.LordToil_Party
+  RimWorld.LordToil_Speech
+  RimWorld.LordToilData_Speech
+  JobDriver_BreastfeedCarryToMom+<MakeNewToils>d__9
+  Verse.JobDriver_CastAbilityWorld+<MakeNewToils>d__1
+  Verse.AI.JobDriver_FollowRoper+<MakeNewToils>d__2
+  Verse.AI.JobDriver_BabyPassive+<MakeNewToils>d__1
+  Verse.AI.JobDriver_ActivateArchonexusCore+<MakeNewToils>d__1
+  Verse.AI.JobDriver_EmancipateSlave+<MakeNewToils>d__5
+  Verse.AI.JobDriver_ExitMapFlying+<MakeNewToils>d__2
+  Verse.AI.JobDriver_ExtractToInventory+<MakeNewToils>d__4
+  Verse.AI.JobDriver_GotoMindControlled+<MakeNewToils>d__0
+  Verse.AI.JobDriver_HaulMechToCharger+<MakeNewToils>d__4
+  Verse.AI.JobDriver_HaulToAtomizer+<MakeNewToils>d__4
+  Verse.AI.JobDriver_ReleasePrisoner+<MakeNewToils>d__5
+  Verse.AI.JobDriver_BabyPlay+<MakeNewToils>d__14
+  Verse.AI.JobDriver_Carried+<MakeNewToils>d__1
+  Verse.AI.JobDriver_Equip+<MakeNewToils>d__10
+  Verse.AI.JobDriver_Follow+<MakeNewToils>d__3
+  Verse.AI.JobDriver_FollowClose+<MakeNewToils>d__8
+  Verse.AI.JobDriver_Goto+<MakeNewToils>d__1
+  Verse.AI.JobDriver_IdleWhileDespawned+<MakeNewToils>d__1
+  Verse.AI.JobDriver_PickupToHold+<Toils>d__2
+  Verse.AI.JobDriver_TakeInventory+<MakeNewToils>d__1
+  Verse.AI.JobDriver_Wait+<MakeNewToils>d__3
+  Verse.AI.JobDriver_WaitWithSleeping+<MakeNewToils>d__1
+  Verse.AI.JobDriver_AttackMelee+<MakeNewToils>d__4
+  Verse.AI.JobDriver_AttackStatic+<MakeNewToils>d__5
+  Verse.AI.JobDriver_CastAbility+<MakeNewToils>d__0
+  Verse.AI.JobDriver_CastAbilityTouch+<MakeNewToils>d__0
+  Verse.AI.JobDriver_CastAbilityGoTo+<MakeNewToils>d__0
+  Verse.AI.JobDriver_CastAbilityMelee+<MakeNewToils>d__0
+  Verse.AI.JobDriver_Kill+<MakeNewToils>d__2
+  Verse.AI.JobDriver_OpenStylingStationDialog+<MakeNewToils>d__1
+  Verse.AI.JobDriver_UseStylingStation+<MakeNewToils>d__1
+  Verse.AI.JobDriver_UseStylingStationAutomatic+<MakeNewToils>d__1
+  Verse.AI.JobDriver_CastVerbOnce+<MakeNewToils>d__2
+  Verse.AI.JobDriver_CastVerbOnceStatic+<MakeNewToils>d__0
+  Verse.AI.JobDriver_DoBill+<CollectIngredientsToils>d__16
+  Verse.AI.JobDriver_DoBill+<MakeNewToils>d__15
+  Verse.AI.Toils_Recipe+<>c
+  Verse.AI.Toils_Recipe+<>c__DisplayClass1_0
+  Verse.AI.Toils_Recipe+<>c__DisplayClass2_0
+  Verse.AI.Toils_Recipe+<>c__DisplayClass3_0
+  Verse.AI.Toils_Recipe+<>c__DisplayClass5_0
+  Verse.AI.Toils_Recipe+<>c__DisplayClass7_0
+  Verse.AI.JobDriver_HaulToCell+<MakeNewToils>d__13
+  Verse.AI.JobDriver_HaulToContainer+<MakeNewToils>d__22
+  Verse.AI.Toils_Haul+<>c
+  Verse.AI.Toils_Haul+<>c__DisplayClass10_0
+  Verse.AI.Toils_Haul+<>c__DisplayClass11_0
+  Verse.AI.Toils_Haul+<>c__DisplayClass11_1
+  Verse.AI.Toils_Haul+<>c__DisplayClass12_0
+  Verse.AI.Toils_Haul+<>c__DisplayClass14_0
+  Verse.AI.Toils_Haul+<>c__DisplayClass17_0
+  Verse.AI.Toils_Haul+<>c__DisplayClass18_0
+  Verse.AI.Toils_Haul+<>c__DisplayClass1_0
+  Verse.AI.Toils_Haul+<>c__DisplayClass2_0
+  Verse.AI.Toils_Haul+<>c__DisplayClass3_0
+  Verse.AI.Toils_Haul+<>c__DisplayClass4_0
+  Verse.AI.Toils_Haul+<>c__DisplayClass5_0
+  Verse.AI.Toils_Haul+<>c__DisplayClass5_1
+  Verse.AI.Toils_Haul+<>c__DisplayClass6_0
+  Verse.AI.Toils_Haul+<>c__DisplayClass7_0
+  Verse.AI.Toils_Haul+<>c__DisplayClass8_0
+  Verse.AI.Toils_Haul+<>c__DisplayClass8_1
+  Verse.AI.Toils_Haul+<>c__DisplayClass9_0
+  Verse.AI.Toil+<>c__DisplayClass20_0
+  Verse.AI.ToilEffects+<>c__DisplayClass0_0
+  Verse.AI.ToilEffects+<>c__DisplayClass10_0
+  Verse.AI.ToilEffects+<>c__DisplayClass11_0
+  Verse.AI.ToilEffects+<>c__DisplayClass1_0
+  Verse.AI.ToilEffects+<>c__DisplayClass2_0
+  Verse.AI.ToilEffects+<>c__DisplayClass3_0
+  Verse.AI.ToilEffects+<>c__DisplayClass4_0
+  Verse.AI.ToilEffects+<>c__DisplayClass5_0
+  Verse.AI.ToilEffects+<>c__DisplayClass6_0
+  Verse.AI.ToilEffects+<>c__DisplayClass7_0
+  Verse.AI.ToilEffects+<>c__DisplayClass8_0
+  Verse.AI.ToilEffects+<>c__DisplayClass9_0
+  Verse.AI.ToilFailConditions+<>c__DisplayClass0_0
+  Verse.AI.ToilFailConditions+<>c__DisplayClass10_0`1
+  Verse.AI.ToilFailConditions+<>c__DisplayClass11_0`1
+  Verse.AI.ToilFailConditions+<>c__DisplayClass12_0`1
+  Verse.AI.ToilFailConditions+<>c__DisplayClass13_0`1
+  Verse.AI.ToilFailConditions+<>c__DisplayClass14_0`1
+  Verse.AI.ToilFailConditions+<>c__DisplayClass15_0`1
+  Verse.AI.ToilFailConditions+<>c__DisplayClass16_0`1
+  Verse.AI.ToilFailConditions+<>c__DisplayClass17_0`1
+  Verse.AI.ToilFailConditions+<>c__DisplayClass18_0`1
+  Verse.AI.ToilFailConditions+<>c__DisplayClass19_0`1
+  Verse.AI.ToilFailConditions+<>c__DisplayClass1_0`1
+  Verse.AI.ToilFailConditions+<>c__DisplayClass22_0`1
+  Verse.AI.ToilFailConditions+<>c__DisplayClass23_0`1
+  Verse.AI.ToilFailConditions+<>c__DisplayClass24_0`1
+  Verse.AI.ToilFailConditions+<>c__DisplayClass25_0`1
+  Verse.AI.ToilFailConditions+<>c__DisplayClass26_0`1
+  Verse.AI.ToilFailConditions+<>c__DisplayClass27_0`1
+  Verse.AI.ToilFailConditions+<>c__DisplayClass28_0`1
+  Verse.AI.ToilFailConditions+<>c__DisplayClass29_0`1
+  Verse.AI.ToilFailConditions+<>c__DisplayClass2_0`1
+  Verse.AI.ToilFailConditions+<>c__DisplayClass30_0
+  Verse.AI.ToilFailConditions+<>c__DisplayClass3_0`1
+  Verse.AI.ToilFailConditions+<>c__DisplayClass5_0`1
+  Verse.AI.ToilFailConditions+<>c__DisplayClass7_0`1
+  Verse.AI.ToilFailConditions+<>c__DisplayClass8_0`1
+  Verse.AI.ToilFailConditions+<>c__DisplayClass9_0`1
+  Verse.AI.ToilJumpConditions+<>c__DisplayClass0_0
+  Verse.AI.ToilJumpConditions+<>c__DisplayClass1_0
+  Verse.AI.ToilJumpConditions+<>c__DisplayClass2_0
+  Verse.AI.ToilJumpConditions+<>c__DisplayClass3_0
+  Verse.AI.ToilJumpConditions+<>c__DisplayClass4_0
+  Verse.AI.Toils_Combat+<>c
+  Verse.AI.Toils_Combat+<>c__DisplayClass0_0
+  Verse.AI.Toils_Combat+<>c__DisplayClass1_0
+  Verse.AI.Toils_Combat+<>c__DisplayClass3_0
+  Verse.AI.Toils_Combat+<>c__DisplayClass6_0
+  Verse.AI.Toils_Effects+<>c__DisplayClass0_0
+  Verse.AI.Toils_General+<>c__DisplayClass0_0
+  Verse.AI.Toils_General+<>c__DisplayClass10_0
+  Verse.AI.Toils_General+<>c__DisplayClass1_0
+  Verse.AI.Toils_General+<>c__DisplayClass2_0
+  Verse.AI.Toils_General+<>c__DisplayClass3_0
+  Verse.AI.Toils_General+<>c__DisplayClass4_0
+  Verse.AI.Toils_General+<>c__DisplayClass5_0
+  Verse.AI.Toils_General+<>c__DisplayClass8_0
+  Verse.AI.Toils_Interact+<>c__DisplayClass0_0
+  Verse.AI.Toils_JobTransforms+<>c__DisplayClass0_0
+  Verse.AI.Toils_JobTransforms+<>c__DisplayClass1_0
+  Verse.AI.Toils_JobTransforms+<>c__DisplayClass2_0
+  Verse.AI.Toils_JobTransforms+<>c__DisplayClass2_1
+  Verse.AI.Toils_JobTransforms+<>c__DisplayClass4_0
+  Verse.AI.Toils_JobTransforms+<>c__DisplayClass5_0
+  Verse.AI.Toils_JobTransforms+<>c__DisplayClass6_0
+  Verse.AI.Toils_JobTransforms+<IngredientPlaceCellsInOrder>d__4
+  Verse.AI.Toils_Jump+<>c__DisplayClass0_0
+  Verse.AI.Toils_Jump+<>c__DisplayClass1_0
+  Verse.AI.Toils_Jump+<>c__DisplayClass2_0
+  Verse.AI.Toils_Jump+<>c__DisplayClass3_0
+  Verse.AI.Toils_Jump+<>c__DisplayClass4_0
+  Verse.AI.Toils_Jump+<>c__DisplayClass5_0
+  Verse.AI.Toils_Jump+<>c__DisplayClass6_0
+  Verse.AI.Toils_Jump+<>c__DisplayClass7_0
+  Verse.AI.Toils_Goto+<>c__DisplayClass1_0
+  Verse.AI.Toils_Goto+<>c__DisplayClass2_0
+  Verse.AI.Toils_Goto+<>c__DisplayClass3_0
+  Verse.AI.Toils_Goto+<>c__DisplayClass4_0
+  Verse.AI.Toils_Goto+<>c__DisplayClass5_0
+  Verse.AI.Toils_Goto+<>c__DisplayClass6_0
+  Verse.AI.Toils_Reserve+<>c__DisplayClass0_0
+  Verse.AI.Toils_Reserve+<>c__DisplayClass1_0
+  Verse.AI.Toils_Reserve+<>c__DisplayClass2_0
+  Verse.AI.Toils_Reserve+<>c__DisplayClass3_0
+  Verse.AI.Toils_Reserve+<>c__DisplayClass4_0
+  Verse.AI.Toils_Reserve+<>c__DisplayClass5_0
+  Verse.AI.Toils_Reserve+<>c__DisplayClass6_0
+  Verse.AI.Toils_ReserveAttackTarget+<>c__DisplayClass0_0
+  Verse.AI.Toils_Rope+<>c
+  Verse.AI.Toils_Rope+<>c__DisplayClass1_0
+  Verse.AI.Toils_Rope+<>c__DisplayClass2_0
+  Verse.AI.Toils_Rope+<>c__DisplayClass3_0
+  Verse.AI.Toils_StyleChange+<>c__DisplayClass1_0
+  Verse.AI.Toils_StyleChange+<>c__DisplayClass3_0
+  Verse.AI.Toils_StyleChange+<>c__DisplayClass4_0`1
+  Verse.AI.Group.PsychicRitualToil_Chronophagy+<>c
+  Verse.AI.Group.PsychicRitualToil_Chronophagy+<>c__DisplayClass6_0
+  Verse.AI.Group.PsychicRitualToil_Chronophagy+<>c__DisplayClass7_0
+  Verse.AI.Group.PsychicRitualToil_GatherForInvocation+<>c
+  Verse.AI.Group.PsychicRitualToil_GatherForInvocation+<InvokerGatherPhaseToils>d__11
+  Verse.AI.Group.PsychicRitualToil_InvokeHorax+<GetBuildingGizmos>d__42
+  Verse.AI.Group.PsychicRitualToil_InvokeHorax+<GetPawnGizmos>d__43
+  Verse.AI.Group.PsychicRitualToil_Multiplex+<>c__DisplayClass17_0
+  Verse.AI.Group.PsychicRitualToil_Philophagy+<>c__DisplayClass7_0
+  Verse.AI.Group.PsychicRitualToil_Psychophagy+<>c__DisplayClass7_0
+  Verse.AI.Group.PsychicRitualToil_SkipAbduction+<>c
+  Verse.AI.Group.PsychicRitualToil_SkipAbductionPlayer+<>c
+  Verse.AI.Group.PsychicRitualToil_SkipAbductionPlayer+<>c__DisplayClass6_0
+  Verse.AI.Group.PsychicRitualToil_SummonFleshbeastsCultist+<>c__DisplayClass8_0
+  Verse.AI.Group.PsychicRitualToil_SummonFleshbeastsPlayer+<>c
+  Verse.AI.Group.PsychicRitualToil_SummonFleshbeastsPlayer+<>c__DisplayClass10_0
+  Verse.AI.Group.PsychicRitualToil_VoidProvocation+<>c
+  RimWorld.JobDriver_GatherAnimalBodyResources+<MakeNewToils>d__7
+  RimWorld.JobDriver_InteractAnimal+<FeedToils>d__19
+  RimWorld.JobDriver_InteractAnimal+<MakeNewToils>d__17
+  RimWorld.JobDriver_ReleaseAnimalToWild+<MakeNewToils>d__6
+  RimWorld.JobDriver_RopeToDestination+<MakeNewToils>d__10
+  RimWorld.JobDriver_Slaughter+<MakeNewToils>d__4
+  RimWorld.JobDriver_Tame+<MakeNewToils>d__3
+  RimWorld.JobDriver_Train+<MakeNewToils>d__2
+  RimWorld.JobDriver_Unrope+<MakeNewToils>d__2
+  RimWorld.JobDriver_LayEgg+<MakeNewToils>d__5
+  RimWorld.JobDriver_Mate+<MakeNewToils>d__6
+  RimWorld.JobDriver_Nuzzle+<MakeNewToils>d__1
+  RimWorld.JobDriver_PredatorHunt+<MakeNewToils>d__13
+  RimWorld.JobDriver_GiveToPackAnimal+<MakeNewToils>d__7
+  RimWorld.JobDriver_PrepareCaravan_GatherItems+<MakeNewToilsCarry>d__17
+  RimWorld.JobDriver_PrepareCaravan_GatherItems+<MakeNewToilsHaulInInventory>d__18
+  RimWorld.JobDriver_BottleFeedBaby+<MakeNewToils>d__12
+  RimWorld.JobDriver_BringBabyToSafety+<MakeNewToils>d__5
+  RimWorld.JobDriver_FeedBaby+<MakeNewToils>d__13
+  RimWorld.JobDriver_FertilizeOvum+<MakeNewToils>d__5
+  RimWorld.JobDriver_AffectFloor+<MakeNewToils>d__9
+  RimWorld.JobDriver_AffectRoof+<MakeNewToils>d__12
+  RimWorld.JobDriver_BuildRoof+<MakeNewToils>d__2
+  RimWorld.JobDriver_ConstructFinishFrame+<MakeNewToils>d__8
+  RimWorld.JobDriver_Deconstruct+<MakeNewToils>d__8
+  RimWorld.JobDriver_FixBrokenDownBuilding+<MakeNewToils>d__8
+  RimWorld.JobDriver_PlaceNoCostFrame+<MakeNewToils>d__1
+  RimWorld.JobDriver_RemoveBuilding+<MakeNewToils>d__14
+  RimWorld.JobDriver_RemoveRoof+<MakeNewToils>d__2
+  RimWorld.JobDriver_Repair+<MakeNewToils>d__8
+  RimWorld.JobDriver_Replant+<MakeNewToils>d__6
+  RimWorld.JobDriver_SmoothWall+<MakeNewToils>d__6
+  RimWorld.Toils_Construct+<>c__DisplayClass0_0
+  RimWorld.Toils_Construct+<>c__DisplayClass1_0
+  RimWorld.JobDriver_GotoPatrolDest+<MakeNewToils>d__5
+  RimWorld.JobDriver_SelfDetonate+<MakeNewToils>d__1
+  RimWorld.JobDriver_BeatFire+<MakeNewToils>d__3
+  RimWorld.JobDriver_ExtinguishFiresNearby+<MakeNewToils>d__7
+  RimWorld.JobDriver_ExtinguishSelf+<MakeNewToils>d__4
+  RimWorld.JobDriver_AcceptRole+<MakeNewToils>d__9
+  RimWorld.JobDriver_Blind+<MakeNewToils>d__6
+  RimWorld.JobDriver_Dance+<MakeNewToils>d__8
+  RimWorld.JobDriver_DeliverPawnToAltar+<MakeNewToils>d__8
+  RimWorld.JobDriver_DeliverPawnToCell+<MakeNewToils>d__5
+  RimWorld.JobDriver_EatAtCannibalPlatter+<MakeNewToils>d__8
+  RimWorld.JobDriver_GiveSpeech+<MakeNewToils>d__11
+  RimWorld.JobDriver_GotoAndStandSociallyActive+<MakeNewToils>d__1
+  RimWorld.JobDriver_HateChant+<MakeNewToils>d__1
+  RimWorld.JobDriver_MarryAdjacentPawn+<MakeNewToils>d__8
+  RimWorld.JobDriver_Sacrifice+<MakeNewToils>d__5
+  RimWorld.JobDriver_Scarify+<MakeNewToils>d__9
+  RimWorld.JobDriver_Spectate+<MakeNewToils>d__4
+  RimWorld.JobDriver_StandAndBeSociallyActive+<MakeNewToils>d__2
+  RimWorld.JobDriver_TendEntity+<MakeNewToils>d__15
+  RimWorld.JobDriver_TendPatient+<MakeNewToils>d__19
+  RimWorld.Toils_Tend+<>c__DisplayClass1_0
+  RimWorld.Toils_Tend+<>c__DisplayClass2_0
+  RimWorld.Toils_Tend+<>c__DisplayClass3_0
+  RimWorld.JobDriver_BuildCubeSculpture+<MakeNewToils>d__7
+  RimWorld.JobDriver_BuildSnowman+<MakeNewToils>d__3
+  RimWorld.JobDriver_DevourerDigest+<MakeNewToils>d__5
+  RimWorld.JobDriver_GoForWalk+<MakeNewToils>d__1
+  RimWorld.JobDriver_GoSwimming+<MakeNewToils>d__2
+  RimWorld.JobDriver_PlayBilliards+<MakeNewToils>d__2
+  RimWorld.JobDriver_PlayGoldenCube+<MakeNewToils>d__13
+  RimWorld.JobDriver_RelaxAlone+<MakeNewToils>d__8
+  RimWorld.JobDriver_SitFacingBuilding+<MakeNewToils>d__5
+  RimWorld.JobDriver_Skygaze+<MakeNewToils>d__1
+  RimWorld.JobDriver_SocialRelax+<MakeNewToils>d__12
+  RimWorld.JobDriver_VisitJoyThing+<MakeNewToils>d__2
+  RimWorld.JobDriver_VisitSickPawn+<MakeNewToils>d__7
+  RimWorld.JobDriver_WatchBuilding+<MakeNewToils>d__2
+  RimWorld.JobDriver_Floordrawing+<MakeNewToils>d__2
+  RimWorld.JobDriver_Lessongiving+<MakeNewToils>d__9
+  RimWorld.JobDriver_Lessontaking+<MakeNewToils>d__8
+  RimWorld.JobDriver_NatureRunning+<MakeNewToils>d__3
+  RimWorld.JobDriver_Radiotalking+<MakeNewToils>d__3
+  RimWorld.JobDriver_Skydreaming+<MakeNewToils>d__1
+  RimWorld.JobDriver_Workwatching+<MakeNewToils>d__8
+  RimWorld.JobDriver_AbsorbXenogerm+<MakeNewToils>d__4
+  RimWorld.JobDriver_GetReimplanted+<MakeNewToils>d__3
+  RimWorld.JobDriver_ActivateMonolith+<MakeNewToils>d__6
+  RimWorld.JobDriver_ActivityGoPassive+<MakeNewToils>d__1
+  RimWorld.JobDriver_ActivitySuppression+<MakeNewToils>d__8
+  RimWorld.JobDriver_AnalyzeItem+<GetStudyToils>d__2
+  RimWorld.JobDriver_ApplyTechprint+<MakeNewToils>d__11
+  RimWorld.JobDriver_BestowingCeremony+<MakeNewToils>d__15
+  RimWorld.JobDriver_CarryDownedPawn+<MakeNewToils>d__4
+  RimWorld.JobDriver_CarryGenepackToContainer+<MakeNewToils>d__10
+  RimWorld.JobDriver_CarryToBiosculpterPod+<MakeNewToils>d__10
+  RimWorld.JobDriver_CarryToBuilding+<MakeNewToils>d__7
+  RimWorld.JobDriver_CarryToEntityHolder+<ChainTakeeToPlatformToils>d__9
+  RimWorld.JobDriver_CarryToEntityHolder+<MakeNewToils>d__8
+  RimWorld.JobDriver_TransferBetweenEntityHolders+<MakeNewToils>d__10
+  RimWorld.JobDriver_CarryToEntityHolderAlreadyHolding+<MakeNewToils>d__7
+  RimWorld.JobDriver_CarryToCryptosleepCasket+<MakeNewToils>d__7
+  RimWorld.JobDriver_ChimeraSwitchToAttackMode+<MakeNewToils>d__1
+  RimWorld.JobDriver_CleanFilth+<MakeNewToils>d__7
+  RimWorld.JobDriver_ClearPollution+<MakeNewToils>d__8
+  RimWorld.JobDriver_ClearSnowAndSand+<MakeNewToils>d__5
+  RimWorld.JobDriver_ControlMech+<MakeNewToils>d__6
+  RimWorld.JobDriver_CreateXenogerm+<MakeNewToils>d__4
+  RimWorld.JobDriver_Deathrest+<MakeNewToils>d__9
+  RimWorld.JobDriver_DisassembleMech+<MakeNewToils>d__5
+  RimWorld.JobDriver_DismissTrader+<MakeNewToils>d__3
+  RimWorld.JobDriver_DyeHair+<MakeNewToils>d__4
+  RimWorld.JobDriver_EjectFuel+<MakeNewToils>d__7
+  RimWorld.JobDriver_EmptyThingContainer+<MakeNewToils>d__7
+  RimWorld.JobDriver_EnterBiosculpterPod+<CollectIngredientsToilsHelper>d__9
+  RimWorld.JobDriver_EnterBiosculpterPod+<MakeNewToils>d__7
+  RimWorld.JobDriver_EnterBuilding+<MakeNewToils>d__4
+  RimWorld.JobDriver_EnterCryptosleepCasket+<MakeNewToils>d__1
+  RimWorld.JobDriver_EnterPortal+<MakeNewToils>d__5
+  RimWorld.JobDriver_EnterTransporter+<MakeNewToils>d__6
+  RimWorld.JobDriver_ExecuteEntity+<MakeNewToils>d__7
+  RimWorld.JobDriver_ExecuteGuiltyColonist+<MakeNewToils>d__3
+  RimWorld.JobDriver_ExtractBioferrite+<MakeNewToils>d__9
+  RimWorld.JobDriver_ExtractSkull+<MakeNewToils>d__5
+  RimWorld.JobDriver_FillFermentingBarrel+<MakeNewToils>d__8
+  RimWorld.JobDriver_Fish+<MakeNewToils>d__3
+  RimWorld.JobDriver_FishAnimal+<MakeNewToils>d__3
+  RimWorld.JobDriver_Flee+<MakeNewToils>d__3
+  RimWorld.JobDriver_FleeAndCower+<MakeNewToils>d__3
+  RimWorld.JobDriver_FleeAndCowerShort+<MakeNewToils>d__2
+  RimWorld.JobDriver_Flick+<MakeNewToils>d__1
+  RimWorld.JobDriver_Forage+<MakeNewToils>d__4
+  RimWorld.JobDriver_GiveToPawn+<MakeNewToils>d__9
+  RimWorld.JobDriver_Hack+<MakeNewToils>d__5
+  RimWorld.JobDriver_HaulCorpseToPublicPlace+<MakeNewToils>d__13
+  RimWorld.JobDriver_Hunt+<MakeNewToils>d__13
+  RimWorld.JobDriver_Ignite+<MakeNewToils>d__4
+  RimWorld.JobDriver_InspectGravEngine+<MakeNewToils>d__2
+  RimWorld.JobDriver_InstallImplant+<MakeNewToils>d__8
+  RimWorld.JobDriver_InstallRelic+<MakeNewToils>d__5
+  RimWorld.JobDriver_Insult+<MakeNewToils>d__4
+  RimWorld.JobDriver_InteractThing+<MakeNewToils>d__12
+  RimWorld.JobDriver_InvestigateMonolith+<MakeNewToils>d__4
+  RimWorld.JobDriver_Kidnap+<MakeNewToils>d__3
+  RimWorld.JobDriver_LayDown+<MakeNewToils>d__16
+  RimWorld.JobDriver_SelfShutdown+<MakeNewToils>d__2
+  RimWorld.JobDriver_ActivityDormant+<MakeNewToils>d__1
+  RimWorld.JobDriver_LinkPsylinkable+<MakeNewToils>d__11
+  RimWorld.JobDriver_Lovin+<MakeNewToils>d__12
+  RimWorld.JobDriver_Maintain+<MakeNewToils>d__2
+  RimWorld.JobDriver_ManTurret+<MakeNewToils>d__13
+  RimWorld.JobDriver_Mine+<MakeNewToils>d__9
+  RimWorld.JobDriver_NociosphereDepart+<MakeNewToils>d__2
+  RimWorld.JobDriver_OfferHelp+<MakeNewToils>d__4
+  RimWorld.JobDriver_Open+<MakeNewToils>d__5
+  RimWorld.JobDriver_OperateDeepDrill+<MakeNewToils>d__1
+  RimWorld.JobDriver_OperateScanner+<MakeNewToils>d__1
+  RimWorld.JobDriver_PaintBuilding+<CollectDyeToils>d__8
+  RimWorld.JobDriver_PaintBuilding+<MakeNewToils>d__7
+  RimWorld.JobDriver_RemovePaintBuilding+<MakeNewToils>d__6
+  RimWorld.JobDriver_PaintFloor+<CollectDyeToils>d__8
+  RimWorld.JobDriver_PaintFloor+<MakeNewToils>d__7
+  RimWorld.JobDriver_RemovePaintFloor+<MakeNewToils>d__6
+  RimWorld.JobDriver_PilotConsole+<MakeNewToils>d__2
+  RimWorld.JobDriver_PutApparelOnOutfitStand+<MakeNewToils>d__13
+  RimWorld.JobDriver_Reading+<MakeNewToils>d__14
+  RimWorld.JobDriver_RecolorApparel+<MakeNewToils>d__5
+  RimWorld.JobDriver_Refuel+<MakeNewToils>d__10
+  RimWorld.JobDriver_RefuelAtomic+<MakeNewToils>d__11
+  RimWorld.JobDriver_ReleaseEntity+<MakeNewToils>d__10
+  RimWorld.JobDriver_ReleaseMechs+<MakeNewToils>d__1
+  RimWorld.JobDriver_Reload+<MakeNewToils>d__5
+  RimWorld.JobDriver_RemoveMechlink+<MakeNewToils>d__6
+  RimWorld.JobDriver_RepairMech+<MakeNewToils>d__10
+  RimWorld.JobDriver_RepairMechRemote+<MakeNewToils>d__3
+  RimWorld.JobDriver_Research+<MakeNewToils>d__6
+  RimWorld.JobDriver_Resurrect+<MakeNewToils>d__9
+  RimWorld.JobDriver_ResurrectMech+<MakeNewToils>d__7
+  RimWorld.JobDriver_RevenantAttack+<MakeNewToils>d__15
+  RimWorld.JobDriver_RevenantEscape+<MakeNewToils>d__7
+  RimWorld.JobDriver_RevenantSleep+<MakeNewToils>d__3
+  RimWorld.JobDriver_RevenantWander+<MakeNewToils>d__5
+  RimWorld.JobDriver_Romance+<MakeNewToils>d__4
+  RimWorld.JobDriver_Seal+<MakeNewToils>d__2
+  RimWorld.JobDriver_ShieldMech+<MakeNewToils>d__5
+  RimWorld.JobDriver_SingleInteraction+<MakeNewToils>d__4
+  RimWorld.JobDriver_Strip+<MakeNewToils>d__2
+  RimWorld.JobDriver_StudyInteract+<MakeNewToils>d__13
+  RimWorld.JobDriver_StudyItem+<GetStudyToils>d__10
+  RimWorld.JobDriver_StudyItem+<MakeNewToils>d__9
+  RimWorld.JobDriver_TakeAndEnterPortal+<MakeNewToils>d__6
+  RimWorld.JobDriver_TakeAndExitMap+<MakeNewToils>d__5
+  RimWorld.JobDriver_TakeBeerOutOfFermentingBarrel+<MakeNewToils>d__9
+  RimWorld.JobDriver_TakeBioferriteOutOfHarvester+<MakeNewToils>d__9
+  RimWorld.JobDriver_TakeCountToInventory+<MakeNewToils>d__1
+  RimWorld.JobDriver_TakeFromOtherInventory+<MakeNewToils>d__7
+  RimWorld.JobDriver_TakeToBed+<MakeNewToils>d__10
+  RimWorld.JobDriver_TalkCreepJoiner+<MakeNewToils>d__2
+  RimWorld.JobDriver_TradeWithPawn+<MakeNewToils>d__3
+  RimWorld.JobDriver_UnloadInventory+<MakeNewToils>d__7
+  RimWorld.JobDriver_UnloadYourInventory+<MakeNewToils>d__6
+  RimWorld.JobDriver_UnnaturalCorpseAttack+<MakeNewToils>d__4
+  RimWorld.JobDriver_UnnaturalCorpseSkip+<MakeNewToils>d__2
+  RimWorld.JobDriver_UseCommsConsole+<MakeNewToils>d__1
+  RimWorld.JobDriver_UseItem+<MakeNewToils>d__5
+  RimWorld.JobDriver_UseItemResearchBench+<MakeNewToils>d__3
+  RimWorld.JobDriver_Vomit+<MakeNewToils>d__4
+  RimWorld.Toils_Misc+<>c__DisplayClass0_0
+  RimWorld.Toils_Misc+<>c__DisplayClass1_0
+  RimWorld.Toils_Misc+<>c__DisplayClass2_0
+  RimWorld.Toils_Misc+<>c__DisplayClass3_0
+  RimWorld.Toils_Misc+<>c__DisplayClass4_0
+  RimWorld.Toils_Refuel+<>c
+  RimWorld.Toils_Refuel+<>c__DisplayClass0_0
+  RimWorld.JobDriver_ExtractTree+<MakeNewToils>d__13
+  RimWorld.JobDriver_PlantSeed+<MakeNewToils>d__9
+  RimWorld.JobDriver_PlantSow+<MakeNewToils>d__5
+  RimWorld.JobDriver_PlantWork+<MakeNewToils>d__11
+  RimWorld.JobDriver_PruneGauranlenTre+<MakeNewToils>d__9
+  RimWorld.JobDriver_ChatWithPrisoner+<MakeNewToils>d__4
+  RimWorld.JobDriver_ConvertPrisoner+<MakeNewToils>d__4
+  RimWorld.JobDriver_EnslaveOrReduceWillPrisoner+<MakeNewToils>d__3
+  RimWorld.JobDriver_Execute+<MakeNewToils>d__3
+  RimWorld.JobDriver_InterrogatePrisoner+<MakeNewToils>d__4
+  RimWorld.Toils_Interpersonal+<>c
+  RimWorld.Toils_Interpersonal+<>c__DisplayClass0_0
+  RimWorld.Toils_Interpersonal+<>c__DisplayClass10_0
+  RimWorld.Toils_Interpersonal+<>c__DisplayClass11_0
+  RimWorld.Toils_Interpersonal+<>c__DisplayClass12_0
+  RimWorld.Toils_Interpersonal+<>c__DisplayClass13_0
+  RimWorld.Toils_Interpersonal+<>c__DisplayClass14_0
+  RimWorld.Toils_Interpersonal+<>c__DisplayClass1_0
+  RimWorld.Toils_Interpersonal+<>c__DisplayClass2_0
+  RimWorld.Toils_Interpersonal+<>c__DisplayClass3_0
+  RimWorld.Toils_Interpersonal+<>c__DisplayClass4_0
+  RimWorld.Toils_Interpersonal+<>c__DisplayClass5_0
+  RimWorld.Toils_Interpersonal+<>c__DisplayClass6_0
+  RimWorld.Toils_Interpersonal+<>c__DisplayClass7_0
+  RimWorld.Toils_Interpersonal+<>c__DisplayClass8_0
+  RimWorld.Toils_Interpersonal+<>c__DisplayClass9_0
+  RimWorld.JobDriver_Feed+<MakeNewToils>d__8
+  RimWorld.JobDriver_FoodDeliver+<MakeNewToils>d__10
+  RimWorld.JobDriver_FoodFeedPatient+<MakeNewToils>d__15
+  RimWorld.JobDriver_GetNeuralSupercharge+<MakeNewToils>d__2
+  RimWorld.JobDriver_Ingest+<MakeNewToils>d__19
+  RimWorld.JobDriver_Ingest+<PrepareToIngestToils_Dispenser>d__21
+  RimWorld.JobDriver_Ingest+<PrepareToIngestToils_NonToolUser>d__23
+  RimWorld.JobDriver_Ingest+<PrepareToIngestToils_ToolUser>d__22
+  RimWorld.JobDriver_MechCharge+<MakeNewToils>d__4
+  RimWorld.JobDriver_Meditate+<MakeNewToils>d__16
+  RimWorld.JobDriver_Reign+<MakeNewToils>d__7
+  RimWorld.Toils_Bed+<>c__DisplayClass0_0
+  RimWorld.Toils_Bed+<>c__DisplayClass1_0
+  RimWorld.Toils_Bed+<>c__DisplayClass5_0
+  RimWorld.Toils_Bed+<>c__DisplayClass6_0
+  RimWorld.Toils_Bed+<>c__DisplayClass7_0
+  RimWorld.Toils_Ingest+<>c__DisplayClass10_0
+  RimWorld.Toils_Ingest+<>c__DisplayClass11_0
+  RimWorld.Toils_Ingest+<>c__DisplayClass12_0
+  RimWorld.Toils_Ingest+<>c__DisplayClass13_0
+  RimWorld.Toils_Ingest+<>c__DisplayClass14_0
+  RimWorld.Toils_Ingest+<>c__DisplayClass1_0
+  RimWorld.Toils_Ingest+<>c__DisplayClass2_0
+  RimWorld.Toils_Ingest+<>c__DisplayClass3_0
+  RimWorld.Toils_Ingest+<>c__DisplayClass4_0
+  RimWorld.Toils_Ingest+<>c__DisplayClass4_1
+  RimWorld.Toils_Ingest+<>c__DisplayClass6_0
+  RimWorld.Toils_LayDown+<>c__DisplayClass11_0
+  RimWorld.Toils_LayDown+<>c__DisplayClass12_0
+  RimWorld.Toils_LayDown+<>c__DisplayClass6_0
+  RimWorld.JobDriver_ExecuteSlave+<MakeNewToils>d__3
+  RimWorld.JobDriver_SuppressSlave+<MakeNewToils>d__4
+  RimWorld.JobDriver_DropEquipment+<MakeNewToils>d__4
+  RimWorld.JobDriver_ForceTargetWear+<MakeNewToils>d__16
+  RimWorld.JobDriver_RemoveApparel+<MakeNewToils>d__7
+  RimWorld.JobDriver_UseOutfitStand+<MakeNewToils>d__8
+  RimWorld.JobDriver_Wear+<MakeNewToils>d__13
+  RimWorld.JobDriver_PrisonerBloodfeed+<MakeNewToils>d__7
+  RimWorld.JobDriver_CreateAndEnterDryadHolder+<MakeNewToils>d__4
+  RimWorld.JobDriver_MergeIntoGaumakerPod+<MakeNewToils>d__6
+  RimWorld.JobDriver_ReturnToGauranlenTree+<MakeNewToils>d__4
+  RimWorld.JobDriver_ChangeTreeMode+<MakeNewToils>d__2
+  RimWorld.LordToil_BestowingCeremony_Wait+<>c
+  RimWorld.LordToil_BestowingCeremony_Wait+<>c__DisplayClass7_0
+  RimWorld.LordToil_BestowingCeremony_Wait+<ExtraFloatMenuOptions>d__7
+  RimWorld.LordToil_BestowingCeremony_Wait+<GetPawnGizmos>d__6
+  RimWorld.LordToil_PrepareCaravan_Leave+<>c
+  RimWorld.LordToil_AssaultThings+<>c
+  RimWorld.LordToil_ExitMapAndEscortCarriers+<>c__DisplayClass8_0
+  RimWorld.LordToil_HiveRelated+<>c
+  RimWorld.LordToil_HiveRelated+<>c__DisplayClass5_0
+  RimWorld.LordToil_HiveRelatedData+<>c
+  RimWorld.LordToil_PsychicRitualParticipantGoto+<>c
+  RimWorld.LordToil_ReimplantXenogerm+<>c
+  RimWorld.LordToil_ReimplantXenogerm+<>c__DisplayClass11_0
+  RimWorld.LordToil_ReimplantXenogerm+<ExtraFloatMenuOptions>d__11
+  RimWorld.LordToil_ShamblerAssault+<>c
+  RimWorld.LordToil_Siege+<>c
+  RimWorld.LordToil_Siege+<>c__DisplayClass21_0
+  RimWorld.LordToil_Siege+<>c__DisplayClass22_0
+  RimWorld.LordToil_Siege+<get_Frames>d__17
+  RimWorld.LordToilData_Siege+<>c
+  RimWorld.LordToil_WaitForItems+<ExtraFloatMenuOptions>d__12
+  RimWorld.LordToil_TravelAndWaitForItems+<ExtraFloatMenuOptions>d__9
+  RimWorld.LordToil_PartyDanceDrums+<>c__DisplayClass4_0
+  RimWorld.LordToil_PartyDanceDrums+<>c__DisplayClass5_0
+  RimWorld.LordToilData_Gathering+<>c
+  RimWorld.LordToil_MarriageCeremony+<>c
+=== Harmony 程序集 ===
+hTypes=2326
+  HarmonyLib.Harmony base=Object
+      M String get_Id()
+      M Void PatchAll()
+      M PatchProcessor CreateProcessor(MethodBase original)
+      M PatchClassProcessor CreateClassProcessor(Type type)
+      M ReversePatcher CreateReversePatcher(MethodBase original, HarmonyMethod standin)
+      M Void PatchAll(Assembly assembly)
+      M Void PatchAllUncategorized()
+      M Void PatchAllUncategorized(Assembly assembly)
+      M Void PatchCategory(String category)
+      M Void PatchCategory(Assembly assembly, String category)
+      M MethodInfo Patch(MethodBase original, HarmonyMethod prefix, HarmonyMethod postfix, HarmonyMethod transpiler, HarmonyMethod finalizer)
+      M MethodInfo ReversePatch(MethodBase original, HarmonyMethod standin, MethodInfo transpiler)
+      M Void UnpatchAll(String harmonyID)
+      M Void Unpatch(MethodBase original, HarmonyPatchType type, String harmonyID)
+      M Void Unpatch(MethodBase original, MethodInfo patch)
+      M Void UnpatchCategory(String category)
+      M Void UnpatchCategory(Assembly assembly, String category)
+      M Boolean HasAnyPatches(String harmonyID)
+      M Patches GetPatchInfo(MethodBase method)
+      M IEnumerable`1 GetPatchedMethods()
+      M IEnumerable`1 GetAllPatchedMethods()
+      M MethodBase GetOriginalMethod(MethodInfo replacement)
+      M MethodBase GetMethodFromStackframe(StackFrame frame)
+      M MethodBase GetOriginalMethodFromStackframe(StackFrame frame)
+      M Dictionary`2 VersionInfo(Version& currentVersion)
+      M Void SetSwitch(String name, Object value)
+      M Void ClearSwitch(String name)
+      M Boolean TryGetSwitch(String name, Object& value)
+      M Boolean TryIsSwitchEnabled(String name, Boolean& isEnabled)
+  HarmonyLib.HarmonyPatch base=HarmonyAttribute
+  HarmonyLib.HarmonyPrefix base=Attribute
+  HarmonyLib.HarmonyPostfix base=Attribute
+  HarmonyLib.HarmonyPatchAll base=HarmonyAttribute
+=== DefDatabase GetNamed ===
+  type: Verse.DefDatabase`1
+      M T GetNamed(String defName, Boolean errorOnFail)
+      M T GetNamedSilentFail(String defName)
+  type: Verse.DefDatabase`1+<>c
+  type: Verse.DefDatabase`1+<>c__DisplayClass15_0
+=== DefOf 相关类型 ===
+  RimWorld.DefOf (base=Attribute)
+  RimWorld.DefOfHelper (base=Object)
+=== Toils_Goto 第三参 IsOptional ===
+  GotoThing(TargetIndex ind, PathEndMode peMode, Boolean canGotoSpawnedParent=opt)
+  GotoThing(TargetIndex ind, IntVec3 exactCell)
+=== Hediff 字段 ===
+  F HediffDef def
+  F Int32 ageTicks
+  F Int32 tickAdded
+  F BodyPartRecord part
+  F String sourceLabel
+  F ThingDef sourceDef
+  F BodyPartGroupDef sourceBodyPartGroup
+  F String sourceToolLabel
+  F HediffDef sourceHediffDef
+  F Int32 loadID
+  F Single severityInt
+  F Boolean recordedTale
+  F Boolean causesNoPain
+  F Boolean visible
+  F WeakReference`1 combatLogEntry
+  F String combatLogText
+  F Int32 temp_partIndexToSetLater
+  F Boolean canBeThreateningToPart
+  F List`1 abilities
+  F Pawn pawn
+  F StringBuilder tipSb

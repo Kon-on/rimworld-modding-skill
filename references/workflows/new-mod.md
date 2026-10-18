@@ -33,7 +33,7 @@ claude mcp add rimworld-source --transport http https://mcp.rimsage.com/mcp
 | packageId | `test.<功能名>` | 如 `test.rainbowcatsword`——标记为测试版 |
 | 前缀 | 2-4 字符 | **用户自行选择**（如 `TST_`） |
 | 作者 | **用户自行填写** | |
-| 目标版本 | 1.6 | |
+| 目标版本 | 1.7 | `<supportedVersions><li>1.7</li></supportedVersions>`；引擎/框架细节见 `references/01-environment.md` |
 | namespace | `<前缀>.<Mod名>` | 用户根据前缀自行确定 |
 
 ### 第 2 步：验证原版结构（铁律）
@@ -60,8 +60,8 @@ claude mcp add rimworld-source --transport http https://mcp.rimsage.com/mcp
 
 ### 第 4 步：生成 Def 和贴图
 
-- 武器 → `templates/weapon-melee.xml` 或 `weapon-ranged.xml`
-- 建筑 → `templates/building.xml`
+- 武器 → `assets/templates/weapon-melee.xml` 或 `weapon-ranged.xml`
+- 建筑 → `assets/templates/building.xml`
 - 服装 → 参考原版 `Apparel_Various.xml` 结构
 - 植物 → 参考原版 `Plants_Cultivated.xml` 结构
 
@@ -98,7 +98,7 @@ claude mcp add rimworld-source --transport http https://mcp.rimsage.com/mcp
 
 ## 阶段三：正规化
 
-开发者确认无 bug 后，执行 `workflows/formalize-mod.md`：
+开发者确认无 bug 后，执行 `references/workflows/formalize-mod.md`：
 
 1. 清理 packageId（去掉 `test.` 前缀）
 2. 补全 About.xml（正式名称、完整描述）

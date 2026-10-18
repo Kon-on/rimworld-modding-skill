@@ -1,6 +1,11 @@
 # 08 — 调试与排错
 
-> **适用版本**: RimWorld 1.6 | **最后更新**: 2026-05-31
+> **适用版本**: RimWorld 1.7（实测 1.7.4981 rev136） | **最后更新**: 2026-10-18
+>
+> **1.7 排错先记住三件事**：
+> 1. 程序集（`Assembly-CSharp.dll`、`RimWorld.dll`、`UnityStubs.dll`）在**游戏安装根目录**，不在 `RimWorldWin64_Data/Managed/`——栈信息里看到这些 DLL 时按根目录去找。
+> 2. mod 的贴图仍是散装 `Textures/**`；原版贴图在 `Assets.zip` 里（紫块问题见 `references/07-assets.md`）。
+> 3. Harmony 补丁相关的红字，先确认玩家启用了创意工坊的 **Harmony mod**（1.7 游戏本体不自带 0Harmony）——见 `references/06-harmony.md`。
 
 
 ## 目录

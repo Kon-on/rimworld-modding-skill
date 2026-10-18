@@ -1,6 +1,10 @@
 # 05 — C# Mod 开发基础
 
-> **适用版本**: RimWorld 1.6 | **最后更新**: 2026-05-31
+> **适用版本**: RimWorld 1.7（实测 1.7.4981 rev136；目标框架 net10.0） | **最后更新**: 2026-10-18
+>
+> 1.7 的 C# 写法与 1.6 基本一致，但**环境**变了：不再用 .NET Framework 4.7.2 / Unity 引用，
+> 程序集在游戏安装根目录，需要 .NET SDK 10。编译细节见 `references/01-environment.md`；
+> Harmony 相关的 1.7 变化见 `references/06-harmony.md`。
 
 
 ## 目录
@@ -12,6 +16,7 @@
 - [ThingComp——给物品添加自定义组件](#thingcomp给物品添加自定义组件)
 - [GameComponent / MapComponent / WorldComponent](#gamecomponentmapcomponentworldcomponent)
 - [DefModExtension——自定义 Def 扩展字段](#defmodextension自定义def扩展字段)
+- [1.7 API 差异速查（实测）](#17-api-差异速查实测)
 - [编译与引用](#编译与引用)
 - [常见问题](#常见问题)
 
@@ -272,12 +277,38 @@ if (ext?.ignoresShield == true)
 }
 ```
 
+## 1.7 API 差异速查（实测）
+
+下面这些是**在 1.7.4981 rev136 上真机编译 + 元数据核对**得出的，1.6 时代的很多教程与示例在这里编不过或行为不对：
+
+| 你会写的（旧） | 1.7 正确写法 | 说明 |
+|---|---|---|
+| `dinfo.Amount = 5f;` | `dinfo.SetAmount(5f);` | `DamageInfo.Amount` / `armorPenetration` 在 1.7 是**只读属性**，赋值编不过 |
+| `Messages.Message("文本", someThing, MessageTypeDefOf.NeutralEvent);` | `Messages.Message("文本", new LookTargets(someThing), MessageTypeDefOf.NeutralEvent, false);` | 第二个参数是 `LookTargets`（也可传 `LookTargets.Invalid`），最后一个 `historical` 通常传 `false` |
+| `RimWorld.Command_Action` | `Verse.Command_Action` | 别在 `RimWorld` 命名空间里找 UI 类；Command_* 都在 `Verse` |
+| `RimWorld.MessageTypeDefOf` | `Verse.MessageTypeDefOf`（在 `Assembly-CSharp.dll` 里） | 反射/查找类型时只需引用 `Assembly-CSharp.dll`；找不到通常是找错了 DLL |
+| 把 Unity 类型当引用（`UnityEngine.dll`） | 用游戏根目录的 `UnityStubs.dll` | 1.7 没有 `UnityEngine.dll` / `RimWorldWin64_Data`；`UnityEngine.Vector3` 等类型由 `UnityStubs.dll` 提供 |
+| `Harmony` 2.x 的 `patchId` 字段 | Harmony 3.0：用唯一 Harmony 实例 ID + 改名 `category` | 详见 `references/06-harmony.md` |
+
+**查证方法（不装反编译器也能用）**：类型名/字段名大多是 UTF-8，个别日志串是 UTF-16，用 PowerShell 直接搜 DLL：
+
+```powershell
+# 找类型或字段名是否存在（UTF-8 元数据）
+Select-String -Path "E:\SteamLibrary\steamapps\common\RimWorld\Assembly-CSharp.dll" -Pattern "SetAmount" -Encoding utf8 -SimpleMatch
+# 找日志字符串（UTF-16）
+Select-String -Path "E:\SteamLibrary\steamapps\common\RimWorld\Assembly-CSharp.dll" -Pattern "Collection cannot init" -Encoding unicode -SimpleMatch
+```
+
+> 元数据里**能搜到 ≠ 会被使用**：还要回原版 XML 数一下实际出现次数（例如 `productHasIngredientStuff` 只在 DLL 里存在，原版 XML 0 处使用）。
+
+**ThingComp 的存读档**：覆写 `PostExposeData()`（不是 `ExposeData()`），并在方法内先 `base.PostExposeData();`——本页 ThingComp 示例即此写法，可直接对照。
+
 ## 编译与引用
 
-1. 创建 **Class Library (.NET Framework 4.7.2)** 项目
-2. 引用 DLL（见 `references/01-environment.md`）
-3. 编译输出 DLL → 复制到 `Assemblies/`
-4. 重启游戏加载
+1. 用 **.NET SDK 10** 建 Class Library 项目（`<TargetFramework>net10.0</TargetFramework>`；VS2022/Rider 需要单独勾选 .NET 10 SDK）
+2. 引用 `Assembly-CSharp.dll` + `RimWorld.dll` + `UnityStubs.dll`（都在**游戏安装根目录**；见 `references/01-environment.md`）
+3. 编译输出 DLL → 复制到 mod 的 `Assemblies/`（**只放你自己的 DLL**，不要把游戏 DLL / 0Harmony 复制进去）
+4. 重启游戏加载；补丁程序集建议独立成一个 DLL，挂掉时不会拖垮主 mod（见 `references/06-harmony.md`）
 
 ## 常见问题
 
@@ -288,4 +319,13 @@ if (ext?.ignoresShield == true)
 确认 `compClass` 指向正确的类，确认 XML 中 `Class=` 使用 `CompProperties_xxx` 类。
 
 ### Q: 编译报错找不到 Verse/RimWorld 类型？
-确认引用了正确的 `Assembly-CSharp.dll` 路径。
+确认引用了 `Assembly-CSharp.dll`（1.7 在**游戏安装根目录**，不是 `RimWorldWin64_Data/Managed/`）。
+
+### Q: 报 "RimWorld.Command_Action 不存在" / "MessageTypeDefOf 找不到"？
+UI 与消息类型在 `Verse` 命名空间：`Verse.Command_Action`、`Verse.MessageTypeDefOf`。见上面「1.7 API 差异速查」。
+
+### Q: 给 `DamageInfo.Amount` 赋值编不过？
+1.7 起它是只读属性，改用 `dinfo.SetAmount(value)`；`armorPenetration` 同理。
+
+### Q: `Messages.Message` 参数不对？
+第二个参数是 `LookTargets`：`new LookTargets(thing)`；不指向任何东西时用 `LookTargets.Invalid`。

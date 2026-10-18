@@ -1,6 +1,9 @@
 # 06 — Harmony 补丁
 
-> **适用版本**: RimWorld 1.6（Harmony 2.x） | **最后更新**: 2026-05-31
+> **适用版本**: RimWorld 1.7（实测 1.7.4981 rev136 + Harmony 3.0） | **最后更新**: 2026-10-18
+>
+> ⚠️ 1.7 有三件事和 1.6 教程不一样：**游戏不自带 0Harmony**、**Harmony 升到 3.0（没有 `patchId` 了）**、
+> **目标框架是 net10.0**。先看下面的「1.7 上的 Harmony」再抄代码。
 
 
 ## 目录
@@ -24,9 +27,65 @@ Harmony 是 RimWorld mod 社区的标准代码补丁库。它让你**在运行�
 - 完全替换某个方法的实现
 - 修改 AI 行为、战斗计算、生成逻辑等
 
+## 1.7 上的 Harmony（先看这个）
+
+| 事项 | 1.6 及更早 | **1.7 实测** |
+|---|---|---|
+| 0Harmony.dll 从哪来 | 玩家 mod 列表里的 Harmony mod | **一样**，但游戏本体不再自带：本机只有创意工坊 `...\workshop\content\294100\2009463077\1.7\Assemblies\0Harmony.dll`（约 2.5 MB） |
+| About.xml 依赖 | 常写 `<modDependencies>` 指向 Harmony | **必须写**，否则玩家漏装时你的补丁会静默失效 |
+| 编译期引用 | 引用 0Harmony.dll | 一样：**只作编译期引用，绝不复制进 `Assemblies/`**（游戏侧由 Harmony mod 提供） |
+| 补丁 ID | `Patch(..., id)` / `HarmonyMethod.id` | **Harmony 3.0 没有 `id` 字段了**。用唯一的 Harmony 实例 ID + 补丁类名，自己维护 `const string PatchId` 常量写日志 |
+| 目标框架漂移 | .NET Framework 4.7.2 | 游戏是 **net10.0**，0Harmony 的编译目标是 net8 —— 本机实测能编译能在启动时加载，**但运行时是否全场景正常未验证**（我们只在启动阶段验证了补丁登记成功） |
+
+### 推荐：bootstrap 模式（1.7 实测写法）
+
+1.6 教程爱用 `PatchAll()`，它省事但有一个致命缺点：**一个补丁目标找不到就会抛异常，整条初始化链断掉**。
+1.7 上更稳的做法是逐条 `AccessTools.Method` 取目标、取不到就 `Log.Error` 后继续：
+
+```csharp
+[StaticConstructorOnStartup]
+public static class MyMod_PatchBootstrap
+{
+    private const string HarmonyId = "<你的packageId>.patches";
+    private const string Tag = "[MyMod.Patches] ";
+
+    static MyMod_PatchBootstrap()
+    {
+        try { Apply(); }
+        catch (Exception e) { Log.Error(Tag + "补丁引导失败：" + e); }   // 只报错，不拖垮其他程序集
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]   // 隔离 HarmonyLib 类型：缺 0Harmony 时只红字，不丢整个 DLL
+    private static void Apply()
+    {
+        var harmony = new Harmony(HarmonyId);
+        int ok = 0, fail = 0;
+        Patch(harmony, AccessTools.Method(typeof(Projectile), "Impact",
+              new[] { typeof(Thing), typeof(bool) }), "MyMod.ProjectileImpact", ref ok, ref fail);
+        Log.Message($"{Tag}补丁引导结束：成功 {ok} / 失败 {fail} / Harmony 自报 {harmony.GetPatchedMethods().Count()}");
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static void Patch(Harmony h, MethodBase target, string patchId, ref int ok, ref int fail)
+    {
+        if (target == null) { Log.Error($"{Tag}找不到目标方法，跳过 {patchId}"); fail++; return; }
+        h.Patch(target, prefix: null, postfix: new HarmonyMethod(/* 你的 Postfix */));
+        Log.Message($"{Tag}已打补丁 {patchId} → {target.DeclaringType?.Name}.{target.Name}");
+        ok++;
+    }
+}
+```
+
+2. **补丁放独立程序集**：主逻辑一个 DLL（`MyMod.dll`），补丁一个 DLL（`MyMod.Patches.dll`）。
+   好处是玩家没装 Harmony 时只有补丁 DLL 报错，主 mod 的物品/Def 照常可用。
+   本仓库的 44 文件测试 mod 就是这么分的，可直接对照源码：
+   `examples/rimtest-mod/RimTestMod/Source/Patches/RimTestMod_PatchBootstrap.cs`、
+   `examples/rimtest-mod/RimTestMod/Source/build.ps1`（含 `0Harmony` 只引用不复制、产物目录禁止出现游戏 DLL 的校验）。
+
 ## 基础架构
 
 ### 入口类
+
 
 ```csharp
 using Verse;
@@ -56,6 +115,7 @@ namespace <你的前缀>.<你的Mod名>
 - `[StaticConstructorOnStartup]` 确保在游戏加载后、主菜单显示前执行
 - `"<你的packageId>"` 是 Harmony ID，**必须全局唯一，由用户自行填写**（与 About.xml 中的 packageId 保持一致）
 - `PatchAll()` 自动扫描当前程序集中所有带 `[HarmonyPatch]` 特性的类
+- ⚠️ 上面是最小示例。1.7 上更推荐下面的 bootstrap 模式：目标方法找不到时只报红字，不会因一个补丁失败而中断整个程序集
 
 ## 三种补丁类型
 

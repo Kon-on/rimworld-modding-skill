@@ -1,6 +1,6 @@
 # 11 — 跨平台适配
 
-> **适用版本**: RimWorld 1.6 | **最后更新**: 2026-06-01
+> **适用版本**: RimWorld 1.7（实测 1.7.4981 rev136） | **最后更新**: 2026-10-18
 
 ## 支持的 AI 编程平台
 
@@ -117,6 +117,38 @@ cp .mcp.json.example .mcp.json
 
 ---
 
+### DSH（DeepSeek Harness）
+
+**Skill 安装**（用户级，所有项目可用）：
+
+```bash
+cp -r rimworld-modding-skill ~/.dsh/skills/rimworld-modding/
+```
+
+也可以放进项目里随仓库走：`<你的mod项目>/.dsh/skills/rimworld-modding/`。
+
+**加载方式**：DSH 读取 `SKILL.md` frontmatter 的 `name` / `description` 建立技能索引，命中后按需加载正文与 `references/`，不需要额外的注册命令。
+
+**MCP 配置**：在 DSH 的 MCP 设置里添加 HTTP 服务器 `https://mcp.rimsage.com/mcp`（字段与 `.mcp.json.example` 相同）。未接入 MCP 时按本文末「无 MCP 时的回退方案」走本地 grep。
+
+**工具映射**：
+
+| 本 Skill 中的操作 | DSH 工具 |
+|------------------|----------|
+| 读取文件 | `read` |
+| 创建/写入文件 | `write` |
+| 编辑文件 | `edit` |
+| 搜索文件内容 | `grep` |
+| 按文件名搜索 | `glob` |
+| 运行命令 | `pwsh`（Windows PowerShell） |
+| 加载 Skill | `skill` |
+| 并行子任务 | `subagent` / Agent Teams（需在设置中启用） |
+
+> **Windows 提示**：DSH 在 Windows 上执行的是 PowerShell，本文档其他章节里的 `grep -r "..."` 示例不能直接粘贴，改用 DSH 自带的 `grep` 工具（语义同 ripgrep），或写成 PowerShell 等价形式：
+> `Get-ChildItem -Recurse -Filter *.xml | Select-String '<techLevel>'`
+
+---
+
 ### Cursor / Windsurf / 其他 IDE 插件
 
 这些 IDE 插件通常不支持 MCP。使用以下降级方案：
@@ -127,7 +159,7 @@ cp .mcp.json.example .mcp.json
 | 查看 Def 结构 | 直接打开原版 XML 文件阅读 |
 | 查找类/方法定义 | 用 dnSpy 反编译 `Assembly-CSharp.dll` |
 
-**使用方式**：将 Skill 的 `references/` 和 `templates/` 作为知识库引用，手动复制对应模板。
+**使用方式**：将 Skill 的 `references/` 和 `assets/templates/` 作为知识库引用，手动复制对应模板。
 
 ---
 
@@ -152,7 +184,7 @@ cp .mcp.json.example .mcp.json
 
 1. **查原版 Def**：用文件搜索工具在 `<RimWorld>/Data/Core/Defs/` 中搜索
 2. **模仿结构**：找到类似的原版 Def，复制其 XML 结构
-3. **对照模板**：使用 `templates/` 中的模板文件
+3. **对照模板**：使用 `assets/templates/` 中的模板文件
 4. **阅读文档**：参考 `references/` 中的说明
 
 ```bash

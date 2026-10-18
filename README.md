@@ -10,19 +10,23 @@
 Claude Code 环世界 Mod 制作全流程技能——从环境搭建到 Steam Workshop 发布。
 Claude Code agent skill for full-cycle RimWorld mod development.
 
+**版本 1.2.0** · 变更记录见 [CHANGELOG.md](CHANGELOG.md) · 支持 Claude Code / Copilot CLI / Codex / Gemini CLI / TRAE / DSH
+
 ---
 
 ## 功能特性
 
 - **全流程覆盖**: XML Def、C#、Harmony 补丁、资源制作、调试、Workshop 发布
 - **中英双语**: 教程用中文，代码/XML 用英文
-- **原版验证**: 所有 Def 模式均对照 RimWorld 1.6 原版文件验证
+- **原版验证**: 所有 Def 模式均对照 RimWorld 1.7 原版文件验证（另有本机 1.7 实测的模板库与静态核验脚本）
 - **RimSage MCP 集成**: 实时源码搜索，写 Def 前先查原版
 - **测试版先行**: 测试版 → 验证 → 正规化 → 可选发布
 - **错误学习系统**: 自动记录排查过的错误，加载 Skill 时读取，避免重复犯错
 - **批量处理**: 支持 Markdown 需求清单，批量生成多个 Mod 内容，逐项确认
 - **AI 生成标注**: 生成的代码自动标记 AI 辅助来源，透明合规
-- **代码模板**: 近战/远程武器、服装/护甲、原材料、建筑、配方、ThingComp、Harmony 补丁、需求清单 (9 个)
+- **代码模板**: 近战/远程武器、服装/护甲、原材料、建筑、配方、植物、ThingComp、Harmony 补丁、需求清单 (10 个)
+- **本地模板库**: 随仓库提交的 1.7 模板库（301 文件：39 模板 + 254 张字段表），`node scripts/find-template.mjs` 一行命令按关键词/Def 类型/字段名检索
+- **可核验**: 自带 `scripts/check-index.mjs`（路径与索引一致性）与 `tests/run-evals.mjs`（知识是否退化），改动都有机械证据
 
 ## 目录结构
 
@@ -33,6 +37,13 @@ rimworld-modding-skill/
 ├── LICENSE                  # MIT
 ├── .gitignore
 ├── .mcp.json.example        # MCP 配置模板
+├── CHANGELOG.md             # 版本变更记录
+├── scripts/                 # 维护者脚本（零依赖）
+│   ├── check-index.mjs      # 索引/路径/标注/XML 一致性校验（改仓库必跑）
+│   ├── xml-lint.mjs         # XML 良构性扫描（被 check-index 与单测共用）
+│   └── find-template.mjs    # 技能运行时查模板库的入口
+├── .github/workflows/
+│   └── check.yml            # CI：每次提交跑校验脚本
 ├── references/              # 参考文档 + 工作流
 │   ├── 01-environment.md
 │   ├── 02-project-structure.md
@@ -66,8 +77,19 @@ rimworld-modding-skill/
 │       ├── harmony-patch.cs
 │       ├── thingcomp.cs
 │       └── requirements-template.md
-└── tests/                   # 测试用例
-    └── evals.json
+├── library/                 # RimWorld 1.7 模板库（301 文件）
+│   ├── 01-梳理报告/         # 1.7 代码形态梳理、1.6→1.7 迁移指南
+│   ├── 02-模板/             # 按线分组的 Def 模板（39 份）
+│   ├── 03-全量字段参考/     # 原版字段出现率与路径（254 张字段表）
+│   └── 04-核验/             # 库自身的核验结果
+├── examples/                # 可跑通的完整示例
+│   └── rimtest-mod/         # 完整测试 mod（44 文件）+ TESTING.md + 核验报告
+├── docs/                    # 构建与核验证据（数据源 JSON、提取/核验脚本、分析草稿）
+└── tests/                   # 评测：固定提示词 + 机械断言
+    ├── evals.json           # 用例与断言
+    ├── run-evals.mjs        # 评测运行器（零依赖）
+    ├── README.md            # 评测方法论与 baseline
+    └── runs/                # 每次运行的产出与 results.json
 ```
 
 ## 🖥️ 平台支持
@@ -79,7 +101,8 @@ rimworld-modding-skill/
 | **OpenAI Codex** | ✅ 适配 | `~/.codex/skills/rimworld-modding/` |
 | **Gemini CLI** | ✅ 适配 | `~/.gemini/skills/rimworld-modding/` |
 | **TRAE** | ✅ 适配 | `~/.trae/skills/rimworld-modding/` |
-| **Cursor / Windsurf** | ⚠️ 降级 | 手动引用 `references/` + `templates/`（无 MCP） |
+| **DSH**（DeepSeek Harness） | ✅ 适配 | `~/.dsh/skills/rimworld-modding/`（或项目级 `<项目>/.dsh/skills/`） |
+| **Cursor / Windsurf** | ⚠️ 降级 | 手动引用 `references/` + `assets/templates/`（无 MCP） |
 
 > 各平台工具映射详见 `references/11-platform-adaptation.md`
 
@@ -97,13 +120,31 @@ cp -r rimworld-modding-skill ~/.trae/skills/rimworld-modding/
 
 # Codex / Gemini CLI
 cp -r rimworld-modding-skill ~/.codex/skills/rimworld-modding/
+
+# DSH（DeepSeek Harness）
+cp -r rimworld-modding-skill ~/.dsh/skills/rimworld-modding/
 ```
 
 ## 需求
 
-- RimWorld 1.6
+- RimWorld 1.7（引擎 Waylith / net10.0；Unity 不再需要）
 - [RimSage MCP](https://mcp.rimsage.com/mcp)（推荐，用于源码搜索）
 - `.mcp.json` 配置 `rimworld-source` MCP 服务器（所有平台通用）
+- Node 18+（只有改本仓库、跑校验脚本时才需要；用技能本身不需要）
+- 没有 MCP、也没有游戏目录时技能仍可用，但只会产出标注了「⚠️ 待验证草稿」的结果
+
+## 维护与校验
+
+改完本仓库任何文件，先跑这两条（CI 里也会跑）：
+
+```bash
+node scripts/check-index.mjs         # 路径引用 / 索引覆盖率 / 模板标注（--strict 警告即失败）
+node tests/run-evals.mjs --validate  # 评测用例结构
+```
+
+- **为什么需要 `check-index.mjs`**：SKILL.md 的「模板对照表」与「子文件索引」是手写索引，目录一改名就会静默漂移——本项目上一次重构就漂移了 38 处路径，直到人工审查才发现。机械约束交给脚本，人只负责内容。
+- **`tests/` 是评测**：固定提示词 + 机械断言，跑一次就知道技能教的写法有没有失效；方法论、baseline 与已知断言缺陷见 `tests/README.md`。
+- **同类现成工具**（可选，本仓库只借鉴能力不引入依赖）：[agentskills-ci](https://pypi.org/project/agentskills-ci/)（引用完整性 + 评分 + 安全扫描 + GitHub Action）、`agent-skill-evals`、`lychee`（链接检查）。
 
 ## 致谢
 
@@ -125,7 +166,7 @@ MIT
 
 - **Full coverage**: XML Defs, C# modding, Harmony patching, assets, debugging, Workshop
 - **Bilingual**: Chinese tutorials + English code/XML
-- **Vanilla-verified**: All Def patterns validated against RimWorld 1.6 base game files
+- **Vanilla-verified**: All Def patterns validated against RimWorld 1.7 base game files
 - **RimSage MCP**: Real-time source code search for verifying Def structures
 - **Test-first pipeline**: Test version → verify → formalize → optional publish
 - **Error Learning**: Auto-records debugged errors, reads them on skill load
@@ -147,6 +188,9 @@ cp -r rimworld-modding-skill ~/.trae/skills/rimworld-modding/
 
 # Codex / Gemini CLI
 cp -r rimworld-modding-skill ~/.codex/skills/rimworld-modding/
+
+# DSH (DeepSeek Harness)
+cp -r rimworld-modding-skill ~/.dsh/skills/rimworld-modding/
 ```
 
 ## Acknowledgments

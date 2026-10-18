@@ -1,10 +1,21 @@
-// ThingComp 模板
+// ThingComp 模板（RimWorld 1.7）
+// 验证状态：已验证（生命周期方法名对照原版 1.7 ThingComp：PostSpawnSetup / CompTick /
+//            PostExposeData / CompInspectStringExtra / CompGetGizmosExtra；本模板所依据的
+//            同类实现已在 1.7.4981 上真机编译为 DLL——见
+//            examples/rimtest-mod/RimTestMod/Source/ThingComp_TestShield.cs）
+// AI 辅助生成
 // 替换 <YourNamespace> 和 <YourPrefix> 为实际值
 // 使用方法：
 //   1. 重命名 CompProperties_xxx 和 Comp_xxx 为你的类名
 //   2. 在 CompProperties 中添加自定义数据字段
 //   3. 在 ThingComp 中实现行为逻辑
 //   4. 在 XML Def 的 <comps> 中引用 CompProperties_xxx
+//
+// 1.7 注意：
+//   · 目标框架 net10.0，引用游戏安装根目录的 Assembly-CSharp.dll（见 references/01-environment.md）
+//   · 存读档覆写的是 PostExposeData()，不是 ExposeData()——本模板已如此
+//   · Scribe_Values.Look 的 key 字符串**不要改名**（改了就等于老存档读不到这些字段）
+//   · 只在需要高响应时才用 CompTick()；能低频就用 CompTickRare() / CompTickLong()
 
 using Verse;
 
@@ -100,5 +111,22 @@ namespace <YourNamespace>
             if (!isActive) return "Inactive";
             return $"Active | Custom Value: {Props.customValue:F1} | Ticks: {tickCounter}/{Props.tickInterval}";
         }
+
+        /// <summary>
+        /// 给物品加命令按钮（可选）。
+        /// 1.7 实测：Command_Action 在 Verse 命名空间（不是 RimWorld）。
+        /// 图片可用 TexCommand.ForbidOff 等原版图标，或用 ContentFinder&lt;Texture2D&gt;.Get("UI/Commands/Xxx")。
+        /// </summary>
+        // public override IEnumerable<Gizmo> CompGetGizmosExtra()
+        // {
+        //     foreach (var g in base.CompGetGizmosExtra()) yield return g;
+        //     yield return new Command_Action
+        //     {
+        //         defaultLabel = "Do something",
+        //         defaultDesc = "Testing only.",
+        //         icon = TexCommand.ForbidOff,
+        //         action = () => { isActive = !isActive; }
+        //     };
+        // }
     }
 }

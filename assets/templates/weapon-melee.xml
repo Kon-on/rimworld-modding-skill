@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  近战武器模板（已验证——基于原版 BaseWeapons.xml）
+  近战武器模板
+  验证状态：已验证（对照原版 Data/Core/Defs/ThingDefs_Misc/Weapons/MeleeMedieval.xml）
   AI 辅助生成
   替换所有 <Your...> 占位符为你的实际值
 
@@ -13,9 +14,9 @@
 -->
 <Defs>
   <ThingDef ParentName="BaseMeleeWeapon_Sharp_Quality">
-    <defName><YourPrefix>_Weapon_<YourName></defName>
-    <label><your weapon label></label>
-    <description><your weapon description></description>
+    <defName>{{YourPrefix}}_Weapon_{{YourName}}</defName>
+    <label>{{YourWeaponLabel}}</label>
+    <description>{{YourWeaponDescription}}</description>
 
     <possessionCount>1</possessionCount>
     <techLevel>Industrial</techLevel>            <!-- Neolithic / Medieval / Industrial / Spacer / Ultra / Archotech -->
@@ -36,7 +37,7 @@
     <equippedAngleOffset>-55</equippedAngleOffset> <!-- 装备角度偏移 -->
 
     <weaponTags>
-      <li><YourPrefix>_<YourTag></li>             <!-- 武器标签，用于文化/角色偏好 -->
+      <li>{{YourPrefix}}_{{YourTag}}</li>             <!-- 武器标签，用于文化/角色偏好 -->
     </weaponTags>
 
     <tools>
@@ -52,7 +53,7 @@
     </tools>
 
     <graphicData>
-      <texPath>Things/Item/<YourPrefix>_<YourTexture></texPath>
+      <texPath>Things/Item/{{YourPrefix}}_{{YourTexture}}</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <shaderType>CutoutComplex</shaderType>
     </graphicData>

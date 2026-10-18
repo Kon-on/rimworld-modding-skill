@@ -1,0 +1,47 @@
+{
+  "run": "2026-10-17-baseline-skill",
+  "date": "2026-10-17",
+  "summary": {
+    "promptsOk": 3,
+    "promptsTotal": 4,
+    "assertionsPassed": 23,
+    "assertionsTotal": 24,
+    "score": 96
+  },
+  "results": [
+    {
+      "id": "create-melee-weapon",
+      "ok": true,
+      "passed": 8,
+      "failed": 0,
+      "failures": []
+    },
+    {
+      "id": "create-ranged-weapon",
+      "ok": false,
+      "passed": 4,
+      "failed": 1,
+      "failures": [
+        {
+          "kind": "contains",
+          "needle": "verbClass=\"Verb_Shoot\"",
+          "note": "未找到"
+        }
+      ]
+    },
+    {
+      "id": "check-techlevel-enum",
+      "ok": true,
+      "passed": 7,
+      "failed": 0,
+      "failures": []
+    },
+    {
+      "id": "debug-missing-def",
+      "ok": true,
+      "passed": 4,
+      "failed": 0,
+      "failures": []
+    }
+  ]
+}

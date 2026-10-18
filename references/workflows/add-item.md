@@ -22,7 +22,7 @@
 
 在 `Defs/ThingDefs/` 下创建 XML 文件：
 
-- **武器**：使用 `templates/weapon-melee.xml`（近战）或 `templates/weapon-ranged.xml`（远程）
+- **武器**：使用 `assets/templates/weapon-melee.xml`（近战）或 `assets/templates/weapon-ranged.xml`（远程）
 - **服装**：继承 `ApparelBase`，参考原版 `Defs/ThingDefs/Apparel/` 下的服装写法
 - **材料/消耗品**：继承 `ResourceBase` 或自定义
 
@@ -30,7 +30,7 @@
 
 ### 第 4 步：添加配方（可选）
 
-如果物品需要制作获得，在 `Defs/RecipeDefs/` 下创建配方文件，使用 `templates/recipe.xml` 模板。
+如果物品需要制作获得，在 `Defs/RecipeDefs/` 下创建配方文件，使用 `assets/templates/recipe.xml` 模板。
 
 ### 第 5 步：注册到物品分类
 

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- AI 辅助生成 | 线 A / 中文注入（DefInjected/ThingDef）：植物 Def 也是 ThingDef，
+       与 Languages/ChineseSimplified/DefInjected/ThingDef/DM_Plants.xml 逐字相同。 -->
+  <DM_Plant_TestBloom.label>测试花</DM_Plant_TestBloom.label>
+  <DM_Plant_TestBloom.description>一朵只为测试而种的花。它看起来可疑地像是机器画出来的。</DM_Plant_TestBloom.description>
+
+</LanguageData>

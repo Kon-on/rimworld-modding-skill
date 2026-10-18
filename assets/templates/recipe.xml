@@ -1,22 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  配方模板
-  将此 RecipeDef 放在 Defs/RecipeDefs/ 下
-  需要在对应 ThingDef 的 <recipeMaker> 中引用
+  配方模板（RimWorld 1.7 结构）
+  验证状态：已验证（products 字典写法经原版全库 50 个 products 块 + 1.7 字段表比对确认；
+            其余字段路径：ingredients/filter/count、workAmount、workSpeedStat、recipeUsers、researchPrerequisite 均在原版命中。
+            productHasIngredientStuff 只在 Assembly-CSharp.dll 元数据中确认存在，原版 XML 无先例，未做运行时验证）
+  AI 辅助生成
+  替换所有 {{...}} 占位符为你的实际值；<products> 里的元素名 YourProductDefName 也要换成真实 defName
+
+  ⚠️ 1.6 模板的 <products><li><thingDef>…</thingDef><count>…</count></li></products> 是错的，1.7 是字典写法（见下）。
+  ⚠️ 旧模板里的 <workSpeedStat>CraftingSpeed</workSpeedStat> 也是错的：1.7 全库没有 CraftingSpeed 这个 StatDef，
+     制造类用 GeneralLaborSpeed（烹饪用 CookSpeed，屠宰用 Butchery*）。
+
+  配方与工作台的两种挂法（可同时用，不会重复出现账单）：
+    A) 本 RecipeDef 的 <recipeUsers> 指向工作台 defName
+    B) 工作台的 <recipes> 里列出本 RecipeDef 的 defName
 -->
 <Defs>
   <RecipeDef>
-    <defName><YourPrefix>_Recipe_<YourName></defName>
-    <label>make <your product label></label>
-    <description>Craft a <your product> at the machining table.</description>
+    <defName>{{YourPrefix}}_Recipe_{{YourName}}</defName>
+    <label>make {{YourProductLabel}}</label>
+    <description>Craft a {{YourProduct}}.</description>
+    <jobString>Making {{YourProduct}}.</jobString>   <!-- 小人工作时的提示；记得在语言文件里本地化 -->
 
-    <!-- 配方所属的工作台 -->
-    <!-- 原版工作台示例: TableMachining, TableSmithing, TableFabrication, FueledStove, ElectricStove -->
+    <!-- 在哪些工作台上可用（原版台子：TableMachining / TableSmithing / TableFabrication / ElectricTailoringBench…） -->
     <recipeUsers>
       <li>TableMachining</li>
     </recipeUsers>
 
-    <!-- 研究前置 -->
+    <!-- 研究前置（RecipeDef 级；原版 21/212 条配方用它，值例 BasicMechtech / HighMechtech） -->
     <researchPrerequisite>Smithing</researchPrerequisite>
 
     <!-- 技能要求 -->
@@ -24,38 +35,57 @@
       <Crafting>5</Crafting>
     </skillRequirements>
 
-    <!-- 制作工作量（ticks, 1秒=60ticks） -->
+    <!-- 工作量（ticks，1 秒 = 60 ticks） -->
     <workAmount>6000</workAmount>
 
-    <!-- 制作速度统计 -->
-    <workSpeedStat>CraftingSpeed</workSpeedStat>
-    <efficiencyStat>CraftingEfficiency</efficiencyStat>
+    <!-- 制作速度统计：必须写真实存在的 StatDef；原版常用 GeneralLaborSpeed（36/212 条配方用 workSpeedStat） -->
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <!-- efficiencyStat 只用于屠宰/熔炼这类"产出倍率"流程（原版仅 2 处：ButcheryFleshEfficiency / ButcheryMechanoidEfficiency），
+         一般制造不要写： -->
+    <!-- <efficiencyStat>ButcheryFleshEfficiency</efficiencyStat> -->
 
-    <!-- 所需原料 -->
+    <!-- 所需原料：filter 里可以是 categories（材料分类）或 thingDefs（具体物品） -->
     <ingredients>
       <li>
         <filter>
+          <!-- 用具体物品： -->
           <thingDefs>
             <li>Steel</li>
           </thingDefs>
+          <!-- 或改成材料分类：
+          <categories>
+            <li>Metallic</li>
+          </categories>
+          -->
         </filter>
         <count>50</count>
       </li>
     </ingredients>
 
-    <!-- 固定产出 -->
+    <!-- 产物：❗字典写法——子元素名 = 产物 defName，值 = 数量（1.7 原版 50 个 products 块全是这个形态）
+         注意：元素名必须是**具体**的 defName，不能写成 {{占位符}}——XML 的元素名不允许以 { 开头。
+         下面用 YourProductDefName 当占位，替换成你产物的真实 defName（带你的前缀，如 TST_PlasmaSword）。 -->
     <products>
-      <li>
-        <thingDef><YourPrefix>_<YourProductDef></thingDef>
-        <count>1</count>
-      </li>
+      <YourProductDefName>1</YourProductDefName>
     </products>
 
-    <!-- 允许制作的最低/最高品质（可选） -->
+    <!-- 产物材料由输入材料决定时必须写（仅 costStuffCount 类配方需要；固定材料的产物不用写） -->
+    <productHasIngredientStuff>true</productHasIngredientStuff>
+
+    <!-- 限定可用材料（可选）：排除某些材料，避免玩家用白银/黄金造便宜货 -->
+    <!--
     <defaultIngredientFilter>
       <categories>
         <li>Metallic</li>
       </categories>
+      <disallowedThingDefs>
+        <li>Silver</li>
+        <li>Gold</li>
+      </disallowedThingDefs>
     </defaultIngredientFilter>
+    -->
+
+    <!-- 半成品（可选）：制造过程中先出现的未完成物 -->
+    <!-- <unfinishedThingDef>UnfinishedWeapon</unfinishedThingDef> -->
   </RecipeDef>
 </Defs>

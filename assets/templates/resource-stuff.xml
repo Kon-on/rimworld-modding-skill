@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  原材料/资源模板（已验证——基于原版 Items_Resource_Stuff.xml 和 Items_Resource_Manufactured.xml）
+  原材料/资源模板
+  验证状态：已验证（对照原版 Data/Core/Defs/ThingDefs_Items/Items_Resource_Stuff.xml、Items_Resource_Manufactured.xml）
+  AI 辅助生成
   替换所有 <Your...> 占位符为你的实际值
 
   ⚠️ 重要：生成后务必对比原版 Def 验证！
@@ -18,14 +20,12 @@
     Leathery  — 皮革（裁缝台）
 -->
 
-<!-- ============================================================
-     类型 A：可用的建筑材料（Stuff）——有 stuffProps
-     ============================================================ -->
+<!--== 类型 A：可用的建筑材料（Stuff）——有 stuffProps == -->
 <Defs>
   <ThingDef ParentName="ResourceBase">
-    <defName><YourPrefix>_Material_<YourName></defName>
-    <label><your material label></label>
-    <description><your material description></description>
+    <defName>{{YourPrefix}}_Material_{{YourName}}</defName>
+    <label>{{YourMaterialLabel}}</label>
+    <description>{{YourMaterialDescription}}</description>
 
     <!-- 价值/重量 -->
     <statBases>
@@ -50,13 +50,13 @@
     <smallVolume>false</smallVolume>             <!-- true=高价值小体积物品（金、银） -->
 
     <graphicData>
-      <texPath>Things/Item/Resource/<YourPrefix>_<YourName></texPath>
+      <texPath>Things/Item/Resource/{{YourPrefix}}_{{YourName}}</texPath>
       <graphicClass>Graphic_StackCount</graphicClass>
     </graphicData>
 
     <techLevel>Industrial</techLevel>            <!-- Neolithic / Medieval / Industrial / Spacer / Ultra / Archotech -->
 
-    <!-- ===== Stuff 核心配置 ===== -->
+    <!--== Stuff 核心配置 == -->
     <stuffProps>
       <!-- 材料分类（必须与使用此材料的武器/服装/建筑的 stuffCategories 匹配） -->
       <categories>
@@ -109,7 +109,7 @@
 
     <!-- 地下矿脉（仅矿石类） -->
     <!--
-    <deepCommonality>0.5</deepCommonality>             <!-- 深钻井出现概率 -->
+    <deepCommonality>0.5</deepCommonality>             <!== 深钻井出现概率 -->
     <deepCountPerPortion>35</deepCountPerPortion>      <!-- 每次采掘量 -->
     <deepLumpSizeRange>2~10</deepLumpSizeRange>        <!-- 矿团大小范围 -->
     -->

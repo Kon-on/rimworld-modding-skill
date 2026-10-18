@@ -1,0 +1,49 @@
+=== Verse.Scribe_Values ===
+  M static Void Look(T& value, String label, T defaultValue [opt], Boolean forceSave [opt])
+=== Verse.AI.ReservationUtility ===
+  M static Boolean CanReserveSittableOrSpot(Pawn pawn, IntVec3 exactSittingPos, Boolean ignoreOtherReservations [opt])
+  M static Boolean CanReserveSittableOrSpot(Pawn pawn, IntVec3 exactSittingPos, Thing ignoreThing, Boolean ignoreOtherReservations [opt])
+  M static Boolean ReserveSittableOrSpot(Pawn pawn, IntVec3 exactSittingPos, Job job, Boolean errorOnFailed [opt])
+  M static Boolean CanReserve(Pawn p, LocalTargetInfo target, Int32 maxPawns [opt], Int32 stackCount [opt], ReservationLayerDef layer [opt], Boolean ignoreOtherReservations [opt])
+  M static Boolean CanReserveAndReach(Pawn p, LocalTargetInfo target, PathEndMode peMode, Danger maxDanger, Int32 maxPawns [opt], Int32 stackCount [opt], ReservationLayerDef layer [opt], Boolean ignoreOtherReservations [opt])
+  M static Boolean CanReserveAndReachableOfDef(Pawn p, ThingDef thingDef, PathEndMode peMode [opt], Danger maxDanger [opt], Int32 maxPawns [opt], Int32 stackCount [opt], ReservationLayerDef layer [opt], Boolean ignoreOtherReservations [opt])
+  M static Boolean Reserve(Pawn p, LocalTargetInfo target, Job job, Int32 maxPawns [opt], Int32 stackCount [opt], ReservationLayerDef layer [opt], Boolean errorOnFailed [opt], Boolean ignoreOtherReservations [opt])
+  M static Void ReserveAsManyAsPossible(Pawn p, List`1 target, Job job, Int32 maxPawns [opt], Int32 stackCount [opt], ReservationLayerDef layer [opt])
+  M static Boolean CanReserveNew(Pawn p, LocalTargetInfo target)
+=== Verse.AI.ToilEffects ===
+  M static Toil WithProgressBar(Toil toil, TargetIndex ind, Func`1 progressGetter, Boolean interpolateBetweenActorAndTarget [opt], Single offsetZ [opt], Boolean alwaysShow [opt])
+  M static Toil WithProgressBarToilDelay(Toil toil, TargetIndex ind, Boolean interpolateBetweenActorAndTarget [opt], Single offsetZ [opt])
+  M static Toil WithProgressBarToilDelay(Toil toil, TargetIndex ind, Int32 toilDuration, Boolean interpolateBetweenActorAndTarget [opt], Single offsetZ [opt])
+=== Verse.AI.ToilFailConditions ===
+  M static T FailOnDespawnedNullOrForbidden(T f, TargetIndex ind)
+=== RimWorld.WorkGiver_Scanner ===
+  M Boolean HasJobOnThing(Pawn pawn, Thing t, Boolean forced [opt])
+  M Job JobOnThing(Pawn pawn, Thing t, Boolean forced [opt])
+=== Verse.Hediff ===
+  M String get_SeverityLabel()
+  M Single get_Severity()
+  P String SeverityLabel
+  P Single Severity
+  F Single severityInt
+  F Pawn pawn
+=== Verse.Pawn ===
+  M Void Kill(Nullable`1 dinfo, Hediff exactCulprit [opt])
+  F Pawn_HealthTracker health
+=== Verse.AI.Toils_Goto ===
+  M static Toil Goto(TargetIndex ind, PathEndMode peMode)
+  M static Toil GotoThing(TargetIndex ind, PathEndMode peMode, Boolean canGotoSpawnedParent [opt])
+  M static Toil GotoThing(TargetIndex ind, IntVec3 exactCell)
+  M static Toil GotoCell(TargetIndex ind, PathEndMode peMode)
+  M static Toil GotoCell(IntVec3 cell, PathEndMode peMode)
+  M static Toil GotoBuild(TargetIndex ind)
+=== Harmony 构造与方法 ===
+  C String id
+  C 
+  M Void PatchAll()
+  M Void PatchAll(Assembly assembly)
+  M MethodInfo Patch(MethodBase original, HarmonyMethod prefix [opt], HarmonyMethod postfix [opt], HarmonyMethod transpiler [opt], HarmonyMethod finalizer [opt])
+  M Void UnpatchAll(String harmonyID [opt])
+  M Void Unpatch(MethodBase original, HarmonyPatchType type, String harmonyID [opt])
+  M Void Unpatch(MethodBase original, MethodInfo patch)
+  TYPE HarmonyLib.HarmonyMethod base=Object
+  TYPE HarmonyLib.HarmonyAttribute base=Attribute

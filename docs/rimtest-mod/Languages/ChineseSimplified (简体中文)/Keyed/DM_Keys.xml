@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- AI 辅助生成 | 线 A / 中文 Keyed（短名目录与带括号目录里的本文件逐字相同）
+       这四个键必须与 Source/ThingComp_TestShield.cs 里的常量逐字符一致：
+         KeyInspect    = DM_TestShield_Inspect          （CompInspectStringExtra：3 个占位符 当前/上限/累计吸收）
+         KeyDepleted   = DM_TestShield_Depleted         （护盾破盾时的 Messages.Message）
+         KeyGizmoLabel = DM_TestShield_GizmoRefillLabel （补满护盾 gizmo 标签）
+         KeyGizmoDesc  = DM_TestShield_GizmoRefillDesc  （补满护盾 gizmo 描述）
+       格式来源：Core/Languages/English/Keyed/ITabs.xml（<LanguageData> 内平铺键值）。 -->
+  <DM_TestShield_Inspect>测试护盾：{0}/{1}（累计吸收 {2} 点伤害）</DM_TestShield_Inspect>
+  <DM_TestShield_Depleted>测试护盾被打破了！</DM_TestShield_Depleted>
+  <DM_TestShield_GizmoRefillLabel>补满测试护盾</DM_TestShield_GizmoRefillLabel>
+  <DM_TestShield_GizmoRefillDesc>立刻把测试护盾点数补满，仅用于测试观察。</DM_TestShield_GizmoRefillDesc>
+
+</LanguageData>

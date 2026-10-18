@@ -1,6 +1,6 @@
 # 10 — API 速查表
 
-> **适用版本**: RimWorld 1.6（WIP） | **最后更新**: 2026-05-31
+> **适用版本**: RimWorld 1.7（实测 1.7.4981 rev136） | **最后更新**: 2026-10-18 | **状态**: 草稿——高频类与方法清单未逐条对照正式版核实；**「1.6 → 1.7 关键变化」一节已实测**，其余以 dnSpy 反编译的 `Assembly-CSharp.dll`（游戏安装根）和 RimSage 查询为准
 
 
 ## 目录
@@ -9,7 +9,7 @@
 - [常用命名空间](#常用命名空间)
 - [高频类速查](#高频类速查)
 - [高频方法速查（按用途）](#高频方法速查按用途)
-- [1.5 → 1.6 关键变化（WIP）](#1516关键变化wip)
+- [1.6 → 1.7 关键变化（已实测）](#16--17-关键变化已实测)
 - [学习资源](#学习资源)
 
 ## 概述
@@ -139,17 +139,24 @@ Log.Warning($"SR: Warning - {variable}");
 Log.Error($"SR: Error - {ex.Message}\n{ex.StackTrace}");
 ```
 
-## 1.5 → 1.6 关键变化（WIP）
+## 1.6 → 1.7 关键变化（已实测）
 
-> ⚠️ 以下基于早期 1.6 预览版本，可能随正式版变化。
+> ✅ 本节是**在本机 1.7.4981 rev136 上真机编译 + 元数据/DLL 反射核对**得到的，不是"待复核"。
+> 完整证据与账本见 `examples/rimtest-mod/_FINDINGS.md`。
 
-| 变化 | 说明 |
+| 变化 | 说明（1.7 现实） |
 |------|------|
-| Unity 2022.3.35 | 引擎升级，Shader/渲染相关 mod 需要适配 |
-| `ModDependenciesByVersion` | 新的版本化依赖声明方式 |
-| `LoadFolders.xml` | 新增对 1.6 条件加载的支持（`<v1.6>`） |
+| 引擎 | Unity 被自研 **Waylith** 替换；游戏根目录出现 `Waylith*.dll`、`UnityStubs.dll`，**不再有 `ReactUnity`/`UnityEngine.dll`/`RimWorldWin64_Data`** |
+| 目标框架 | **net10.0**（1.6 的 .NET Framework 4.7.2 / Unity 2022.3.35 引用全部作废） |
+| 引用 DLL | `Assembly-CSharp.dll` + `RimWorld.dll` + `UnityStubs.dll`，三个都在**安装根目录** |
+| Harmony | 升到 **3.0**：`HarmonyMethod` 没有 `id` 字段了；游戏本体**不自带** 0Harmony（由创意工坊 Harmony mod 提供） |
+| `DamageInfo` | `Amount` / `armorPenetration` 变**只读**，改用 `dinfo.SetAmount(x)` |
+| `Messages.Message` | 第二参数是 `LookTargets`（`new LookTargets(thing)` 或 `LookTargets.Invalid`），末尾 `historical` 一般传 `false` |
+| UI 类命名空间 | `Command_Action` 在 **`Verse`**（`RimWorld.Command_Action` 不存在）；`MessageTypeDefOf` 也在 `Verse`，位于 `Assembly-CSharp.dll` |
+| `LoadFolders.xml` | 版本块写法不变，只是把 `<v1.6>` 换成 `<v1.7>`（详见 `references/02-project-structure.md`）；内容与 1.6 完全一致，1.7 没有强制新字段 |
+| 原版资产 | 从散装 `Data/Core/Textures` 改为安装根 `Assets.zip`（内部为 `.dds`，Zstd 压缩）——只影响你**查看**原版贴图，不影响 mod 资源写法 |
 
-**建议**：在 1.6 正式发布后重新验证所有 API 引用。
+**建议**：不在上表里的 API，引用前先在 `Assembly-CSharp.dll`（安装根，dnSpy 或 `Select-String -Encoding utf8`）确认一次。
 
 ## 学习资源
 

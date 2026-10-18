@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  服装/护甲模板（已验证——基于原版 Apparel_Various.xml）
+  服装/护甲模板
+  验证状态：已验证（对照原版 1.7 全库：Apparel_Various.xml 的 Apparel_FlakVest、
+            Apparel_Headgear.xml；字段路径 apparel/wornGraphicPath 5.1% (104/2054)、
+            apparel/wornGraphicPaths 0.1% (2/2054)、StuffEffectMultiplier* 与 EquipDelay 见 Stats_Apparel.xml）
+  ⚠️ 1.7 没有 ApparelTagDef 这种 Def，<apparel><tags> 里是**自由字符串**；
+     <apBodyPartGroups> 与顶层 <bodyPartGroups> 在 1.7 都不存在，只有 <apparel><bodyPartGroups>。
   AI 辅助生成
   替换所有 <Your...> 占位符为你的实际值
 
@@ -24,19 +29,17 @@
     Torso, Shoulders, Arms, Legs, Neck, UpperHead, FullHead, Hands, Feet
 -->
 
-<!-- ============================================================
-     类型 A：普通衣物（裁缝台制作）
+<!--== 类型 A：普通衣物（裁缝台制作）
      ParentName="ApparelMakeableBase"
-     材质：Fabric / Leathery
-     ============================================================ -->
+     材质：Fabric / Leathery == -->
 <Defs>
   <ThingDef ParentName="ApparelMakeableBase">
-    <defName><YourPrefix>_Apparel_<YourName></defName>
-    <label><your apparel label></label>
-    <description><your apparel description></description>
+    <defName>{{YourPrefix}}_Apparel_{{YourName}}</defName>
+    <label>{{YourApparelLabel}}</label>
+    <description>{{YourApparelDescription}}</description>
 
     <possessionCount>1</possessionCount>
-    <techLevel>Industrial</techLevel>            <!-- Neolithic / Medieval / Industrial / Spacer / Ultra / Archotech -->
+    <techLevel>Industrial</techLevel>            <!-- 合法值：Animal / Neolithic / Medieval / Industrial / Spacer / Ultra / Archotech（是 Ultra，不是 Ultratech） -->
 
     <!-- 材料成本 -->
     <costStuffCount>50</costStuffCount>
@@ -72,7 +75,7 @@
     </equippedStatOffsets>
     -->
 
-    <!-- ===== 服装核心配置 ===== -->
+    <!--== 服装核心配置 == -->
     <apparel>
       <!-- 覆盖的身体部位（至少选一个） -->
       <bodyPartGroups>
@@ -83,15 +86,20 @@
         <!-- <li>Neck</li> -->
       </bodyPartGroups>
 
-      <!-- 穿戴贴图路径（与 graphicData/texPath 通常相同） -->
-      <wornGraphicPath>Things/Pawn/Humanlike/Apparel/<YourName>/<YourName></wornGraphicPath>
+      <!-- 穿戴贴图路径（指向"名字"，不是 .png）：
+           游戏会在同目录找带朝向后缀的文件 —— {{YourName}}_south / _north / _east / _west，
+           也可以进一步按体型细分 —— {{YourName}}_male_south、_female_、_thin_、_fat_、_hulk_（原版护甲多为后者）。
+           一张图都没有就会显示紫块。字符串单值用 wornGraphicPath；
+           要用列表形式（多套贴图）时改写成 <wornGraphicPaths><li>…</li></wornGraphicPaths>，原版只有 2 处这么用。 -->
+      <wornGraphicPath>Things/Pawn/Humanlike/Apparel/{{YourName}}/{{YourName}}</wornGraphicPath>
 
       <!-- 服装层级：OnSkin（内衣）/ Middle（中层）/ Shell（外层） -->
       <layers>
         <li>OnSkin</li>
       </layers>
 
-      <!-- 标签：IndustrialBasic / IndustrialAdvanced / Military -->
+      <!-- 标签：自由字符串（1.7 无 ApparelTagDef），原版常用 IndustrialBasic / IndustrialAdvanced / Military；
+           影响生成小人时的默认着装与"符合身份"判定 -->
       <tags>
         <li>IndustrialBasic</li>
       </tags>
@@ -109,8 +117,11 @@
       <!-- <developmentalStageFilter>Child, Adult</developmentalStageFilter> -->
     </apparel>
 
+    <!-- 物品栏/地面上的图标（原版 1.7 惯例：与穿戴贴图**同目录**，
+         即在 Things/Pawn/Humanlike/Apparel/<Name>/ 下再放一个无后缀的 <Name>.png 当图标）。
+         也可以另起目录放图标（如 Things/Item/Equipment/Apparel/<Name>），两种都能用，路径对上就行。 -->
     <graphicData>
-      <texPath>Things/Pawn/Humanlike/Apparel/<YourName>/<YourName></texPath>
+      <texPath>Things/Pawn/Humanlike/Apparel/{{YourName}}/{{YourName}}</texPath>
       <graphicClass>Graphic_Single</graphicClass>
     </graphicData>
 

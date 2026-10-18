@@ -1,15 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  建筑模板
+<!--== 模板类型：建筑 Def（ThingDef + ParentName="BuildingBase"）
+  ============================================================================
+  验证状态：已验证（对照 RimWorld 1.7 原版 Data 全库实测：BuildingBase 继承链、
+            statBases/WorkToBuild 297/2054、statBases/WorkToMake 167/2054、thingClass 479/2054、
+            designationCategory 180 处、CompProperties_Power 98 处、shortCircuitInRain 21 处、
+            CompProperties_Breakdownable 44 处、resourcesFractionWhenDeconstructed 23 处、
+            researchPrerequisites 319 处；工作台四件套见文件末尾注释）
   AI 辅助生成
-  替换所有 <Your...> 占位符为你的实际值
+  替换所有 {{...}} 占位符为你的实际值
   前缀示例：SR → SR_Building_ArcFurnace
--->
+
+  ⚠️ 1.7 易错点（旧模板常写错的）：
+     · 建造工作量是 statBases/WorkToBuild；制造（台子上做东西）用 statBases/WorkToMake，两者不是一回事
+     · Mass 是重量，不是"拆毁掉落材料量"（返还看 costList × 拆解系数）
+     · 没有 filthAffordance / workToBuild（小写）/ efficiencyStat 这些字段
+     · <comps> 是列表容器，加自定义 comp 是往同一个 <comps> 里再加一个 <li>，不要写第二个 <comps> 节点
+  ============================================================================ -->
 <Defs>
   <ThingDef ParentName="BuildingBase">
-    <defName><YourPrefix>_Building_<YourName></defName>
-    <label><your building label></label>
-    <description><your building description></description>
+    <defName>{{YourPrefix}}_Building_{{YourName}}</defName>
+    <label>{{YourBuildingLabel}}</label>
+    <description>{{YourBuildingDescription}}</description>
 
     <!-- 占地大小（宽, 高） -->
     <size>(2,2)</size>
@@ -18,24 +29,30 @@
     <!-- 可选: Production, Furniture, Structure, Power, Temperature, Security, Recreation, Misc -->
     <designationCategory>Production</designationCategory>
 
+    <!-- 建筑原型。默认 Building 即可；要做能加工的台子必须改 Building_WorkTable（见文件末尾） -->
+    <thingClass>Building</thingClass>
+
     <statBases>
       <MaxHitPoints>300</MaxHitPoints>            <!-- 耐久度 -->
-      <WorkToBuild>5000</WorkToBuild>             <!-- 建造工作量 -->
-      <Mass>20</Mass>                             <!-- 拆毁掉落材料量 -->
-      <Flammability>0.5</Flammability>            <!-- 可燃性 -->
-      <Beauty>0</Beauty>                          <!-- 美观度 -->
+      <WorkToBuild>5000</WorkToBuild>             <!-- 建造工作量（ticks，60 ticks = 1 秒） -->
+      <Mass>20</Mass>                             <!-- 重量 kg；拆毁返还的材料由 costList 决定，与 Mass 无关 -->
+      <Flammability>0.5</Flammability>            <!-- 可燃性 0-1 -->
+      <Beauty>0</Beauty>                          <!-- 美观度（负数为减益） -->
     </statBases>
 
-    <!-- 建造所需材料 -->
+    <!-- 建造所需材料（拆毁时按下面的比例返还） -->
     <costList>
       <Steel>100</Steel>
       <ComponentIndustrial>5</ComponentIndustrial>
     </costList>
 
+    <!-- 拆解返还比例（0-1，原版常见 0 / 0.25 / 0.5 / 1；不写就是默认值） -->
+    <!-- <resourcesFractionWhenDeconstructed>0.5</resourcesFractionWhenDeconstructed> -->
+
     <!-- 通过性: Impassable / PassThroughOnly / Standable -->
     <passability>Impassable</passability>
 
-    <!-- 贴图填充率 (0-1)，低于1表示建筑物不完全占满格子 -->
+    <!-- 贴图填充率 (0-1)，低于 1 表示建筑物不完全占满格子 -->
     <fillPercent>0.85</fillPercent>
 
     <!-- 地形要求: Light / Medium / Heavy -->
@@ -44,38 +61,84 @@
     <!-- 是否可旋转 -->
     <rotatable>true</rotatable>
 
+    <!-- 组件列表：所有 <li> 都写在同一个 <comps> 里 -->
     <comps>
-      <!-- 电力消费者 -->
+      <!-- 电力消费者（basePowerConsumption 为负表示消耗） -->
       <li Class="CompProperties_Power">
-        <basePowerConsumption>-200</basePowerConsumption>   <!-- 负数为消耗电力 -->
+        <basePowerConsumption>-200</basePowerConsumption>
         <shortCircuitInRain>true</shortCircuitInRain>
       </li>
-      <!-- 可摧毁（掉落材料） -->
+      <!-- 可故障（会让小人修理，增加真实感） -->
       <li Class="CompProperties_Breakdownable" />
+      <!-- 自定义 comp：直接在这里加 <li>，字段写你自己的 CompProperties 类 -->
+      <!--
+      <li Class="YourNamespace.CompProperties_CustomBattery">
+        <storedEnergy>500</storedEnergy>
+        <efficiency>0.95</efficiency>
+      </li>
+      -->
     </comps>
 
     <graphicData>
-      <texPath>Things/Building/<YourPrefix>_<YourTexture></texPath>
+      <texPath>Things/Building/{{YourPrefix}}_{{YourTexture}}</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <shaderType>CutoutComplex</shaderType>
       <drawSize>(2,2)</drawSize>                  <!-- 贴图绘制大小 -->
     </graphicData>
 
-    <!-- 可选：添加自定义 ThingComp -->
-    <!--
-    <comps>
-      <li Class="CompProperties_CustomBattery">
-        <storedEnergy>500</storedEnergy>
-        <efficiency>0.95</efficiency>
-      </li>
-    </comps>
-    -->
-
-    <!-- 建造研究前置（可选） -->
+    <!-- 研究前置（可选；注意是复数 researchPrerequisites，值是研究 Def 名） -->
     <!--
     <researchPrerequisites>
       <li>Electricity</li>
     </researchPrerequisites>
     -->
   </ThingDef>
+
+  <!--==========================================================================
+    工作台变体（要做"能在上面加工东西"的台子，把上面那个 Def 改成下面这样）
+
+    必须补齐四项，少一项就会出怪象（台子能造但没账单界面 / 造不了东西 / 不认设施加成）：
+      1. <thingClass>Building_WorkTable</thingClass>   原版 17 处；不写就没有加工逻辑
+      2. <inspectorTabs><li>ITab_Bills</li></inspectorTabs>  原版 23 处；不写就没有"账单"界面
+      3. <recipes> 或让 RecipeDef 的 <recipeUsers> 指向本 defName（两边都写也不会重复，游戏按 LIST 去重）
+      4. 可选：<li Class="CompProperties_AffectedByFacilities"> + <linkableFacilities> 接受工具柜等加成
+    另：台子通常写 <hasInteractionCell>true</hasInteractionCell>、<passability>PassThroughOnly</passability>、
+        <statBases><Cleanliness>-2</Cleanliness></statBases>（脏工作台）与 <uiOrder>2500</uiOrder>。
+        参考原版：Data/Core/Defs/ThingDefs_Buildings/Buildings_Production.xml（TableMachining / TableSmithing）。
+
+    <ThingDef ParentName="BenchBase">
+      <defName>{{YourPrefix}}_Building_{{YourBenchName}}</defName>
+      <label>{{YourBenchLabel}}</label>
+      <thingClass>Building_WorkTable</thingClass>
+      <size>(1,1)</size>
+      <designationCategory>Production</designationCategory>
+      <uiOrder>2500</uiOrder>
+      <passability>PassThroughOnly</passability>
+      <hasInteractionCell>true</hasInteractionCell>
+      <statBases>
+        <WorkToBuild>2000</WorkToBuild>
+        <MaxHitPoints>180</MaxHitPoints>
+        <Flammability>1.0</Flammability>
+        <Cleanliness>-2</Cleanliness>
+      </statBases>
+      <inspectorTabs>
+        <li>ITab_Bills</li>
+      </inspectorTabs>
+      <recipes>
+        <li>{{YourPrefix}}_Recipe_{{YourName}}</li>
+      </recipes>
+      <comps>
+        <li Class="CompProperties_AffectedByFacilities">
+          <linkableFacilities>
+            <li>ToolCabinet</li>
+          </linkableFacilities>
+        </li>
+      </comps>
+      <graphicData>
+        <texPath>Things/Building/Production/{{YourPrefix}}_{{YourBenchTexture}}</texPath>
+        <graphicClass>Graphic_Single</graphicClass>
+        <drawSize>(1,1)</drawSize>
+      </graphicData>
+    </ThingDef>
+  ========================================================================== -->
 </Defs>

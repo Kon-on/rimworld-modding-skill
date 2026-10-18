@@ -20,7 +20,7 @@
 
 ### 第 3 步：编写 BuildingDef
 
-使用 `templates/building.xml` 模板，参考 `references/03-xml-defs.md` 建筑部分。
+使用 `assets/templates/building.xml` 模板，参考 `references/03-xml-defs.md` 建筑部分。
 
 **注意**：
 - `<size>` 决定建筑占几格

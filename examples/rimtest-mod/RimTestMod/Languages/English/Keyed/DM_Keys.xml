@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- AI 辅助生成 | 线 A / 英文 Keyed 兜底
+       作用：即使以英文（或任何非中文语言）运行，C# 里 Translate() 出来的也是英文句子而不是键名。
+       Def 的 label/description 本身就是英文，所以英文侧不需要 DefInjected。 -->
+  <DM_TestShield_Inspect>Test shield: {0}/{1} ({2} damage absorbed)</DM_TestShield_Inspect>
+  <DM_TestShield_Depleted>Test shield broken!</DM_TestShield_Depleted>
+  <DM_TestShield_GizmoRefillLabel>Refill test shield</DM_TestShield_GizmoRefillLabel>
+  <DM_TestShield_GizmoRefillDesc>Instantly refill the test shield. For testing only.</DM_TestShield_GizmoRefillDesc>
+
+</LanguageData>

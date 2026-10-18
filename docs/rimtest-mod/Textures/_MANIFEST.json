@@ -1,0 +1,181 @@
+{
+  "mod": "rimtest-mod",
+  "generator": "Source/make-textures.py",
+  "generator_sha256": "b2a17139cb2a129ce8c7e90c1f6b85edcbd272460f9d26c041de2be162637b08",
+  "ai_note": "AI 辅助生成；全部图形为原创几何绘制，未使用任何第三方 IP 素材",
+  "environment": {
+    "python": "3.12.14",
+    "pillow": "12.3.0",
+    "supersample": 4
+  },
+  "reproducible": "无随机源/时间戳/网络；命令: python Source/make-textures.py",
+  "palette": "#38D8E8 青蓝主色 / #A8E4FF 亮青 / #8020E8->128,92,232 紫 / #2B3038-#8A94A2 深灰金属",
+  "texPath_contract": [
+    {
+      "defName": "DM_Weapon_PlasmaDagger",
+      "texPath": "Things/Item/Equipment/WeaponMelee/DM_PlasmaDagger"
+    },
+    {
+      "defName": "DM_Weapon_IonRifle",
+      "texPath": "Things/Item/Equipment/WeaponRanged/DM_IonRifle"
+    },
+    {
+      "defName": "DM_Projectile_IonRifle",
+      "texPath": "Things/Projectile/DM_IonRifleBullet"
+    },
+    {
+      "defName": "DM_Apparel_TestVest",
+      "texPath": "Things/Item/Equipment/Apparel/DM_TestVest"
+    },
+    {
+      "defName": "DM_Apparel_TestVest(worn)",
+      "texPath": "Things/Pawn/Humanlike/Apparel/DM_TestVest/DM_TestVest"
+    },
+    {
+      "defName": "DM_Stuff_TestAlloy",
+      "texPath": "Things/Item/Resource/DM_TestAlloy"
+    },
+    {
+      "defName": "DM_Building_TestBench",
+      "texPath": "Things/Building/Production/DM_TestBench"
+    },
+    {
+      "defName": "DM_Plant_TestBloom",
+      "texPath": "Things/Plant/DM_TestBloom"
+    }
+  ],
+  "files": [
+    {
+      "file": "Textures/Things/Item/Equipment/WeaponMelee/DM_PlasmaDagger.png",
+      "width": 128,
+      "height": 128,
+      "mode": "RGBA",
+      "bytes": 6848,
+      "sha256": "ec9192efcf6c7979508aa82e1bb45a2169d3ae2a4a7f2e9eb4625a7470ad44a4",
+      "texPath": "Things/Item/Equipment/WeaponMelee/DM_PlasmaDagger",
+      "usedBy": "DM_Weapon_PlasmaDagger",
+      "method": "几何矢量绘制：水平刀身多边形 + 沿刀轴 violet->cyan 线性渐变 + 高斯辉光 + 深色描边，保持水平（与原版 Gladius 一致，装备旋转交给游戏），按 alpha 包围盒适配 120px 宽、4x 超采样 LANCZOS 缩放"
+    },
+    {
+      "file": "Textures/Things/Item/Equipment/WeaponRanged/DM_IonRifle.png",
+      "width": 128,
+      "height": 128,
+      "mode": "RGBA",
+      "bytes": 6228,
+      "sha256": "1a694fd2908cd332bba3d317c0a54bc9242394d7be6cccd7a5ddebec6f8977c3",
+      "texPath": "Things/Item/Equipment/WeaponRanged/DM_IonRifle",
+      "usedBy": "DM_Weapon_IonRifle",
+      "method": "几何矢量绘制：水平枪身圆角矩形组 + 蓝白发光能量槽 + 枪口能量环辉光，保持水平（与原版 AssaultRifle 一致），适配 124px 宽、4x 超采样 LANCZOS 缩放"
+    },
+    {
+      "file": "Textures/Things/Projectile/DM_IonRifleBullet.png",
+      "width": 32,
+      "height": 32,
+      "mode": "RGBA",
+      "bytes": 1835,
+      "sha256": "d162a99dcd26b679e9590080de655ff121d2bbed0e78f94cd5a13a2b930a9323",
+      "texPath": "Things/Projectile/DM_IonRifleBullet",
+      "usedBy": "DM_Projectile_IonRifle",
+      "method": "胶囊多边形弹体（弹头朝 +x，供 drawRotated 旋转）+ blue->glow 线性渐变 + 大半径高斯辉光"
+    },
+    {
+      "file": "Textures/Things/Item/Equipment/Apparel/DM_TestVest.png",
+      "width": 128,
+      "height": 128,
+      "mode": "RGBA",
+      "bytes": 10661,
+      "sha256": "ecbbf55d89288958f440b116bbb0e54f3c5fc13fa7543cf37591aa67a5fd9188",
+      "texPath": "Things/Item/Equipment/Apparel/DM_TestVest",
+      "usedBy": "DM_Apparel_TestVest（物品图标）",
+      "method": "几何矢量绘制：背心正面轮廓多边形 + 肩带/胸板/腰袋/束带 + 中央青蓝能量核心（径向辉光）"
+    },
+    {
+      "file": "Textures/Things/Pawn/Humanlike/Apparel/DM_TestVest/DM_TestVest_south.png",
+      "width": 128,
+      "height": 128,
+      "mode": "RGBA",
+      "bytes": 7327,
+      "sha256": "bf460337e025cf896642a3e0bc5204b70c27645290ddbb07bade76ecc253b4ec",
+      "texPath": "Things/Pawn/Humanlike/Apparel/DM_TestVest/DM_TestVest",
+      "usedBy": "DM_Apparel_TestVest（穿戴，south）",
+      "method": "穿戴外观（正面）：躯干轮廓按原版实测 x 34..94 / y 42..106 + 领口包边 + 肩带 + 胸口能量核心 + 胸袋腰袋 + 青蓝下摆条"
+    },
+    {
+      "file": "Textures/Things/Pawn/Humanlike/Apparel/DM_TestVest/DM_TestVest_north.png",
+      "width": 128,
+      "height": 128,
+      "mode": "RGBA",
+      "bytes": 7812,
+      "sha256": "551e258f365d7c60d50021850e191b96fca098236e0140ad74f52a0db9e5ecf0",
+      "texPath": "Things/Pawn/Humanlike/Apparel/DM_TestVest/DM_TestVest",
+      "usedBy": "DM_Apparel_TestVest（穿戴，north）",
+      "method": "穿戴外观（背面）：同款轮廓 + 背甲平板 + 中缝 + X 型束带 + 菱形能量徽记 + 背袋"
+    },
+    {
+      "file": "Textures/Things/Pawn/Humanlike/Apparel/DM_TestVest/DM_TestVest_east.png",
+      "width": 128,
+      "height": 128,
+      "mode": "RGBA",
+      "bytes": 4683,
+      "sha256": "2431dd979c1abc557c540a72e2394efc78d85c8148c2bc0961263aa1e810ffb7",
+      "texPath": "Things/Pawn/Humanlike/Apparel/DM_TestVest/DM_TestVest",
+      "usedBy": "DM_Apparel_TestVest（穿戴，east）",
+      "method": "穿戴外观（右侧视）：原版实测侧身轮廓 x 44..86 / y 44..104 + 肩带 + 背带扣 + 前襟能量条 + 侧袋"
+    },
+    {
+      "file": "Textures/Things/Pawn/Humanlike/Apparel/DM_TestVest/DM_TestVest_west.png",
+      "width": 128,
+      "height": 128,
+      "mode": "RGBA",
+      "bytes": 4658,
+      "sha256": "531a994fbb9d468778d92cafe15dc0e0f969a3820cd50b1b0dc2accdc484b8ef",
+      "texPath": "Things/Pawn/Humanlike/Apparel/DM_TestVest/DM_TestVest",
+      "usedBy": "DM_Apparel_TestVest（穿戴，west）",
+      "method": "穿戴外观（左侧视）：east 图的水平镜像（原版同类贴图同样使用镜像）"
+    },
+    {
+      "file": "Textures/Things/Item/Resource/DM_TestAlloy.png",
+      "width": 64,
+      "height": 64,
+      "mode": "RGBA",
+      "bytes": 2530,
+      "sha256": "cf8067ff6cf919d74a5b5e8caf83ee12adcd136e5a30d0561113968a5c2d315c",
+      "texPath": "Things/Item/Resource/DM_TestAlloy",
+      "usedBy": "DM_Stuff_TestAlloy",
+      "method": "几何矢量绘制：三块等轴合金锭（顶/正/侧面三色面）+ 顶面青蓝高光"
+    },
+    {
+      "file": "Textures/Things/Building/Production/DM_TestBench.png",
+      "width": 128,
+      "height": 128,
+      "mode": "RGBA",
+      "bytes": 6521,
+      "sha256": "fefb45faf3c89de4de85798f9f362f8d851dadee45a45cf885e9557fe9388606",
+      "texPath": "Things/Building/Production/DM_TestBench",
+      "usedBy": "DM_Building_TestBench",
+      "method": "几何矢量绘制（俯视）：台面渐变 + 中央能量加工槽（分段+辉光）+ 夹具/锯片 + 四角桌腿 + 控制面板"
+    },
+    {
+      "file": "Textures/Things/Plant/DM_TestBloom.png",
+      "width": 64,
+      "height": 64,
+      "mode": "RGBA",
+      "bytes": 7863,
+      "sha256": "5bd959ea44e303db8f50160900ae7d4232b6e084ed46cc873b43f878d63e04c7",
+      "texPath": "Things/Plant/DM_TestBloom",
+      "usedBy": "DM_Plant_TestBloom",
+      "method": "几何矢量绘制：三茎绿叶 + 三朵八瓣青蓝花（花瓣+花心辉光）+ 根际阴影"
+    },
+    {
+      "file": "About/Preview.png",
+      "width": 640,
+      "height": 360,
+      "mode": "RGBA",
+      "bytes": 144647,
+      "sha256": "26fe3d920ac0a67497d9edf8a1d04c33cf53038cde1394fd5b089b3b43b7354c",
+      "texPath": null,
+      "usedBy": "Steam/About 预览图（非游戏内贴图）",
+      "method": "合成预览图：深色渐变背景 + 网格 + 青蓝辉光 + 标题文字（含 mod 名）+ 三张主素材缩略图面板"
+    }
+  ]
+}

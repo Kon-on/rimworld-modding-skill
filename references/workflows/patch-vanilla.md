@@ -53,7 +53,7 @@
 1. 确定要修改的目标方法（类名 + 方法名）
 2. 用 dnSpy 或 RimSage 查看方法签名（参数类型、返回类型）
 3. 决定使用 Prefix（前置拦截）、Postfix（后置拦截）还是 Transpiler
-4. 编写 patch 代码（使用 `templates/harmony-patch.cs`）
+4. 编写 patch 代码（使用 `assets/templates/harmony-patch.cs`）
 5. 编译 → 放入 Assemblies/ → 测试
 
 ### 示例：修改战斗伤害计算

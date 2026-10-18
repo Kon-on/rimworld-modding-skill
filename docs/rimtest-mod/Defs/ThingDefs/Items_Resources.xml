@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- AI 辅助生成 | 目标平台 RimWorld 1.7.4981 rev136（线 A / XML）
+       核验源：
+         Core/Defs/ThingDefs_Items/Items_Resource_Base.xml:4  ResourceBase  <- 本 Def 的父
+         Core/Defs/ThingDefs_Items/Items_Resource_Stuff.xml:134 Steel（金属材料范本：statBases + stuffProps + soundInteract）
+         Core/Defs/ThingDefs_Items/Items_Resource_Stuff.xml:190 Plasteel（stuffProps/statFactors 里 WorkToMake/WorkToBuild 的真实用法）
+       1.7 字段实测：stuffProps/categories/li、stuffProps/appearance（Metal/Planks/Bricks）、stuffProps/color、
+       commonality、constructEffect、isAirtight、canSuggestUseDefaultStuff、statFactors、statOffsets、
+       soundImpactBullet / soundMeleeHitSharp / soundMeleeHitBlunt / soundImpactMelee；
+       材料自身护甲输出写在 statBases：StuffPower_Armor_Sharp/Blunt/Heat、StuffPower_Insulation_Cold/Heat、
+       SharpDamageMultiplier、BluntDamageMultiplier（这些 StatDef 见 Core/Defs/Misc/StatDefs/Stats_Stuff.xml）。
+       贴图契约：Things/Item/Resource/DM_TestAlloy（单图 64x64 -> Graphic_StackCount 自动按堆叠数量拼图）。
+       颜色取自贴图线调色板 #38D8E8 = (56,216,232)（Textures/_MANIFEST.json palette）。 -->
+  <ThingDef ParentName="ResourceBase">
+    <defName>DM_Stuff_TestAlloy</defName>
+    <label>test alloy</label>
+    <description>A test-mod alloy. Counts as a metallic building material and as crafting stuff, so it can be used for weapons, apparel and buildings.</description>
+    <graphicData>
+      <texPath>Things/Item/Resource/DM_TestAlloy</texPath>
+      <graphicClass>Graphic_StackCount</graphicClass>
+    </graphicData>
+    <thingCategories>
+      <li>ResourcesRaw</li>
+    </thingCategories>
+    <statBases>
+      <MarketValue>3.5</MarketValue>
+      <Mass>0.35</Mass>
+      <StuffPower_Armor_Sharp>1.25</StuffPower_Armor_Sharp>
+      <StuffPower_Armor_Blunt>0.55</StuffPower_Armor_Blunt>
+      <StuffPower_Armor_Heat>0.75</StuffPower_Armor_Heat>
+      <StuffPower_Insulation_Cold>2</StuffPower_Insulation_Cold>
+      <StuffPower_Insulation_Heat>0</StuffPower_Insulation_Heat>
+      <SharpDamageMultiplier>1.1</SharpDamageMultiplier>
+      <BluntDamageMultiplier>1.1</BluntDamageMultiplier>
+    </statBases>
+    <stuffProps>
+      <categories>
+        <li>Metallic</li>
+      </categories>
+      <color>(56,216,232)</color>
+      <commonality>0.3</commonality>
+      <constructEffect>ConstructMetal</constructEffect>
+      <isAirtight>true</isAirtight>
+      <appearance>Metal</appearance>
+      <canSuggestUseDefaultStuff>true</canSuggestUseDefaultStuff>
+      <statFactors>
+        <MaxHitPoints>1.6</MaxHitPoints>
+        <Beauty>1.2</Beauty>
+        <Flammability>0</Flammability>
+        <WorkToBuild>1.8</WorkToBuild>
+        <WorkToMake>1.8</WorkToMake>
+      </statFactors>
+      <soundImpactBullet>BulletImpact_Metal</soundImpactBullet>
+      <soundMeleeHitSharp>MeleeHit_Metal_Sharp</soundMeleeHitSharp>
+      <soundMeleeHitBlunt>MeleeHit_Metal_Blunt</soundMeleeHitBlunt>
+      <soundImpactMelee>Pawn_Melee_Punch_HitBuilding_Metal</soundImpactMelee>
+    </stuffProps>
+    <useHitPoints>false</useHitPoints>
+    <smeltable>true</smeltable>
+    <burnableByRecipe>false</burnableByRecipe>
+    <soundInteract>Metal_Drop</soundInteract>
+    <soundDrop>Metal_Drop</soundDrop>
+  </ThingDef>
+
+</Defs>
+

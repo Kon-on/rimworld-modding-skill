@@ -1,0 +1,23 @@
+name: check
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  index-and-evals:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: 索引一致性（路径、索引覆盖率、模板标注）
+        run: node scripts/check-index.mjs --strict
+      - name: 评测用例结构
+        run: node tests/run-evals.mjs --validate
+      - name: 模板检索脚本冒烟测试
+        run: node tests/test-find-template.mjs
+      - name: XML 模板良构性
+        run: node tests/test-xml-lint.mjs

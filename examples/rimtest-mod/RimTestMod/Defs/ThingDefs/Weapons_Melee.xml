@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- AI 辅助生成 | 目标平台 RimWorld 1.7.4981 rev136（线 A / XML）
+       核验源（全部为 1.7 原版 Data 实测，不是 1.6 文档）：
+         Core/Defs/ThingDefs_Misc/Weapons/BaseWeapons.xml:179  BaseMeleeWeapon_Sharp_Quality  <- 本 Def 的直接父
+         Core/Defs/ThingDefs_Misc/Weapons/BaseWeapons.xml:144  BaseMeleeWeapon_Sharp
+         Core/Defs/ThingDefs_Misc/Weapons/BaseWeapons.xml:114  BaseMeleeWeapon
+         Core/Defs/ThingDefs_Misc/Weapons/MeleeMedieval.xml:59 MeleeWeapon_Gladius（同父实例：costStuffCount/stuffCategories/weaponTags/recipeMaker）
+         Core/Defs/ThingDefs_Misc/Weapons/MeleeNeolithic.xml:59 MeleeWeapon_Knife（equippedAngleOffset=-65 / uiIconScale / tools 三件套写法）
+         Core/Defs/ThingDefs_Misc/Weapons/MeleeMedieval.xml:4   MeleeWeapon_Mace（techLevel=Medieval 同族实例）
+       任务命中点：tools/li（edge）power = 18（伤害）、cooldownTime = 1.2（冷却 1.2 秒）
+       techLevel = Ultra：1.7 实测合法枚举为 Neolithic/Medieval/Industrial/Spacer/Ultra/Archotech/Animal，
+       原版 1.7 里不存在 "Ultratech" —— 1.6 模板与旧文档里的 Ultratech 是过时/错误写法。
+       继承说明：本 Def 不再写 thingCategories/weaponClasses/smeltable/tradeTags/relicChance，
+       它们由 BaseMeleeWeapon 链提供（WeaponsMelee / Melee+MeleePiercer / true / WeaponMelee / 1）。 -->
+  <ThingDef ParentName="BaseMeleeWeapon_Sharp_Quality">
+    <defName>DM_Weapon_PlasmaDagger</defName>
+    <label>plasma dagger (test)</label>
+    <description>A test-mod plasma dagger. Damage and cooldown are fixed by the mod spec: 18 damage per hit, 1.2 seconds cooldown. Blade is made from any metallic stuff.</description>
+    <techLevel>Ultra</techLevel>
+    <graphicData>
+      <texPath>Things/Item/Equipment/WeaponMelee/DM_PlasmaDagger</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <uiIconScale>1.3</uiIconScale>
+    <equippedAngleOffset>-65</equippedAngleOffset>
+    <costStuffCount>50</costStuffCount>
+    <stuffCategories>
+      <li>Metallic</li>
+    </stuffCategories>
+    <statBases>
+      <WorkToMake>12000</WorkToMake>
+      <Mass>1.2</Mass>
+    </statBases>
+    <weaponTags>
+      <li>UltratechMelee</li>
+    </weaponTags>
+    <recipeMaker>
+      <researchPrerequisite>ChargedShot</researchPrerequisite>
+      <skillRequirements>
+        <Crafting>6</Crafting>
+      </skillRequirements>
+      <displayPriority>500</displayPriority>
+    </recipeMaker>
+    <tools>
+      <li>
+        <label>handle</label>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>9</power>
+        <cooldownTime>2</cooldownTime>
+      </li>
+      <li>
+        <label>edge</label>
+        <capacities>
+          <li>Cut</li>
+        </capacities>
+        <power>18</power>
+        <cooldownTime>1.2</cooldownTime>
+      </li>
+    </tools>
+  </ThingDef>
+
+</Defs>
+

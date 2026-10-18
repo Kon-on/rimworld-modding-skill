@@ -38,7 +38,7 @@
 
 ### 需求文件格式参考
 
-详见 `templates/requirements-template.md`。
+详见 `assets/templates/requirements-template.md`。
 
 ## 第二步：逐个处理
 
