@@ -4,16 +4,16 @@
   "summary": {
     "promptsOk": 1,
     "promptsTotal": 4,
-    "assertionsPassed": 11,
-    "assertionsTotal": 24,
-    "score": 46
+    "assertionsPassed": 14,
+    "assertionsTotal": 25,
+    "score": 56
   },
   "results": [
     {
       "id": "create-melee-weapon",
       "ok": false,
       "passed": 1,
-      "failed": 7,
+      "failed": 8,
       "failures": [
         {
           "kind": "contains",
@@ -41,22 +41,27 @@
           "note": "未找到"
         },
         {
-          "kind": "not_contains",
-          "needle": "costList",
-          "note": "不应出现，却在第 55 行出现"
+          "kind": "contains",
+          "needle": "<techLevel>Ultra</techLevel>",
+          "note": "未找到"
         },
         {
-          "kind": "not_contains",
-          "needle": "Ultratech",
-          "note": "不应出现，却在第 3 行出现"
+          "kind": "not_contains_line",
+          "needle": "^\\s*<techLevel>\\s*Ultratech\\s*</techLevel>",
+          "note": "不该单独成行，却在第 24 行出现：<techLevel>Ultratech</techLevel>"
+        },
+        {
+          "kind": "not_contains_line",
+          "needle": "^\\s*<costList>",
+          "note": "不该单独成行，却在第 55 行出现：<costList>"
         }
       ]
     },
     {
       "id": "create-ranged-weapon",
       "ok": false,
-      "passed": 2,
-      "failed": 3,
+      "passed": 3,
+      "failed": 2,
       "failures": [
         {
           "kind": "contains",
@@ -65,12 +70,7 @@
         },
         {
           "kind": "contains",
-          "needle": "verbClass=\"Verb_Shoot\"",
-          "note": "未找到"
-        },
-        {
-          "kind": "contains",
-          "needle": "rangedWeapon_Range",
+          "needle": "Verb_Shoot",
           "note": "未找到"
         }
       ]
@@ -85,23 +85,13 @@
     {
       "id": "debug-missing-def",
       "ok": false,
-      "passed": 1,
-      "failed": 3,
+      "passed": 3,
+      "failed": 1,
       "failures": [
         {
-          "kind": "contains",
-          "needle": "RimSage",
-          "note": "未找到"
-        },
-        {
-          "kind": "contains",
-          "needle": "grep",
-          "note": "未找到"
-        },
-        {
-          "kind": "contains",
-          "needle": "先查原版",
-          "note": "未找到"
+          "kind": "contains_any",
+          "needle": "Logs\\Player.log | Logs/Player.log",
+          "note": "以下写法一个都没出现"
         }
       ]
     }

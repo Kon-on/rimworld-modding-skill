@@ -103,7 +103,7 @@ node tests/test-find-template.mjs       # 模板检索脚本冒烟测试
 ```
 
 - **为什么要有 `check-index.mjs`**：SKILL.md 的「模板 ↔ Def 类型对照表」与「子文件索引」是手写索引，目录一改名就会静默漂移——本项目上一次重构漂移了 38 处路径，直到人工审查才发现。机械约束交给脚本，人只负责内容。
-- **`tests/` 是评测不是测试**：固定提示词 + 机械断言，跑一次就知道技能教的写法有没有失效。当前 baseline：4 条用例中 3 条全过，剩 1 条因 3 处字面量断言过严而失败；原因与修法写在 [tests/README.md](tests/README.md)，为保真没有为凑分去改断言。
+- **`tests/` 是评测不是测试**：固定提示词 + 机械断言，跑一次就知道技能教的写法有没有失效。当前 baseline（2026-10-18 修订断言后重算）：加载技能 **4 / 4 用例、25 / 25 断言**；同一天同一模型的「不加载技能」对照臂 1 / 4、14 / 25。断言的修订依据与两臂差异都写在 [tests/README.md](tests/README.md)。
 - **改动都有证据**：静态核验结果见 [examples/rimtest-mod/核验报告.md](examples/rimtest-mod/核验报告.md)，可复算命令写在 [docs/README.md](docs/README.md)。
 
 ## 已知限制
@@ -111,7 +111,7 @@ node tests/test-find-template.mjs       # 模板检索脚本冒烟测试
 - **运行时验证未完成**：完整测试 mod 与逐项测试清单（[examples/rimtest-mod/TESTING.md](examples/rimtest-mod/TESTING.md)）已交付，但游戏内的逐项测试尚未跑完，结果未回填。
 - **Harmony 兼容性**：Harmony 3.0（按 net8 编译）跑在 net10.0 游戏上，目前只验证到「编译通过 + 补丁登记成功」，长时间、多场景未验证。
 - **语言目录标识**：`legacyFolderName` 的实际取值无法静态确定，示例 mod 因此同时提供 `ChineseSimplified` 与 `ChineseSimplified (简体中文)` 两种目录名。
-- **评测缺对照基线**：还没有「不给技能时表现如何」的 RED baseline。
+- **评测样本量小**：4 条用例、单一模型、单次运行——只够证明「技能教的写法没失效」，不足以给出统计意义上的提升幅度。
 - **实测环境**：Windows + RimWorld 1.7.4981 rev136；Linux / macOS 未验证。
 
 ## 隐私与合规

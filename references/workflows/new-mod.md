@@ -74,7 +74,7 @@ claude mcp add rimworld-source --transport http https://mcp.rimsage.com/mcp
 ```
 测试步骤：
 1. 启动 RimWorld → Mod 列表勾选 "<ModName> (Test)"
-2. Developer Mode → Spawn Thing → 搜索 defName
+2. 开发者模式（Development Mode）→ 顶栏 debug actions 菜单 → `Spawning` → `Spawn thing` → 搜索 defName
 3. 确认：贴图正常 / 属性正确 / 无红字
 4. 反馈：有 bug 说 bug，没问题说 "OK 可以正规化"
 ```

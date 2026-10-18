@@ -1,18 +1,18 @@
 {
   "run": "2026-10-17-baseline-skill",
-  "date": "2026-10-17",
+  "date": "2026-10-18",
   "summary": {
-    "promptsOk": 3,
+    "promptsOk": 2,
     "promptsTotal": 4,
     "assertionsPassed": 23,
-    "assertionsTotal": 24,
-    "score": 96
+    "assertionsTotal": 25,
+    "score": 92
   },
   "results": [
     {
       "id": "create-melee-weapon",
       "ok": true,
-      "passed": 8,
+      "passed": 9,
       "failed": 0,
       "failures": []
     },
@@ -23,9 +23,9 @@
       "failed": 1,
       "failures": [
         {
-          "kind": "contains",
-          "needle": "verbClass=\"Verb_Shoot\"",
-          "note": "未找到"
+          "kind": "not_contains_line",
+          "needle": "^\\s*<rangedWeapon_Range[\\s>/]",
+          "note": "不该单独成行，却在第 49 行出现：<rangedWeapon_Range>30</rangedWeapon_Range>"
         }
       ]
     },
@@ -38,10 +38,16 @@
     },
     {
       "id": "debug-missing-def",
-      "ok": true,
-      "passed": 4,
-      "failed": 0,
-      "failures": []
+      "ok": false,
+      "passed": 3,
+      "failed": 1,
+      "failures": [
+        {
+          "kind": "contains_any",
+          "needle": "Logs\\Player.log | Logs/Player.log",
+          "note": "以下写法一个都没出现"
+        }
+      ]
     }
   ]
 }

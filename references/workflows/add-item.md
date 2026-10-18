@@ -48,8 +48,8 @@
 
 ### 第 6 步：测试
 
-1. 启动游戏，启用 Developer Mode
-2. Open Debug Actions Menu → **Spawn Thing**
+1. 启动游戏，启用开发者模式（Development Mode）
+2. 顶栏 debug actions 菜单 → `Spawning` → **`Spawn thing`**
 3. 搜索你的物品 defName
 4. 确认：
    - [ ] 物品正常生成在地图上

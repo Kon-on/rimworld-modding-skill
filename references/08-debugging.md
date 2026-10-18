@@ -25,23 +25,27 @@
 3. 屏幕顶部出现一排开发工具按钮
 
 ### 常用开发工具
-- **Open Debug Actions Menu**（⚙️ 图标）→ 最常用的工具集
-  - `Spawn Thing` — 直接生成物品测试
-  - `Execute Incident` — 触发任意事件
-  - `Apply Damage` — 对选中对象施加伤害
-  - `Give Hediff` — 施加健康效果
-- **Open Debug Log** — 查看实时日志
-- **God Mode** — 无敌模式 + 免费建造
+
+1.7 的调试入口集中在顶部工具栏的 **debug actions 菜单**（DLL 里叫 `DebugActionsPalette` / `Dev_ToggleDevPalette`）。菜单按分类组织（`General` / `Pawns` / `Spawning` / `Anomaly` 等），动作名以游戏里实际显示的为准——下面是 1.7 的 `Assembly-CSharp.dll` 里确实存在的几个：
+
+- `Spawning` 分类 → `Spawn thing` — 直接生成物品测试（还有 `Spawn thing with style`、`Spawn full thing stack`、`Spawn stack of 25` / `75` 等变体）
+- 对选中单位：`Apply damage`、`Kill`、`Down`、`Recruit` 等
+- `General` / `Pawns` / `Anomaly` 分类下是其余动作与开关
+
+> ⚠️ 别照抄 1.6 及更早教程里的菜单标签（`Open Debug Actions Menu`、`God Mode`、`Open Debug Log`、`Execute Incident`、`Give Hediff`）：1.7 的 `Assembly-CSharp.dll` 与语言文件里都查不到这些字符串。日志不靠菜单看——见下一节直接读文件。
 
 ## 日志文件
 
-### Player.log 位置
+### 日志位置（1.7 换了引擎，路径也变了）
+
+1.7 起游戏不再是 Unity，日志**不在**旧的 `AppData\LocalLow\…\Player.log`，而是在**用户数据目录下的 `Logs\` 子目录**里：
 
 | 系统 | 路径 |
 |------|------|
-| Windows | `%USERPROFILE%\AppData\LocalLow\Ludeon Studios\RimWorld by Ludeon Studios\Player.log` |
-| Linux | `~/.config/unity3d/Ludeon Studios/RimWorld by Ludeon Studios/Player.log` |
-| macOS | `~/Library/Logs/Ludeon Studios/RimWorld by Ludeon Studios/Player.log` |
+| Windows（本机实测 1.7.4981 rev136） | `%USERPROFILE%\AppData\LocalLow\Ludeon Studios\RimWorld by Ludeon Studios\Logs\Player.log` |
+| Linux / macOS（未实测） | 同一「用户数据目录」下的 `Logs/Player.log`；旧 Unity 时代的 `~/.config/unity3d/…`、`~/Library/Logs/…` **不再保证存在**，以实际安装为准 |
+
+怎么快速找到：`Logs\` 与你 mod 列表所在的 `Config\`（`Config\ModsConfig.xml`）同级；游戏每次启动会把上一局的日志改名成同目录下的 **`Player-prev.log`**，崩溃重启后要看上一局就翻它。日志头几行会自报家门（`Log file: …`），拿不准时打开文件对一眼即可。
 
 ### 日志解读
 
@@ -111,7 +115,7 @@ if (Find.AnyThing<Pawn>() is Pawn pawn)
 2. 确认问题是否复现
    - **不复现** → mod 冲突，二分法找出冲突 mod
    - **复现** → 你的 mod 有 bug，进入下一步
-3. 查看 Player.log，搜索你的 mod 前缀
+3. 打开用户数据目录里的 `Logs\Player.log`（路径见「日志文件」一节），搜索你的 mod 前缀
 4. 在可疑代码处加入 `Log.Message()` 输出变量值
 5. 逐步缩小问题范围
 
@@ -127,7 +131,7 @@ if (Find.AnyThing<Pawn>() is Pawn pawn)
 检查 About.xml 是否语法正确，`packageId` 是否与其他 mod 重复。
 
 ### Q: 开发模式下物品怎么生成？
-Open Debug Actions Menu → Spawn Thing → 搜索你的物品 defName → 点击生成。
+顶部工具栏的 debug actions 菜单 → `Spawning` → `Spawn thing` → 搜索你的物品 defName → 点击生成。
 
 ### Q: Harmony 补丁没有生效？
 1. 确认 `[StaticConstructorOnStartup]` 类被正确调用（检查 Log.Message 输出）

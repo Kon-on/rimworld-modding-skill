@@ -34,15 +34,16 @@
 4. 反复二分，直到找到冲突 mod
 5. 查看冲突 mod 是否 patch 了相同的类/方法
 
-## 常用调试命令（开发者控制台）
+## 1.7 没有开发者控制台（旧命令一律按不存在处理）
 
-在开发者模式下按 `` ` ``（反引号）打开开发者控制台：
+1.6 及更早的教程会让你按 `` ` ``（反引号）打开「开发者控制台」，敲 `list defs`、`spawn <defName>`——**1.7 已经移除**：`Assembly-CSharp.dll` 里查不到 `DevConsole` / `ExecuteCommand` 字符串，照抄这些命令不会有任何反应。1.7 能用的入口是：
 
-| 命令 | 作用 |
-|------|------|
-| `list defs ThingDef` | 列出所有 ThingDef |
-| `list defs <YourPrefix>` | 列出你的 mod 的 Def |
-| `spawn <defName>` | 生成指定物品 |
+| 想做的事 | 1.7 里的做法 |
+|----------|--------------|
+| 确认 Def 到底有没有加载 | 读 `Logs\Player.log`（路径与查找办法见 `references/08-debugging.md`），搜 XML 报错与你的 packageId；或对 mod 目录跑静态核验：`node docs/verify-testmod.mjs --mod <mod 目录>`（本仓库脚本） |
+| 把物品生成出来看效果 | 开发者模式 → 顶部工具栏的 debug actions 菜单 → `Spawning` → `Spawn thing` → 搜你的 defName |
+| 触发事件 / 折腾选中单位 | 同一菜单的其余分类（`General` / `Pawns` / `Anomaly`），对选中单位可用 `Apply damage`、`Kill`、`Down`、`Recruit` 等动作 |
+| 看游戏这一局的运行日志 | 直接打开用户数据目录里的 `Logs\Player.log`（`Logs\` 与 `Config\` 同级） |
 
 ## 获取帮助时应该提供的信息
 

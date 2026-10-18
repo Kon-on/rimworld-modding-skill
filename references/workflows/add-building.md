@@ -69,7 +69,7 @@
 
 ### 第 7 步：测试
 
-1. 启动游戏，启用 Developer Mode + God Mode
+1. 启动游戏，启用开发者模式（Development Mode）
 2. 在 **Architect** 菜单中找到你的建筑分类
 3. 放置建筑，确认：
    - [ ] 建筑正常放置在地图上

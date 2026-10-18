@@ -5,6 +5,12 @@
  * 分工：产出必须由 agent 生成（有 skill / 无 skill 各跑一次），断言是机械的，交给脚本。
  * 本脚本只做四件事：列用例、导出提示词包、校验用例结构（CI）、按断言给产出打分。
  *
+ * 断言的四种写法（大小写敏感，全部是对产出文本的字面量检查）：
+ *   contains          字符串必须出现
+ *   contains_any      字符串数组的数组，每一组里**任一**写法出现即算过（用于同义写法）
+ *   not_contains      字符串出现即算错（正文里也不许出现，只用于「出现就是错」的写法）
+ *   not_contains_line 正则数组，**单独成行**即算错（允许正文里引用/纠错，只禁正文里这样写）
+ *
  * 用法：
  *   node tests/run-evals.mjs --list                    列出用例
  *   node tests/run-evals.mjs --prompts                 导出可粘贴给 agent 的提示词包
@@ -37,11 +43,24 @@ function assertText(expect, text) {
       note: text.toLowerCase().includes(String(needle).toLowerCase()) ? "命中但大小写不符" : "未找到",
     });
   }
+  for (const group of expect.contains_any ?? []) {
+    const alts = Array.isArray(group) ? group : [group];
+    const hit = alts.find((s) => text.includes(s));
+    if (hit) passed.push({ kind: "contains_any", needle: alts.join(" | "), note: "命中 " + JSON.stringify(hit) });
+    else failed.push({ kind: "contains_any", needle: alts.join(" | "), note: "以下写法一个都没出现" });
+  }
   for (const needle of expect.not_contains ?? []) {
     if (text.includes(needle)) {
       const line = text.slice(0, text.indexOf(needle)).split("\n").length;
       failed.push({ kind: "not_contains", needle, note: "不应出现，却在第 " + line + " 行出现" });
     } else passed.push({ kind: "not_contains", needle });
+  }
+  for (const pattern of expect.not_contains_line ?? []) {
+    const rx = new RegExp(pattern);
+    const lines = text.split("\n");
+    const i = lines.findIndex((l) => rx.test(l));
+    if (i < 0) passed.push({ kind: "not_contains_line", needle: pattern });
+    else failed.push({ kind: "not_contains_line", needle: pattern, note: "不该单独成行，却在第 " + (i + 1) + " 行出现：" + lines[i].trim().slice(0, 80) });
   }
   return { passed, failed };
 }
@@ -56,11 +75,21 @@ function validate() {
     else if (ids.has(p.id)) bad.push(at + ".id 重复：" + p.id); else ids.add(p.id);
     if (typeof p.prompt !== "string" || !p.prompt.trim()) bad.push(at + ".prompt 不能为空");
     const e = p.expect ?? {};
-    const lists = [["contains", e.contains], ["not_contains", e.not_contains]];
-    if (!lists.some((x) => Array.isArray(x[1]) && x[1].length)) bad.push(at + ".expect 至少要有一组非空断言");
+    const lists = [["contains", e.contains], ["not_contains", e.not_contains], ["not_contains_line", e.not_contains_line]];
+    const groups = [["contains_any", e.contains_any]];
+    if (!lists.some((x) => Array.isArray(x[1]) && x[1].length) && !groups.some((x) => Array.isArray(x[1]) && x[1].length))
+      bad.push(at + ".expect 至少要有一组非空断言");
     for (const [k, v] of lists) {
       if (v === undefined) continue;
       if (!Array.isArray(v) || v.some((s) => typeof s !== "string" || !s)) bad.push(at + ".expect." + k + " 必须是非空字符串数组");
+    }
+    for (const [k, v] of groups) {
+      if (v === undefined) continue;
+      if (!Array.isArray(v) || !v.length || v.some((g) => !Array.isArray(g) || !g.length || g.some((s) => typeof s !== "string" || !s)))
+        bad.push(at + ".expect." + k + " 必须是「非空字符串数组」的数组（例：[['a','b'], ['c']]）");
+    }
+    for (const s of e.not_contains_line ?? []) {
+      try { new RegExp(s); } catch { bad.push(at + ".expect.not_contains_line 里不是合法正则：" + s); }
     }
   });
   console.log("rimworld-modding 评测用例结构校验：" + prompts.length + " 条用例");
@@ -72,8 +101,9 @@ function validate() {
 function list() {
   console.log("共 " + prompts.length + " 条评测用例（tests/evals.json）\n");
   for (const p of prompts) {
-    const c = (p.expect?.contains ?? []).length, n = (p.expect?.not_contains ?? []).length;
-    console.log("- " + p.id + "  [必须包含 " + c + " 项 / 必须不含 " + n + " 项]");
+    const c = (p.expect?.contains ?? []).length, a = (p.expect?.contains_any ?? []).length;
+    const n = (p.expect?.not_contains ?? []).length, r = (p.expect?.not_contains_line ?? []).length;
+    console.log("- " + p.id + "  [必须包含 " + c + " 项 / 同义任一 " + a + " 组 / 必须不含 " + n + " 项 / 禁单独成行 " + r + " 条]");
     console.log("    " + p.prompt);
   }
 }
@@ -85,8 +115,10 @@ function promptPack() {
   for (const p of prompts) {
     console.log("## " + p.id);
     console.log("提示词：" + p.prompt);
-    console.log("必须包含：" + (p.expect?.contains ?? []).map((s) => JSON.stringify(s)).join(" / "));
+    if ((p.expect?.contains ?? []).length) console.log("必须包含：" + p.expect.contains.map((s) => JSON.stringify(s)).join(" / "));
+    if ((p.expect?.contains_any ?? []).length) console.log("必须包含（同义任一）：" + p.expect.contains_any.map((g) => g.map((s) => JSON.stringify(s)).join(" 或 ")).join(" / "));
     if ((p.expect?.not_contains ?? []).length) console.log("必须不含：" + p.expect.not_contains.map((s) => JSON.stringify(s)).join(" / "));
+    if ((p.expect?.not_contains_line ?? []).length) console.log("禁止单独成行：" + p.expect.not_contains_line.map((s) => JSON.stringify(s)).join(" / "));
     console.log("");
   }
 }
