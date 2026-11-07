@@ -1,5 +1,7 @@
 # RimWorld Modding Skill
 
+[English](README.en.md) · 简体中文
+
 > 给 AI 编码代理用的 RimWorld 1.7 mod 制作技能：环境搭建、XML Def、C# 与 Harmony 补丁、贴图、调试、Steam Workshop 发布的全流程，附带经原版实测校准的模板库与可机械校验的索引。
 
 **兼容** Claude Code · OpenAI Codex · Gemini CLI · GitHub Copilot CLI · TRAE · DSH · Cursor / Windsurf（降级）
