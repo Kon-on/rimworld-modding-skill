@@ -4,9 +4,7 @@
 
 ## 1.2.0 — 2026-10-18
 
-这次改动只为一件事：**把整个技能从 1.6 校准到 1.7**。证据不是猜的——用这个技能真机做成了一个环世界 1.7 测试 mod
-（`examples/rimtest-mod/`，44 文件，含 8 类 XML Def、ThingComp、3 个 Harmony 补丁、12 张原创贴图、本地化），
-过程中撞到的每一处"文档与 1.7 现实不一致"都记进了 `examples/rimtest-mod/_FINDINGS.md`（F1–F20），再逐条回改技能本体。
+这次改动只为一件事：**把整个技能从 1.6 校准到 1.7**。证据不是猜的——用这个技能真机做成了一个环世界 1.7 测试 mod（含 8 类 XML Def、ThingComp、3 个 Harmony 补丁、12 张原创贴图、本地化），过程中撞到的每一处「文档与 1.7 现实不一致」都记下来，再逐条回改技能本体。
 
 ### 变更（1.6 → 1.7 校准）
 
@@ -31,15 +29,14 @@
 
 ### 证据
 
-- 完整过程与逐条证据：`examples/rimtest-mod/_FINDINGS.md`（F1–F20，全部指向原版 1.7 文件行号或 DLL 反射结果）。
-- 可复跑：静态核验脚本 `docs/verify-testmod.mjs`（对该 mod 跑 8 类检查）、`node scripts/check-index.mjs --strict`、`node tests/run-evals.mjs --validate`。
-- 测试 mod 本体：`examples/rimtest-mod/`（含 TESTING.md 与核验报告）。
+- 每条结论都指向原版 1.7 文件行号或 DLL 反射结果。
+- 可复跑：`node scripts/check-index.mjs --strict`。
 
 ### 已知问题
 
-- **运行时验证尚未完成**：本机未启动游戏，`examples/rimtest-mod/TESTING.md` 里的游戏内测试项（语言目录加载、补丁日志、植物贴图、存档读档）待跑。静态检查通过 ≠ 运行时正确。
+- **运行时验证尚未完成**：本机未启动游戏，游戏内测试项（语言目录加载、补丁日志、植物贴图、存档读档）待跑。静态检查通过 ≠ 运行时正确。
 - Harmony 3.0（编译目标 net8）与游戏 net10.0 的运行时漂移只在"能编译 + 启动时登记成功"这一层验证过，全场景未验证。
-- 沿用 1.1.0 的两条：评测断言有三处字面量过严（见 `tests/README.md`「已知断言缺陷」）；缺无技能的 RED baseline。
+- 沿用 1.1.0 的两条：部分评测断言字面量过严；缺无技能的 RED baseline。
 
 ## 1.1.0 — 2026-10-17
 
@@ -48,8 +45,7 @@
 ### 新增
 
 - `scripts/check-index.mjs`：零依赖校验脚本。检查 skill 内路径引用是否存在、是否残留重构前的旧前缀、索引区块是否收录全部文件、模板注释头是否有验证状态与 AI 标注；`--strict`（警告即失败）、`--json`（CI）可用。
-- `tests/run-evals.mjs` + `tests/README.md`：评测运行器、评测方法论、首次 baseline（4 条用例 / 24 条断言，23 通过）。
-- `.github/workflows/check.yml`：每次提交跑索引校验与用例结构校验。
+- 评测运行器、评测方法论与首次 baseline（4 条用例 / 24 条断言，23 通过）。
 - `CHANGELOG.md`（本文件）。
 - SKILL.md「核验源降级路径」：RimSage MCP → 本地 grep / dnSpy → 向用户索要游戏目录 → 「⚠️ 待验证草稿」，并规定草稿的四条硬要求（开头声明、列出待核对项、不得写入模板目录、提醒复核）。
 - `references/02-project-structure.md`：「本地化（Languages 目录）」一节（DefInjected / Keyed / 落地检查）。
@@ -63,7 +59,7 @@
 - 模板注释头统一为 `验证状态：已验证（对照 <原版文件>）` / `验证状态：待核验（需核对 <字段／文件>）` + `AI 辅助生成`。武器、服装、原材料为「已验证」；建筑、配方、Harmony、ThingComp 按实际情况标为「待核验」。
 - 核心决策树与「三层决策」①：区分「已验证」与「待核验」模板——后者必须先按降级路径核对再用。
 - `references/10-api-reference.md`：状态从 WIP 改为「草稿」，并说明以反编译源码为准；「1.5 → 1.6 关键变化」标为待复核。
-- README：补版本号、DSH 平台行与安装命令、目录树（`scripts/`、`tests/`、`.github/`）、需求（Node 18+ 与无核验源时的行为）。
+- README：补版本号、DSH 平台行与安装命令、目录树、需求（Node 18+ 与无核验源时的行为）。
 
 ### 修复
 
@@ -72,10 +68,10 @@
 
 ### 已知问题
 
-- 评测断言有三处字面量过严（属性写法 vs 元素写法、`not_contains` 会误伤正确的纠错文案），详见 `tests/README.md`「已知断言缺陷」。未擅自修改断言——改测试迎合答案等于取消测试。
+- 评测断言有三处字面量过严（属性写法 vs 元素写法、`not_contains` 会误伤正确的纠错文案）。未擅自修改断言——改测试迎合答案等于取消测试。
 - 缺 RED baseline（无技能对照），当前分数还不能证明「技能确实改变了产出质量」；待跑。
 
 ## 1.0.0 — 2026-06-01
 
-- 按 skill 发布惯例标准化目录：`templates/` → `assets/templates/`、`workflows/` → `references/workflows/`、`evals/` → `tests/`，移除两份设计/计划文档。
+- 按 skill 发布惯例标准化目录：`templates/` → `assets/templates/`、`workflows/` → `references/workflows/`，评测用例目录独立，移除两份设计/计划文档。
 - 首次发布：SKILL.md、11 篇参考文档、7 个工作流、9 个模板、错误学习记录与 4 条评测用例。
