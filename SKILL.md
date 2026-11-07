@@ -121,25 +121,6 @@ description: |
 
 ---
 
-## 🧠 学习系统
-
-每次加载此 Skill 时，必须先读取 `learnings/errors.txt` 中的历史错误记录，
-并在后续工作中避免重复犯错。
-
-排查完错误并修复后，必须将关键教训总结为一句话追加到 `learnings/errors.txt`。
-格式：`YYYY-MM-DD | <类别> | <一句话总结>`
-
-| 类别 | 适用场景 |
-|------|---------|
-| XML | ThingDef/RecipeDef/Def 属性写错、枚举值错误、ParentName 错误 |
-| C# | 编译错误、空引用、类型错误、DLL 加载问题 |
-| Harmony | Patch ID 冲突、补丁未生效、Prefix/Postfix 签名错误 |
-| Path | 文件路径错误、资源缺失、加载顺序问题 |
-| Other | 上述类别之外的错误 |
-
-此文件仅在 rimworld-modding skill 上下文中读取，其他场景不读取。
-
----
 
 ## 核心工作流：测试版先行（Test → Verify → Formalize）
 
@@ -167,7 +148,6 @@ description: |
 | 🎵 **用 Harmony 拦截方法** | `references/06-harmony.md` + `assets/templates/harmony-patch.cs` |
 | 🖼️ **添加纹理/音效资源** | `references/07-assets.md` |
 | 🐛 **排查报错/崩溃/红字** | `references/08-debugging.md` |
-| 📖 **查看历史错误记录** | `learnings/errors.txt`（自动读取） |
 | ✅ **测试通过，正规化 mod** | `references/workflows/formalize-mod.md` |
 | 📦 **批量处理多个需求** | `references/workflows/batch-process.md` + `assets/templates/requirements-template.md` |
 | 📦 **发布到 Steam Workshop** | `references/09-workshop.md` |
@@ -349,13 +329,8 @@ grep -rh "techLevel" "<游戏安装目录>/Data/Core/Defs/" | sort -u | head -20
 | 文件 | 作用 | 命令 |
 |------|------|------|
 | `scripts/check-index.mjs` | 机械校验：路径引用是否存在、两处索引是否收录全部文件、模板标注是否齐全 | `node scripts/check-index.mjs`（`--strict` 警告即失败，`--json` 供 CI） |
-| `tests/run-evals.mjs` | 跑 `tests/evals.json` 的评测断言 / 校验用例结构 | `node tests/run-evals.mjs --validate` · `--prompts` · `--check-all <运行目录>` |
 | `scripts/find-template.mjs` | 查本地 1.7 模板库：模板清单、某 Def 类型的模板与必填字段、某字段的路径与出现率 | `node scripts/find-template.mjs --list` · `--def ThingDef` · `--field verbClass`（`--json` 供机器读） |
-| `tests/test-find-template.mjs` | 检索脚本的冒烟测试（库缺位时自动跳过） | `node tests/test-find-template.mjs` |
-| `scripts/xml-lint.mjs` | 零依赖 XML 良构性扫描（标签配对、注释里的 `--`、占位符写进元素名）；被 check-index 与单测共用 | 经 `node tests/test-xml-lint.mjs` 调用 |
-| `tests/test-xml-lint.mjs` | XML 模板良构性单测（含"占位符不能当元素名"这类反例） | `node tests/test-xml-lint.mjs` |
-| `tests/README.md` | 评测方法论与 baseline 记录 | — |
-| `.github/workflows/check.yml` | CI：每次提交自动跑索引校验、用例结构、检索脚本冒烟、XML 良构性 | 推到 GitHub 即生效 |
+| `scripts/xml-lint.mjs` | 零依赖 XML 良构性扫描（标签配对、注释里的 `--`、占位符写进元素名）；被 check-index 调用 | `node scripts/xml-lint.mjs <目录>` |
 | `CHANGELOG.md` | 版本变更记录 | — |
 
 > 改完本仓库任何文件，先跑 `node scripts/check-index.mjs` 再提交。
@@ -390,9 +365,6 @@ grep -rh "techLevel" "<游戏安装目录>/Data/Core/Defs/" | sort -u | head -20
 - `assets/templates/requirements-template.md` — 批量需求文件格式模板
 - `assets/templates/plant.xml` — 植物 Def（观赏/作物两段，走「无模板新类型」流程产出）
 <!-- INDEX:TEMPLATES:END -->
-
-### 错误学习 (learnings/)
-- `learnings/errors.txt` — 历史错误记录（每次加载 Skill 时自动读取）
 
 <!-- INDEX:WORKFLOWS:START -->
 ### 工作流 (references/workflows/)

@@ -44,8 +44,6 @@ const TEMPLATES = listDir("assets/templates", (f) => /\.(xml|cs|md)$/.test(f));
 const REFERENCES = listDir("references", (f) => f.endsWith(".md"));
 const WORKFLOWS = listDir("references/workflows", (f) => f.endsWith(".md"));
 
-if (!existsSync(join(ROOT, "learnings/errors.txt"))) add("warn", "learnings-missing", "缺少 learnings/errors.txt");
-
 // ---------- 2. 索引区块 ----------
 const SKILL = readFileSync(join(ROOT, "SKILL.md"), "utf8");
 function region(name) {
@@ -66,18 +64,17 @@ const REGIONS = {
 };
 
 // ---------- 3. 路径引用扫描 ----------
-const SKILL_PREFIX = /^(assets|references|scripts|tests|learnings|docs|library|examples)\//;
+const SKILL_PREFIX = /^(assets|references|scripts|library)\//;
 const LEGACY_PREFIX = /^(templates|workflows|evals)\//;
 const known = new Set([
   ...TEMPLATES.map((f) => `assets/templates/${f}`),
   ...REFERENCES.map((f) => `references/${f}`),
   ...WORKFLOWS.map((f) => `references/workflows/${f}`),
-  "learnings/errors.txt",
 ]);
 
-// 全仓 Markdown：SKILL.md、README.md、references/**、tests/README.md …（文档之间也会互相引用路径）
+// 全仓 Markdown：SKILL.md、README.md、references/**、assets/templates/*.md（文档之间也会互相引用路径）
 const MD_FILES = [
-  "SKILL.md", "README.md", "CHANGELOG.md", "tests/README.md",
+  "SKILL.md", "README.md", "CHANGELOG.md",
   ...REFERENCES.map((f) => `references/${f}`),
   ...WORKFLOWS.map((f) => `references/workflows/${f}`),
   ...TEMPLATES.filter((f) => f.endsWith(".md")).map((f) => `assets/templates/${f}`),
@@ -144,7 +141,7 @@ for (const f of TEMPLATES) {
 }
 
 // ---------- 6. XML 模板良构性 ----------
-// 扫描器在 scripts/xml-lint.mjs（独立成模块，便于单测：tests/test-xml-lint.mjs）。
+// 扫描器在 scripts/xml-lint.mjs（独立成模块）。
 // 技能承诺「有模板 → 直接用（免核验）」，因此模板必须是合法 XML：
 // 占位符写成 {{YourXxx}}（不是 <YourXxx>），注释里不得出现 -- 连字符 runs。
 for (const f of TEMPLATES) {
